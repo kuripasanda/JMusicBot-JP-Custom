@@ -18,6 +18,7 @@ package dev.cosgy.JMusicBot.slashcommands.dj;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
+import com.jagrosh.jmusicbot.audio.RequestMetadata;
 import dev.cosgy.JMusicBot.slashcommands.DJCommand;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -38,13 +39,10 @@ public class ForceskipCmd extends DJCommand {
 
     @Override
     public void doCommand(CommandEvent event) {
-        Logger log = LoggerFactory.getLogger("Forceskip");
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-        User u = event.getJDA().getUserById(handler.getRequester());
-        log.info(event.getGuild().getName() + "で" + handler.getPlayer().getPlayingTrack().getInfo().title + "をスキップしました" +
-                " (" + (u == null ? "誰かがリクエストしました。" : u.getName() + "さんがリクエストしました。") + ")");
+        RequestMetadata rm = handler.getRequestMetadata();
         event.reply(event.getClient().getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title
-                + "** をスキップしました\n(" + (u == null ? "誰かがリクエストしました。" : "**" + u.getName() + "さんがリクエストしました。**") + ")");
+                + "** "+(rm.getOwner() == 0L ? "(自動再生)" : "(**" + rm.user.username + "**がリクエスト)"));
         handler.getPlayer().stopTrack();
     }
 
@@ -55,9 +53,9 @@ public class ForceskipCmd extends DJCommand {
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-        User u = event.getJDA().getUserById(handler.getRequester());
+        RequestMetadata rm = handler.getRequestMetadata();
         event.reply(client.getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title
-                + "** をスキップしました\n(" + (u == null ? "誰かがリクエストしました。" : "**" + u.getName() + "さんがリクエストしました。**") + ")").queue();
+                + "** "+(rm.getOwner() == 0L ? "(自動再生)" : "(**" + rm.user.username + "**がリクエスト)")).queue();
         handler.getPlayer().stopTrack();
     }
 }

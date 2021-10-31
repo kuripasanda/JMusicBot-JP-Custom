@@ -143,7 +143,7 @@ public class JMusicBot {
         List<Command> commandList = new ArrayList<Command>() {{
             //その他
             add(aboutCommand);
-            add(new InviteCommand());
+            //add(new InviteCommand());
             add(new PingCommand());
             add(new SettingsCmd(bot));
             if (config.getCosgyDevHost()) add(new InfoCommand(bot));
@@ -185,6 +185,7 @@ public class JMusicBot {
             add(new SettcCmd(bot));
             add(new SetvcCmd(bot));
             add(new AutoplaylistCmd(bot));
+            add(new ServerListCmd(bot));
             // Owner
             add(new DebugCmd(bot));
             add(new SetavatarCmd(bot));
@@ -193,6 +194,7 @@ public class JMusicBot {
             add(new SetstatusCmd(bot));
             add(new PublistCmd(bot));
             add(new ShutdownCmd(bot));
+            add(new LeaveCmd(bot));
         }};
 
         cb.addCommands(commandList.toArray(new Command[0]));
@@ -200,7 +202,7 @@ public class JMusicBot {
         // スラッシュコマンドの実装
         List<SlashCommand> slashCommandList = new ArrayList<SlashCommand>() {{
             add(aboutCommand);
-            add(new InviteCommand());
+            //add(new InviteCommand());
             add(new PingCommand());
             add(new SettingsCmd(bot));
             if (config.getCosgyDevHost()) add(new InfoCommand(bot));
@@ -239,9 +241,11 @@ public class JMusicBot {
             // Admin
             add(new PrefixCmd(bot));
             add(new SetdjCmd(bot));
+            add(new SkipratioCmd(bot));
             add(new SettcCmd(bot));
             add(new SetvcCmd(bot));
             add(new AutoplaylistCmd(bot));
+            add(new ServerListCmd(bot));
             // Owner
             add(new DebugCmd(bot));
             add(new SetavatarCmd(bot));
@@ -250,6 +254,7 @@ public class JMusicBot {
             add(new SetstatusCmd(bot));
             add(new PublistCmd(bot));
             add(new ShutdownCmd(bot));
+            //add(new LeaveCmd(bot));
         }};
 
         cb.addSlashCommands(slashCommandList.toArray(new SlashCommand[0]));

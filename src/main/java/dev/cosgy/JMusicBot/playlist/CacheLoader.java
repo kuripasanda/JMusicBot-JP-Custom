@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagrosh.jmusicbot.BotConfig;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.queue.FairQueue;
+import com.jagrosh.jmusicbot.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -88,7 +89,8 @@ public class CacheLoader {
         try {
             log.debug("キャッシュの読み込み開始: " + "cache" + File.separator + serverId + ".cash");
 
-            File file = new File(Paths.get("cache" + File.separator + serverId + ".cash").toString());
+
+            File file = new File(OtherUtil.getPath("cache" + File.separator + serverId + ".cash").toString());
 
             byte[] data = new byte[(int) file.length()];
             InputStream reader = new FileInputStream(file);
@@ -129,7 +131,7 @@ public class CacheLoader {
 
     public boolean cacheExists(String serverId) {
         log.debug("確認するファイル名：" + serverId + ".cash");
-        return Files.exists(Paths.get("cache" + File.separator + serverId + ".cash"));
+        return Files.exists(OtherUtil.getPath("cache" + File.separator + serverId + ".cash"));
     }
 
     public void createCache(String serverId) throws IOException {
@@ -138,7 +140,7 @@ public class CacheLoader {
             log.info("すでにキャッシュファイルが存在していたため、古いキャッシュを削除します。");
             deleteCache(serverId);
         }
-        Files.createFile(Paths.get("cache" + File.separator + serverId + ".cash"));
+        Files.createFile(OtherUtil.getPath("cache" + File.separator + serverId + ".cash"));
     }
 
     public void writeCache(String serverId, List<QueuedTrack> queuedTracks) throws IOException {
@@ -160,7 +162,7 @@ public class CacheLoader {
 
         ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
         byte[] bytes = objectMapper.writeValueAsBytes(data);
-        FileOutputStream fos = new FileOutputStream(Paths.get("cache" + File.separator + serverId + ".cash").toString(), true);
+        FileOutputStream fos = new FileOutputStream(OtherUtil.getPath("cache" + File.separator + serverId + ".cash").toString(), true);
 
         fos.write(bytes);
         fos.flush();

@@ -78,7 +78,7 @@ public class FormatUtil {
     public static String listOfVChannels(List<VoiceChannel> list, String query) {
         StringBuilder outBuilder = new StringBuilder(" 複数のボイスチャンネルで\"" + query + "\"が一致しました。:");
         for (int i = 0; i < 6 && i < list.size(); i++)
-            outBuilder.append("\n - ").append(list.get(i).getName()).append(" (ID:").append(list.get(i).getId()).append(")");
+            outBuilder.append("\n - ").append(list.get(i).getAsMention()).append(" (ID:").append(list.get(i).getId()).append(")");
         String out = outBuilder.toString();
         if (list.size() > 6)
             out += "\n**と " + (list.size() - 6) + " など...**";

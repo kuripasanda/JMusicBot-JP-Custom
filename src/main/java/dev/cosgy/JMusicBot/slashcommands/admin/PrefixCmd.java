@@ -46,7 +46,7 @@ public class PrefixCmd extends AdminCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
-        if(!checkAdminPermission(client, event)){
+        if(checkAdminPermission(client, event)){
             event.reply(client.getWarning()+"権限がないため実行できません。").queue();
             return;
         }

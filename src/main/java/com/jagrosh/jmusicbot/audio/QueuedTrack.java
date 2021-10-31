@@ -27,17 +27,17 @@ public class QueuedTrack implements Queueable {
     private final AudioTrack track;
 
     public QueuedTrack(AudioTrack track, User owner) {
-        this(track, owner.getIdLong());
+        this(track, new RequestMetadata(owner));
     }
 
-    public QueuedTrack(AudioTrack track, long owner) {
+    public QueuedTrack(AudioTrack track, RequestMetadata rm) {
         this.track = track;
-        this.track.setUserData(owner);
+        this.track.setUserData(rm);
     }
 
     @Override
     public long getIdentifier() {
-        return track.getUserData(Long.class);
+        return track.getUserData(RequestMetadata.class).getOwner();
     }
 
     public AudioTrack getTrack() {
@@ -46,6 +46,6 @@ public class QueuedTrack implements Queueable {
 
     @Override
     public String toString() {
-        return "`[" + FormatUtil.formatTime(track.getDuration()) + "]` **" + track.getInfo().title + "** - <@" + track.getUserData(Long.class) + ">";
+        return "`[" + FormatUtil.formatTime(track.getDuration()) + "]` **" + track.getInfo().title + "** - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
     }
 }

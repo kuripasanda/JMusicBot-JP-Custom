@@ -1,6 +1,7 @@
 package dev.cosgy.JMusicBot.playlist;
 
 import com.jagrosh.jmusicbot.BotConfig;
+import com.jagrosh.jmusicbot.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -51,7 +52,7 @@ public class MylistLoader {
     public List<String> getPlaylistNames(String userId) {
         if (folderExists()) {
             if (folderUserExists(userId)) {
-                File folder = new File(config.getMylistfolder() + File.separator + userId);
+                File folder = new File(OtherUtil.getPath(config.getMylistfolder() + File.separator + userId).toString());
                 return Arrays.stream(Objects.requireNonNull(folder.listFiles((pathname) -> pathname.getName().endsWith(".txt"))))
                         .map(f -> f.getName().substring(0, f.getName().length() - 4))
                         .collect(Collectors.toList());

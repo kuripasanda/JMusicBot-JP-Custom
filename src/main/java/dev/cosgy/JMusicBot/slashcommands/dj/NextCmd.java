@@ -37,7 +37,7 @@ public class NextCmd extends DJCommand {
     @Override
     public void doCommand(CommandEvent event) {
         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-        User u = event.getJDA().getUserById(handler.getRequester());
+        User u = event.getJDA().getUserById(handler.getRequestMetadata().user.id);
 
         AudioTrack track = handler.getPlayer().getPlayingTrack();
         handler.addTrackIfRepeat(track);
@@ -54,7 +54,7 @@ public class NextCmd extends DJCommand {
             return;
         }
         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-        User u = event.getJDA().getUserById(handler.getRequester());
+        User u = event.getJDA().getUserById(handler.getRequestMetadata().user.id);
 
         AudioTrack track = handler.getPlayer().getPlayingTrack();
         handler.addTrackIfRepeat(track);

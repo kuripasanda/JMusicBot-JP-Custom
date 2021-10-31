@@ -89,7 +89,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
         RepeatMode mode = manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode();
         if(mode != RepeatMode.OFF)
         {
-            queue.add(new QueuedTrack(track.makeClone(), track.getUserData(Long.class)==null ? 0L : track.getUserData(Long.class)));
+            queue.add(new QueuedTrack(track.makeClone(), track.getUserData(RequestMetadata.class)));
         }
     }
 
@@ -119,10 +119,12 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
         return audioPlayer;
     }
 
-    public long getRequester() {
-        if (audioPlayer.getPlayingTrack() == null || audioPlayer.getPlayingTrack().getUserData(Long.class) == null)
-            return 0;
-        return audioPlayer.getPlayingTrack().getUserData(Long.class);
+    public RequestMetadata getRequestMetadata()
+    {
+        if(audioPlayer.getPlayingTrack() == null)
+            return RequestMetadata.EMPTY;
+        RequestMetadata rm = audioPlayer.getPlayingTrack().getUserData(RequestMetadata.class);
+        return rm == null ? RequestMetadata.EMPTY : rm;
     }
 
     public boolean playFromDefault() {
@@ -153,15 +155,16 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         RepeatMode repeatMode = manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode();
+
         // もしも楽曲再生が通常通り終了し、リピートモードが有効(!OFF)ならばキューに再追加する
         if (endReason == AudioTrackEndReason.FINISHED && repeatMode != RepeatMode.OFF) {
             // in RepeatMode.ALL
             if (repeatMode == RepeatMode.ALL) {
-                queue.add(new QueuedTrack(track.makeClone(), track.getUserData(Long.class) == null ? 0L : track.getUserData(Long.class)));
+                queue.add(new QueuedTrack(track.makeClone(), track.getUserData(RequestMetadata.class)));
 
                 // in RepeatMode.SINGLE
             } else if (repeatMode == RepeatMode.SINGLE) {
-                queue.addAt(0, new QueuedTrack(track.makeClone(), track.getUserData(Long.class) == null ? 0L : track.getUserData(Long.class)));
+                queue.addAt(0, new QueuedTrack(track.makeClone(), track.getUserData(RequestMetadata.class)));
             }
         }
 
@@ -197,17 +200,18 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             Guild guild = guild(jda);
             AudioTrack track = audioPlayer.getPlayingTrack();
             MessageBuilder mb = new MessageBuilder();
-            mb.append(FormatUtil.filter(manager.getBot().getConfig().getSuccess() + " **" + guild.getSelfMember().getVoiceState().getChannel().getName() + "**で、再生中です..."));
+            mb.append(FormatUtil.filter(manager.getBot().getConfig().getSuccess() + " **" + guild.getSelfMember().getVoiceState().getChannel().getAsMention() + "**で、再生中です..."));
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(guild.getSelfMember().getColor());
-            if (getRequester() != 0) {
-                User u = guild.getJDA().getUserById(getRequester());
-                if (u == null)
-                    eb.setAuthor("不明 (ID:" + getRequester() + ")", null, null);
+            RequestMetadata rm = getRequestMetadata();
+            if(rm.getOwner() != 0L)
+            {
+                User u = guild.getJDA().getUserById(rm.user.id);
+                if(u==null)
+                    eb.setAuthor(rm.user.username + "#" + rm.user.discrim, null, rm.user.avatar);
                 else
                     eb.setAuthor(u.getName() + "#" + u.getDiscriminator(), null, u.getEffectiveAvatarUrl());
             }
-
             try {
                 eb.setTitle(track.getInfo().title, track.getInfo().uri);
             } catch (Exception e) {
@@ -245,7 +249,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
 
     public String getTopicFormat(JDA jda) {
         if (isMusicPlaying(jda)) {
-            long userid = getRequester();
+            long userid = getRequestMetadata().getOwner();
             AudioTrack track = audioPlayer.getPlayingTrack();
             String title = track.getInfo().title;
             if (title == null || title.equals("不明なタイトル"))
