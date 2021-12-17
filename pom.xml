@@ -38,7 +38,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.3.0_331</version>
+            <version>4.4.0_350</version>
         </dependency>
         <dependency>
             <groupId>com.github.Cosgy-Dev</groupId>
@@ -63,16 +63,16 @@
             <version>LATEST</version>
         </dependency>-->
         <dependency>
+            <groupId>com.github.jagrosh</groupId>
+            <artifactId>JLyrics</artifactId>
+            <version>master-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>pw.chew</groupId>
             <artifactId>jda-chewtils</artifactId>
             <version>1.22.0</version>
             <scope>compile</scope>
             <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>com.jagrosh</groupId>
-            <artifactId>JLyrics</artifactId>
-            <version>0.5</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
