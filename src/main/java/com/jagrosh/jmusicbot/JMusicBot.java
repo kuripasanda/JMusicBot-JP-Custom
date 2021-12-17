@@ -182,6 +182,7 @@ public class JMusicBot {
             // Admin
             add(new PrefixCmd(bot));
             add(new SetdjCmd(bot));
+            add(new SkipratioCmd(bot));
             add(new SettcCmd(bot));
             add(new SetvcCmd(bot));
             add(new AutoplaylistCmd(bot));
@@ -194,7 +195,7 @@ public class JMusicBot {
             add(new SetstatusCmd(bot));
             add(new PublistCmd(bot));
             add(new ShutdownCmd(bot));
-            add(new LeaveCmd(bot));
+            //add(new LeaveCmd(bot));
         }};
 
         cb.addCommands(commandList.toArray(new Command[0]));
