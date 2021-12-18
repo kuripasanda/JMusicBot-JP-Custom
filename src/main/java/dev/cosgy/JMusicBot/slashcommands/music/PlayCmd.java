@@ -38,6 +38,7 @@ import dev.cosgy.JMusicBot.slashcommands.DJCommand;
 import dev.cosgy.JMusicBot.slashcommands.MusicCommand;
 import dev.cosgy.JMusicBot.util.Cache;
 import dev.cosgy.JMusicBot.util.StackTraceUtil;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -287,9 +288,11 @@ public class PlayCmd extends MusicCommand {
         private final static String CANCEL = "\uD83D\uDEAB"; // 🚫
 
         private final String loadingEmoji;
+        private JDA jda;
 
         public RequestCmd(Bot bot) {
             super(bot);
+            this.jda = bot.getJDA();
             this.loadingEmoji = bot.getConfig().getLoading();
             this.name = "request";
             this.arguments = "<title|URL>";
@@ -333,7 +336,7 @@ public class PlayCmd extends MusicCommand {
                     CacheLoader.CacheResult cache = bot.getCacheLoader().ConvertCache(data);
                     event.reply(":calling: キャッシュファイルを読み込んでいます... (" + cache.getItems().size() + "曲)").queue(m -> {
                         cache.loadTracks(bot.getPlayerManager(), (at) -> {
-                            handler.addTrack(new QueuedTrack(at, User.fromId(data.get(count.get()).getUserId())));
+                            handler.addTrack(new QueuedTrack(at, (User) jda.retrieveUserById(data.get(count.get()).getUserId())));
                             count.getAndIncrement();
                         }, () -> {
                             StringBuilder builder = new StringBuilder(cache.getTracks().isEmpty()

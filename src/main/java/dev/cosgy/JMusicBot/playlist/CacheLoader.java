@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagrosh.jmusicbot.BotConfig;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
+import com.jagrosh.jmusicbot.audio.RequestMetadata;
 import com.jagrosh.jmusicbot.queue.FairQueue;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
@@ -156,8 +157,7 @@ public class CacheLoader {
                     que.getInfo().identifier,
                     que.getInfo().isStream,
                     que.getInfo().uri,
-                    que.getUserData(Long.class)
-            ));
+                    que.getUserData(RequestMetadata.class).getOwner()));
         }
 
         ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
