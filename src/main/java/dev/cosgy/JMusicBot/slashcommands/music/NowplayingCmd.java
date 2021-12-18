@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands.music;
+package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
-import dev.cosgy.JMusicBot.slashcommands.MusicCommand;
+import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>

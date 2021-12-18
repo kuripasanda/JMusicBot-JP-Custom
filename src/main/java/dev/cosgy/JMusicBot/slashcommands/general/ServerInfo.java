@@ -1,4 +1,4 @@
-package dev.cosgy.JMusicBot.slashcommands.general;
+package dev.cosgy.jmusicbot.slashcommands.general;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;

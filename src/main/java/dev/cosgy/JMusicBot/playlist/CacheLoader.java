@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package dev.cosgy.JMusicBot.playlist;
+package dev.cosgy.jmusicbot.playlist;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +28,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import dev.cosgy.JMusicBot.util.Cache;
+import dev.cosgy.jmusicbot.util.Cache;
 import org.msgpack.jackson.dataformat.MessagePackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +99,7 @@ public class CacheLoader {
             reader.read(data);
 
             ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
-            List<dev.cosgy.JMusicBot.util.Cache> deserialized = objectMapper.readValue(data, new TypeReference<List<dev.cosgy.JMusicBot.util.Cache>>() {
+            List<dev.cosgy.jmusicbot.util.Cache> deserialized = objectMapper.readValue(data, new TypeReference<List<dev.cosgy.jmusicbot.util.Cache>>() {
             });
 
             log.debug("キャッシュの読み込み完了");
@@ -111,9 +111,9 @@ public class CacheLoader {
         }
     }
 
-    public CacheResult ConvertCache(List<dev.cosgy.JMusicBot.util.Cache> data) {
+    public CacheResult ConvertCache(List<dev.cosgy.jmusicbot.util.Cache> data) {
         List<String> urls = new ArrayList<>();
-        for (dev.cosgy.JMusicBot.util.Cache datum : data) {
+        for (dev.cosgy.jmusicbot.util.Cache datum : data) {
             urls.add(datum.getUrl());
         }
         return new CacheResult(urls, false);
@@ -145,7 +145,7 @@ public class CacheLoader {
     }
 
     public void writeCache(String serverId, List<QueuedTrack> queuedTracks) throws IOException {
-        List<dev.cosgy.JMusicBot.util.Cache> data = new ArrayList<>();
+        List<dev.cosgy.jmusicbot.util.Cache> data = new ArrayList<>();
 
         for (QueuedTrack queuedTrack : queuedTracks) {
             AudioTrack que = queuedTrack.getTrack();

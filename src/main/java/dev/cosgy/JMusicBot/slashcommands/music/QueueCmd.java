@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands.music;
+package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.Paginator;
@@ -23,8 +23,8 @@ import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
-import dev.cosgy.JMusicBot.settings.RepeatMode;
-import dev.cosgy.JMusicBot.slashcommands.MusicCommand;
+import dev.cosgy.jmusicbot.settings.RepeatMode;
+import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;

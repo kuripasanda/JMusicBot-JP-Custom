@@ -1,12 +1,12 @@
-package dev.cosgy.JMusicBot.slashcommands.music;
+package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
-import dev.cosgy.JMusicBot.playlist.MylistLoader;
-import dev.cosgy.JMusicBot.slashcommands.DJCommand;
-import dev.cosgy.JMusicBot.slashcommands.MusicCommand;
-import dev.cosgy.JMusicBot.util.StackTraceUtil;
+import dev.cosgy.jmusicbot.playlist.MylistLoader;
+import dev.cosgy.jmusicbot.slashcommands.DJCommand;
+import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
+import dev.cosgy.jmusicbot.util.StackTraceUtil;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;

@@ -1,4 +1,4 @@
-package dev.cosgy.JMusicBot.util;
+package dev.cosgy.jmusicbot.util;
 
 import net.dv8tion.jda.api.entities.TextChannel;
 

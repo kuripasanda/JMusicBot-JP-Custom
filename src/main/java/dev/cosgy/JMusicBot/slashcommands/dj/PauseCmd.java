@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands.dj;
+package dev.cosgy.jmusicbot.slashcommands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.PlayStatus;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
-import dev.cosgy.JMusicBot.slashcommands.DJCommand;
+import dev.cosgy.jmusicbot.slashcommands.DJCommand;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

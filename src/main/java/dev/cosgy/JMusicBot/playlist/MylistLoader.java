@@ -1,4 +1,4 @@
-package dev.cosgy.JMusicBot.playlist;
+package dev.cosgy.jmusicbot.playlist;
 
 import com.jagrosh.jmusicbot.BotConfig;
 import com.jagrosh.jmusicbot.utils.OtherUtil;

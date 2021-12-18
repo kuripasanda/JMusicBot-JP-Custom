@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands.music;
+package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -31,13 +31,13 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import dev.cosgy.JMusicBot.playlist.CacheLoader;
-import dev.cosgy.JMusicBot.playlist.MylistLoader;
-import dev.cosgy.JMusicBot.playlist.PubliclistLoader;
-import dev.cosgy.JMusicBot.slashcommands.DJCommand;
-import dev.cosgy.JMusicBot.slashcommands.MusicCommand;
-import dev.cosgy.JMusicBot.util.Cache;
-import dev.cosgy.JMusicBot.util.StackTraceUtil;
+import dev.cosgy.jmusicbot.playlist.CacheLoader;
+import dev.cosgy.jmusicbot.playlist.MylistLoader;
+import dev.cosgy.jmusicbot.playlist.PubliclistLoader;
+import dev.cosgy.jmusicbot.slashcommands.DJCommand;
+import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
+import dev.cosgy.jmusicbot.util.Cache;
+import dev.cosgy.jmusicbot.util.StackTraceUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;

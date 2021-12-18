@@ -22,7 +22,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import dev.cosgy.JMusicBot.playlist.MylistLoader;
+import dev.cosgy.jmusicbot.playlist.MylistLoader;
 
 import java.io.File;
 import java.io.IOException;

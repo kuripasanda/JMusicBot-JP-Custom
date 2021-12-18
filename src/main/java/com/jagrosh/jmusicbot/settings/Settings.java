@@ -16,7 +16,7 @@
 package com.jagrosh.jmusicbot.settings;
 
 import com.jagrosh.jdautilities.command.GuildSettingsProvider;
-import dev.cosgy.JMusicBot.settings.RepeatMode;
+import dev.cosgy.jmusicbot.settings.RepeatMode;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;

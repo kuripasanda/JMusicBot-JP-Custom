@@ -1,4 +1,4 @@
-package dev.cosgy.JMusicBot.slashcommands.music;
+package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.OrderedMenu;
@@ -10,7 +10,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import dev.cosgy.JMusicBot.slashcommands.MusicCommand;
+import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
 import dev.cosgy.niconicoSearchAPI.nicoSearchAPI;
 import dev.cosgy.niconicoSearchAPI.nicoVideoSearchResult;
 import net.dv8tion.jda.api.Permission;

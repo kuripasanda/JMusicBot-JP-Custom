@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package dev.cosgy.JMusicBot.util;
+package dev.cosgy.jmusicbot.util;
 
 /**
  * @author Kosugi_kun
