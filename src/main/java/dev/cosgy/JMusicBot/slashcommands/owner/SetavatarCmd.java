@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands.owner;
+package dev.cosgy.jmusicbot.slashcommands.owner;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
-import dev.cosgy.JMusicBot.slashcommands.OwnerCommand;
+import dev.cosgy.jmusicbot.slashcommands.OwnerCommand;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;

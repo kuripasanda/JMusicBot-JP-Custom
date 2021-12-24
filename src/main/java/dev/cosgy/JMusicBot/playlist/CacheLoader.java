@@ -14,19 +14,21 @@
  *  limitations under the License.
  */
 
-package dev.cosgy.JMusicBot.playlist;
+package dev.cosgy.jmusicbot.playlist;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagrosh.jmusicbot.BotConfig;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
+import com.jagrosh.jmusicbot.audio.RequestMetadata;
 import com.jagrosh.jmusicbot.queue.FairQueue;
+import com.jagrosh.jmusicbot.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import dev.cosgy.JMusicBot.util.Cache;
+import dev.cosgy.jmusicbot.util.Cache;
 import org.msgpack.jackson.dataformat.MessagePackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +90,8 @@ public class CacheLoader {
         try {
             log.debug("キャッシュの読み込み開始: " + "cache" + File.separator + serverId + ".cash");
 
-            File file = new File(Paths.get("cache" + File.separator + serverId + ".cash").toString());
+
+            File file = new File(OtherUtil.getPath("cache" + File.separator + serverId + ".cash").toString());
 
             byte[] data = new byte[(int) file.length()];
             InputStream reader = new FileInputStream(file);
@@ -96,7 +99,7 @@ public class CacheLoader {
             reader.read(data);
 
             ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
-            List<dev.cosgy.JMusicBot.util.Cache> deserialized = objectMapper.readValue(data, new TypeReference<List<dev.cosgy.JMusicBot.util.Cache>>() {
+            List<dev.cosgy.jmusicbot.util.Cache> deserialized = objectMapper.readValue(data, new TypeReference<List<dev.cosgy.jmusicbot.util.Cache>>() {
             });
 
             log.debug("キャッシュの読み込み完了");
@@ -108,9 +111,9 @@ public class CacheLoader {
         }
     }
 
-    public CacheResult ConvertCache(List<dev.cosgy.JMusicBot.util.Cache> data) {
+    public CacheResult ConvertCache(List<dev.cosgy.jmusicbot.util.Cache> data) {
         List<String> urls = new ArrayList<>();
-        for (dev.cosgy.JMusicBot.util.Cache datum : data) {
+        for (dev.cosgy.jmusicbot.util.Cache datum : data) {
             urls.add(datum.getUrl());
         }
         return new CacheResult(urls, false);
@@ -129,7 +132,7 @@ public class CacheLoader {
 
     public boolean cacheExists(String serverId) {
         log.debug("確認するファイル名：" + serverId + ".cash");
-        return Files.exists(Paths.get("cache" + File.separator + serverId + ".cash"));
+        return Files.exists(OtherUtil.getPath("cache" + File.separator + serverId + ".cash"));
     }
 
     public void createCache(String serverId) throws IOException {
@@ -138,11 +141,11 @@ public class CacheLoader {
             log.info("すでにキャッシュファイルが存在していたため、古いキャッシュを削除します。");
             deleteCache(serverId);
         }
-        Files.createFile(Paths.get("cache" + File.separator + serverId + ".cash"));
+        Files.createFile(OtherUtil.getPath("cache" + File.separator + serverId + ".cash"));
     }
 
     public void writeCache(String serverId, List<QueuedTrack> queuedTracks) throws IOException {
-        List<dev.cosgy.JMusicBot.util.Cache> data = new ArrayList<>();
+        List<dev.cosgy.jmusicbot.util.Cache> data = new ArrayList<>();
 
         for (QueuedTrack queuedTrack : queuedTracks) {
             AudioTrack que = queuedTrack.getTrack();
@@ -154,22 +157,20 @@ public class CacheLoader {
                     que.getInfo().identifier,
                     que.getInfo().isStream,
                     que.getInfo().uri,
-                    que.getUserData(Long.class)
-            ));
+                    que.getUserData(RequestMetadata.class).getOwner()));
         }
 
         ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
         byte[] bytes = objectMapper.writeValueAsBytes(data);
-        FileOutputStream fos = new FileOutputStream(Paths.get("cache" + File.separator + serverId + ".cash").toString(), true);
+        FileOutputStream fos = new FileOutputStream(OtherUtil.getPath("cache" + File.separator + serverId + ".cash").toString(), true);
 
         fos.write(bytes);
         fos.flush();
         fos.close();
     }
 
-    public CacheLoader deleteCache(String serverId) throws IOException {
+    public void deleteCache(String serverId) throws IOException {
         Files.delete(Paths.get("cache" + File.separator + serverId + ".cash"));
-        return null;
     }
 
     public static class CacheLoadError {

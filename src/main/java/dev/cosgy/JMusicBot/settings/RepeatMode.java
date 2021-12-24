@@ -1,4 +1,4 @@
-package dev.cosgy.JMusicBot.settings;
+package dev.cosgy.jmusicbot.settings;
 
 /**
  * @author ryuuta0217

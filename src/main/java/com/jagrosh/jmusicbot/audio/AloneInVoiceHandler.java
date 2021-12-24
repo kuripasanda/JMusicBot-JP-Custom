@@ -16,8 +16,8 @@
 package com.jagrosh.jmusicbot.audio;
 
 import com.jagrosh.jmusicbot.Bot;
-import dev.cosgy.JMusicBot.playlist.CacheLoader;
-import dev.cosgy.JMusicBot.util.LastSendTextChannel;
+import dev.cosgy.jmusicbot.playlist.CacheLoader;
+import dev.cosgy.jmusicbot.util.LastSendTextChannel;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;

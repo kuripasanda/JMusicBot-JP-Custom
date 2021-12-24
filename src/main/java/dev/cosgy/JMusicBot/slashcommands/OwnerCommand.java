@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands;
+package dev.cosgy.jmusicbot.slashcommands;
 
 import com.jagrosh.jdautilities.command.SlashCommand;
 

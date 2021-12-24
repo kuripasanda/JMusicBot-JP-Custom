@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands.general;
+package dev.cosgy.jmusicbot.slashcommands.general;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
-import dev.cosgy.JMusicBot.settings.RepeatMode;
+import dev.cosgy.jmusicbot.settings.RepeatMode;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Role;
@@ -55,7 +55,7 @@ public class SettingsCmd extends SlashCommand {
         Role role = s.getRole(event.getGuild());
         EmbedBuilder ebuilder = new EmbedBuilder()
                 .setDescription("コマンド実行用チャンネル: " + (tChan == null ? "なし" : "**#" + tChan.getName() + "**")
-                        + "\n専用ボイスチャンネル: " + (vChan == null ? "なし" : "**" + vChan.getName() + "**")
+                        + "\n専用ボイスチャンネル: " + (vChan == null ? "なし" : "**" + vChan.getAsMention() + "**")
                         + "\nDJ 権限: " + (role == null ? "未設定" : "**" + role.getName() + "**")
                         + "\nリピート: **" + (s.getRepeatMode() == RepeatMode.ALL ? "有効(全曲リピート)" : (s.getRepeatMode() == RepeatMode.SINGLE ? "有効(1曲リピート)" : "無効")) + "**"
                         + "\nデフォルトプレイリスト: " + (s.getDefaultPlaylist() == null ? "なし" : "**" + s.getDefaultPlaylist() + "**")

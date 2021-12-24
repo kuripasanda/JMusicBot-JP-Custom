@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands.music;
+package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jlyrics.LyricsClient;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
-import dev.cosgy.JMusicBot.slashcommands.MusicCommand;
+import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -39,7 +39,7 @@ public class LyricsCmd extends MusicCommand {
         super(bot);
         this.name = "lyrics";
         this.arguments = "[曲名]";
-        this.help = "現在再生中の曲または指定した曲名の歌詞を表示します";
+        this.help = "曲の歌詞を表示します";
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
         this.aliases = bot.getConfig().getAliases(this.name);
         this.bePlaying = true;
@@ -54,7 +54,16 @@ public class LyricsCmd extends MusicCommand {
         event.getChannel().sendTyping().queue();
         String title;
         if (event.getOption("name").getAsString().isEmpty())
-            title = ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).getPlayer().getPlayingTrack().getInfo().title;
+        {
+            AudioHandler sendingHandler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+            if (sendingHandler.isMusicPlaying(event.getJDA()))
+                title = sendingHandler.getPlayer().getPlayingTrack().getInfo().title;
+            else
+            {
+                event.reply(client.getError() + "曲が再生されていないため使用できません。").queue();
+                return;
+            }
+        }
         else
             title = event.getOption("name").getAsString();
         lClient.getLyrics(title).thenAccept(lyrics ->
@@ -94,8 +103,17 @@ public class LyricsCmd extends MusicCommand {
     public void doCommand(CommandEvent event) {
         event.getChannel().sendTyping().queue();
         String title;
-        if (event.getArgs().isEmpty())
-            title = ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).getPlayer().getPlayingTrack().getInfo().title;
+        if(event.getArgs().isEmpty())
+        {
+            AudioHandler sendingHandler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+            if (sendingHandler.isMusicPlaying(event.getJDA()))
+                title = sendingHandler.getPlayer().getPlayingTrack().getInfo().title;
+            else
+            {
+                event.replyError("曲が再生されていないため使用できません。");
+                return;
+            }
+        }
         else
             title = event.getArgs();
         lClient.getLyrics(title).thenAccept(lyrics ->

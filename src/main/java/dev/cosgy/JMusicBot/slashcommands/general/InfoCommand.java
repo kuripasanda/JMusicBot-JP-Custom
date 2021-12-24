@@ -1,9 +1,9 @@
-package dev.cosgy.JMusicBot.slashcommands.general;
+package dev.cosgy.jmusicbot.slashcommands.general;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
 import com.jagrosh.jmusicbot.Bot;
-import dev.cosgy.JMusicBot.util.MaintenanceInfo;
+import dev.cosgy.jmusicbot.util.MaintenanceInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;

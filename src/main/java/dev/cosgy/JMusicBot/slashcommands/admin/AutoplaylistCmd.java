@@ -13,12 +13,12 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands.admin;
+package dev.cosgy.jmusicbot.slashcommands.admin;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.settings.Settings;
-import dev.cosgy.JMusicBot.slashcommands.AdminCommand;
+import dev.cosgy.jmusicbot.slashcommands.AdminCommand;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -49,7 +49,7 @@ public class AutoplaylistCmd extends AdminCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
-        if(!checkAdminPermission(client, event)){
+        if(checkAdminPermission(client, event)){
             event.reply(client.getWarning()+"権限がないため実行できません。").queue();
             return;
         }

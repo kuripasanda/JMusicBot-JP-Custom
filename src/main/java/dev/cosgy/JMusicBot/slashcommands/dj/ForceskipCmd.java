@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands.dj;
+package dev.cosgy.jmusicbot.slashcommands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
-import dev.cosgy.JMusicBot.slashcommands.DJCommand;
-import net.dv8tion.jda.api.entities.User;
+import com.jagrosh.jmusicbot.audio.RequestMetadata;
+import dev.cosgy.jmusicbot.slashcommands.DJCommand;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -38,13 +36,10 @@ public class ForceskipCmd extends DJCommand {
 
     @Override
     public void doCommand(CommandEvent event) {
-        Logger log = LoggerFactory.getLogger("Forceskip");
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-        User u = event.getJDA().getUserById(handler.getRequester());
-        log.info(event.getGuild().getName() + "で" + handler.getPlayer().getPlayingTrack().getInfo().title + "をスキップしました" +
-                " (" + (u == null ? "誰かがリクエストしました。" : u.getName() + "さんがリクエストしました。") + ")");
+        RequestMetadata rm = handler.getRequestMetadata();
         event.reply(event.getClient().getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title
-                + "** をスキップしました\n(" + (u == null ? "誰かがリクエストしました。" : "**" + u.getName() + "さんがリクエストしました。**") + ")");
+                + "** "+(rm.getOwner() == 0L ? "(自動再生)" : "(**" + rm.user.username + "**がリクエスト)"));
         handler.getPlayer().stopTrack();
     }
 
@@ -55,9 +50,9 @@ public class ForceskipCmd extends DJCommand {
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-        User u = event.getJDA().getUserById(handler.getRequester());
+        RequestMetadata rm = handler.getRequestMetadata();
         event.reply(client.getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title
-                + "** をスキップしました\n(" + (u == null ? "誰かがリクエストしました。" : "**" + u.getName() + "さんがリクエストしました。**") + ")").queue();
+                + "** "+(rm.getOwner() == 0L ? "(自動再生)" : "(**" + rm.user.username + "**がリクエスト)")).queue();
         handler.getPlayer().stopTrack();
     }
 }

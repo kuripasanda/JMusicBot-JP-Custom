@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands.music;
+package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -31,13 +31,14 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import dev.cosgy.JMusicBot.playlist.CacheLoader;
-import dev.cosgy.JMusicBot.playlist.MylistLoader;
-import dev.cosgy.JMusicBot.playlist.PubliclistLoader;
-import dev.cosgy.JMusicBot.slashcommands.DJCommand;
-import dev.cosgy.JMusicBot.slashcommands.MusicCommand;
-import dev.cosgy.JMusicBot.util.Cache;
-import dev.cosgy.JMusicBot.util.StackTraceUtil;
+import dev.cosgy.jmusicbot.playlist.CacheLoader;
+import dev.cosgy.jmusicbot.playlist.MylistLoader;
+import dev.cosgy.jmusicbot.playlist.PubliclistLoader;
+import dev.cosgy.jmusicbot.slashcommands.DJCommand;
+import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
+import dev.cosgy.jmusicbot.util.Cache;
+import dev.cosgy.jmusicbot.util.StackTraceUtil;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -287,9 +288,11 @@ public class PlayCmd extends MusicCommand {
         private final static String CANCEL = "\uD83D\uDEAB"; // 🚫
 
         private final String loadingEmoji;
+        private JDA jda;
 
         public RequestCmd(Bot bot) {
             super(bot);
+            this.jda = bot.getJDA();
             this.loadingEmoji = bot.getConfig().getLoading();
             this.name = "request";
             this.arguments = "<title|URL>";
@@ -333,7 +336,7 @@ public class PlayCmd extends MusicCommand {
                     CacheLoader.CacheResult cache = bot.getCacheLoader().ConvertCache(data);
                     event.reply(":calling: キャッシュファイルを読み込んでいます... (" + cache.getItems().size() + "曲)").queue(m -> {
                         cache.loadTracks(bot.getPlayerManager(), (at) -> {
-                            handler.addTrack(new QueuedTrack(at, User.fromId(data.get(count.get()).getUserId())));
+                            handler.addTrack(new QueuedTrack(at, (User) jda.retrieveUserById(data.get(count.get()).getUserId())));
                             count.getAndIncrement();
                         }, () -> {
                             StringBuilder builder = new StringBuilder(cache.getTracks().isEmpty()

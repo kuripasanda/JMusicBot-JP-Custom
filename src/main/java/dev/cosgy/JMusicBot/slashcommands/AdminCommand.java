@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands;
+package dev.cosgy.jmusicbot.slashcommands;
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.SlashCommand;
@@ -35,9 +35,9 @@ public abstract class AdminCommand extends SlashCommand {
 
     public static boolean checkAdminPermission(CommandClient client, SlashCommandEvent event){
         if (event.getUser().getId().equals(client.getOwnerId()) || event.getMember().isOwner())
-            return true;
+            return false;
         if (event.getGuild() == null)
-            return true;
-        return event.getMember().hasPermission(Permission.MANAGE_SERVER);
+            return false;
+        return !event.getMember().hasPermission(Permission.MANAGE_SERVER);
     }
 }

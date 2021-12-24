@@ -1,6 +1,7 @@
-package dev.cosgy.JMusicBot.playlist;
+package dev.cosgy.jmusicbot.playlist;
 
 import com.jagrosh.jmusicbot.BotConfig;
+import com.jagrosh.jmusicbot.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -10,7 +11,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Consumer;
@@ -51,7 +54,7 @@ public class MylistLoader {
     public List<String> getPlaylistNames(String userId) {
         if (folderExists()) {
             if (folderUserExists(userId)) {
-                File folder = new File(config.getMylistfolder() + File.separator + userId);
+                File folder = new File(OtherUtil.getPath(config.getMylistfolder() + File.separator + userId).toString());
                 return Arrays.stream(Objects.requireNonNull(folder.listFiles((pathname) -> pathname.getName().endsWith(".txt"))))
                         .map(f -> f.getName().substring(0, f.getName().length() - 4))
                         .collect(Collectors.toList());
@@ -97,7 +100,7 @@ public class MylistLoader {
     }
 
     public void writePlaylist(String userId, String name, String text) throws IOException {
-        Files.write(Paths.get(config.getMylistfolder() + File.separator + userId + File.separator + name + ".txt"), text.trim().getBytes());
+        Files.write(Paths.get(config.getMylistfolder() + File.separator + userId + File.separator + name + ".txt"), text.trim().getBytes(StandardCharsets.UTF_8));
     }
 
     @Nullable

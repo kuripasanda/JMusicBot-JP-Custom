@@ -16,7 +16,7 @@
 package com.jagrosh.jmusicbot.settings;
 
 import com.jagrosh.jdautilities.command.GuildSettingsProvider;
-import dev.cosgy.JMusicBot.settings.RepeatMode;
+import dev.cosgy.jmusicbot.settings.RepeatMode;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -38,9 +38,10 @@ public class Settings implements GuildSettingsProvider {
     private RepeatMode repeatMode;
     private String prefix;
     private boolean bitrateWarningReaded;
+    private double skipRatio;
 
 
-    public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, boolean bitrateWarningReaded, int announce) {
+    public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, boolean bitrateWarningReaded, int announce, double skipRatio) {
         this.manager = manager;
         try {
             this.textId = Long.parseLong(textId);
@@ -63,9 +64,10 @@ public class Settings implements GuildSettingsProvider {
         this.prefix = prefix;
         this.bitrateWarningReaded = bitrateWarningReaded;
         this.announce = announce;
+        this.skipRatio = skipRatio;
     }
 
-    public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, boolean bitrateWarningReaded, int announce) {
+    public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, boolean bitrateWarningReaded, int announce, double skipRatio) {
         this.manager = manager;
         this.textId = textId;
         this.voiceId = voiceId;
@@ -76,6 +78,7 @@ public class Settings implements GuildSettingsProvider {
         this.prefix = prefix;
         this.bitrateWarningReaded = bitrateWarningReaded;
         this.announce = announce;
+        this.skipRatio = skipRatio;
     }
 
     // Getters
@@ -122,8 +125,19 @@ public class Settings implements GuildSettingsProvider {
         return prefix;
     }
 
+    public double getSkipRatio()
+    {
+        return skipRatio;
+    }
+
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+        this.manager.writeSettings();
+    }
+
+    public void setSkipRatio(double skipRatio)
+    {
+        this.skipRatio = skipRatio;
         this.manager.writeSettings();
     }
 

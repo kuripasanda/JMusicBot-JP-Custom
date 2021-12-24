@@ -16,12 +16,13 @@
 package com.jagrosh.jmusicbot.playlist;
 
 import com.jagrosh.jmusicbot.BotConfig;
+import com.jagrosh.jmusicbot.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import dev.cosgy.JMusicBot.playlist.MylistLoader;
+import dev.cosgy.jmusicbot.playlist.MylistLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +54,7 @@ public class PlaylistLoader {
     public List<String> getPlaylistNames(String guildId) {
         if (folderExists()) {
             if (folderGuildExists(guildId)) {
-                File folder = new File(config.getPlaylistsFolder() + File.separator + guildId);
+                File folder = new File(OtherUtil.getPath(config.getPlaylistsFolder() + File.separator + guildId).toString());
                 return Arrays.stream(Objects.requireNonNull(folder.listFiles((pathname) -> pathname.getName().endsWith(".txt")))).map(f -> f.getName().substring(0, f.getName().length() - 4)).collect(Collectors.toList());
             } else {
                 createGuildFolder(guildId);
@@ -68,14 +69,14 @@ public class PlaylistLoader {
 
     public void createGuildFolder(String guildId) {
         try {
-            Files.createDirectory(Paths.get(config.getPlaylistsFolder() + File.separator + guildId));
+            Files.createDirectory(OtherUtil.getPath(config.getPlaylistsFolder() + File.separator + guildId));
         } catch (IOException ignored) {
         }
     }
 
     public void createFolder() {
         try {
-            Files.createDirectory(Paths.get(config.getPlaylistsFolder()));
+            Files.createDirectory(OtherUtil.getPath(config.getPlaylistsFolder()));
         } catch (IOException ignore) {
         }
     }

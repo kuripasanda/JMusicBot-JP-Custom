@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package dev.cosgy.JMusicBot.slashcommands.general;
+package dev.cosgy.jmusicbot.slashcommands.general;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;

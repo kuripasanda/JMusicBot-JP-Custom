@@ -1,4 +1,4 @@
-package dev.cosgy.JMusicBot.util;
+package dev.cosgy.jmusicbot.util;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.CommandListener;

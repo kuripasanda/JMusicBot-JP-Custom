@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands.music;
+package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
-import dev.cosgy.JMusicBot.slashcommands.MusicCommand;
-import net.dv8tion.jda.api.entities.User;
+import com.jagrosh.jmusicbot.audio.RequestMetadata;
+import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 /**
@@ -39,14 +39,14 @@ public class SkipCmd extends MusicCommand {
     public void doCommand(CommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
 
-        // 再生中の曲のリクエスト者が送信者かどうか
-        if (event.getAuthor().getIdLong() == handler.getRequester()) {
+        RequestMetadata rm = handler.getRequestMetadata();
+        if(event.getAuthor().getIdLong() == rm.getOwner()){
             event.reply(event.getClient().getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title + "** をスキップしました。");
             handler.getPlayer().stopTrack();
         } else {
             // ボイチャにいる人数 (Bot, スピーカーミュートは含まず)
             int listeners = (int) event.getSelfMember().getVoiceState().getChannel().getMembers().stream()
-                    .filter(m -> !m.getUser().isBot() && !m.getVoiceState().isDeafened() && m.getUser().getIdLong() != handler.getRequester()).count();
+                    .filter(m -> !m.getUser().isBot() && !m.getVoiceState().isDeafened() && m.getUser().getIdLong() != handler.getRequestMetadata().getOwner()).count();
 
             // 送信するメッセージ
             String msg;
@@ -63,8 +63,8 @@ public class SkipCmd extends MusicCommand {
             int skippers = (int) event.getSelfMember().getVoiceState().getChannel().getMembers().stream()
                     .filter(m -> handler.getVotes().contains(m.getUser().getId())).count();
 
-            // 必要な投票数 (ボイチャにいる人数 × 0.55)
-            int required = (int) Math.ceil(listeners * .55);
+            int required = (int)Math.ceil(listeners * bot.getSettingsManager().getSettings(event.getGuild()).getSkipRatio());
+            msg += skippers + " 票, " + required + "/" + listeners + " 必要]`";
 
             // 必要投票数が、ボイチャにいる人数と相違する場合
             if (required != listeners) {
@@ -76,9 +76,8 @@ public class SkipCmd extends MusicCommand {
 
             // 現在の投票者数が、必要投票数に達しているかどうか
             if (skippers >= required) {
-                // 達していたらスキップする
-                User u = event.getJDA().getUserById(handler.getRequester());
-                msg += "\n" + event.getClient().getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title + "**をスキップしました 。\n" + (handler.getRequester() == 0 ? "" : " (" + (u == null ? "この曲は誰かがリクエストしました。" : "この曲は**" + u.getName() + "**がリクエストしました。") + ")");
+                msg += "\n" + event.getClient().getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title
+                        + "**をスキップしました。 " + (rm.getOwner() == 0L ? "(自動再生)" : "(**" + rm.user.username + "**がリクエスト)");
                 handler.getPlayer().stopTrack();
             }
             event.reply(msg);
@@ -89,14 +88,14 @@ public class SkipCmd extends MusicCommand {
     public void doCommand(SlashCommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
 
-        // 再生中の曲のリクエスト者が送信者かどうか
-        if (event.getUser().getIdLong() == handler.getRequester()) {
+        RequestMetadata rm = handler.getRequestMetadata();
+        if(event.getUser().getIdLong() == rm.getOwner()){
             event.reply(client.getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title + "** をスキップしました。").queue();
             handler.getPlayer().stopTrack();
         } else {
             // ボイチャにいる人数 (Bot, スピーカーミュートは含まず)
             int listeners = (int) event.getGuild().getSelfMember().getVoiceState().getChannel().getMembers().stream()
-                    .filter(m -> !m.getUser().isBot() && !m.getVoiceState().isDeafened() && m.getUser().getIdLong() != handler.getRequester()).count();
+                    .filter(m -> !m.getUser().isBot() && !m.getVoiceState().isDeafened() && m.getUser().getIdLong() != handler.getRequestMetadata().getOwner()).count();
 
             // 送信するメッセージ
             String msg;
@@ -126,9 +125,8 @@ public class SkipCmd extends MusicCommand {
 
             // 現在の投票者数が、必要投票数に達しているかどうか
             if (skippers >= required) {
-                // 達していたらスキップする
-                User u = event.getJDA().getUserById(handler.getRequester());
-                msg += "\n" + client.getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title + "**をスキップしました 。\n" + (handler.getRequester() == 0 ? "" : " (" + (u == null ? "この曲は誰かがリクエストしました。" : "この曲は**" + u.getName() + "**がリクエストしました。") + ")");
+                msg += "\n" + client.getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title
+                        + "**をスキップしました。 " + (rm.getOwner() == 0L ? "(自動再生)" : "(**" + rm.user.username + "**がリクエスト)");
                 handler.getPlayer().stopTrack();
             }
             event.reply(msg).queue();

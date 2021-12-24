@@ -14,13 +14,13 @@
  *  limitations under the License.
  */
 
-package dev.cosgy.JMusicBot.slashcommands.dj;
+package dev.cosgy.jmusicbot.slashcommands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import dev.cosgy.JMusicBot.slashcommands.DJCommand;
+import dev.cosgy.jmusicbot.slashcommands.DJCommand;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
@@ -37,7 +37,7 @@ public class NextCmd extends DJCommand {
     @Override
     public void doCommand(CommandEvent event) {
         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-        User u = event.getJDA().getUserById(handler.getRequester());
+        User u = event.getJDA().getUserById(handler.getRequestMetadata().user.id);
 
         AudioTrack track = handler.getPlayer().getPlayingTrack();
         handler.addTrackIfRepeat(track);
@@ -54,7 +54,7 @@ public class NextCmd extends DJCommand {
             return;
         }
         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-        User u = event.getJDA().getUserById(handler.getRequester());
+        User u = event.getJDA().getUserById(handler.getRequestMetadata().user.id);
 
         AudioTrack track = handler.getPlayer().getPlayingTrack();
         handler.addTrackIfRepeat(track);

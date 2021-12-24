@@ -1,12 +1,12 @@
-package dev.cosgy.JMusicBot.slashcommands.general;
+package dev.cosgy.jmusicbot.slashcommands.general;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
 import com.jagrosh.jdautilities.menu.Paginator;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
-import dev.cosgy.JMusicBot.slashcommands.DJCommand;
-import dev.cosgy.JMusicBot.util.Cache;
+import dev.cosgy.jmusicbot.slashcommands.DJCommand;
+import dev.cosgy.jmusicbot.util.Cache;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;

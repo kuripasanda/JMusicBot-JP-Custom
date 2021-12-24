@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.cosgy.JMusicBot.slashcommands;
+package dev.cosgy.jmusicbot.slashcommands;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.settings.Settings;
-import dev.cosgy.JMusicBot.util.MaintenanceInfo;
+import dev.cosgy.jmusicbot.util.MaintenanceInfo;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -72,14 +72,14 @@ public abstract class MusicCommand extends SlashCommand {
                 current = settings.getVoiceChannel(event.getGuild());
             GuildVoiceState userState = event.getMember().getVoiceState();
             if (!userState.inVoiceChannel() || userState.isDeafened() || (current != null && !userState.getChannel().equals(current))) {
-                event.reply(client.getError() + String.format("このコマンドを使用するには、%sに参加している必要があります！", (current == null ? "音声チャンネル" : "**" + current.getName() + "**"))).queue();
+                event.reply(client.getError() + String.format("このコマンドを使用するには、%sに参加している必要があります！", (current == null ? "音声チャンネル" : "**" + current.getAsMention() + "**"))).queue();
                 return;
             }
             if (!event.getGuild().getSelfMember().getVoiceState().inVoiceChannel()) {
                 try {
                     event.getGuild().getAudioManager().openAudioConnection(userState.getChannel());
                 } catch (PermissionException ex) {
-                    event.reply(client.getError() + String.format("**%s**に接続できません!", userState.getChannel().getName())).queue();
+                    event.reply(client.getError() + String.format("**%s**に接続できません!", userState.getChannel().getAsMention())).queue();
                     return;
                 }
                 if (userState.getChannel().getType() == ChannelType.STAGE) {
