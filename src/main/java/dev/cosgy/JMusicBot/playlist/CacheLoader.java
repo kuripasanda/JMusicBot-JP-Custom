@@ -169,9 +169,8 @@ public class CacheLoader {
         fos.close();
     }
 
-    public CacheLoader deleteCache(String serverId) throws IOException {
+    public void deleteCache(String serverId) throws IOException {
         Files.delete(Paths.get("cache" + File.separator + serverId + ".cash"));
-        return null;
     }
 
     public static class CacheLoadError {

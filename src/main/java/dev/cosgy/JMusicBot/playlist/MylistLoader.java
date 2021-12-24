@@ -11,7 +11,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Consumer;
@@ -98,7 +100,7 @@ public class MylistLoader {
     }
 
     public void writePlaylist(String userId, String name, String text) throws IOException {
-        Files.write(Paths.get(config.getMylistfolder() + File.separator + userId + File.separator + name + ".txt"), text.trim().getBytes());
+        Files.write(Paths.get(config.getMylistfolder() + File.separator + userId + File.separator + name + ".txt"), text.trim().getBytes(StandardCharsets.UTF_8));
     }
 
     @Nullable

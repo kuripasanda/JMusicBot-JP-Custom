@@ -10,6 +10,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.function.Consumer;
@@ -38,7 +39,7 @@ public class PubliclistLoader {
     public List<String> getPlaylistNames() {
         if (folderExists()) {
             File folder = new File(config.getPublistFolder());
-            return Arrays.stream(folder.listFiles((pathname) -> pathname.getName().endsWith(".txt")))
+            return Arrays.stream(Objects.requireNonNull(folder.listFiles((pathname) -> pathname.getName().endsWith(".txt"))))
                     .map(f -> f.getName().substring(0, f.getName().length() - 4))
                     .collect(Collectors.toList());
         } else {
@@ -67,7 +68,7 @@ public class PubliclistLoader {
     }
 
     public void writePlaylist(String name, String text) throws IOException {
-        Files.write(OtherUtil.getPath(config.getPublistFolder() + File.separator + name + ".txt"), text.trim().getBytes());
+        Files.write(OtherUtil.getPath(config.getPublistFolder() + File.separator + name + ".txt"), text.trim().getBytes(StandardCharsets.UTF_8));
     }
 
     public Playlist getPlaylist(String name) {
