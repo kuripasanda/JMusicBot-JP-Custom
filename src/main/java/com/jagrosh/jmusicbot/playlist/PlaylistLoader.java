@@ -26,6 +26,7 @@ import dev.cosgy.jmusicbot.playlist.MylistLoader;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -98,7 +99,7 @@ public class PlaylistLoader {
     }
 
     public void writePlaylist(String guildId, String name, String text) throws IOException {
-        Files.write(Paths.get(config.getPlaylistsFolder() + File.separator + guildId + File.separator + name + ".txt"), text.trim().getBytes());
+        Files.write(Paths.get(config.getPlaylistsFolder() + File.separator + guildId + File.separator + name + ".txt"), text.trim().getBytes(StandardCharsets.UTF_8));
     }
 
     public Playlist getPlaylist(String guildId, String name) {
