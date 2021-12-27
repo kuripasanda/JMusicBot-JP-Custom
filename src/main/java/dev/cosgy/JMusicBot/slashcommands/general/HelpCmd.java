@@ -32,7 +32,6 @@ public class HelpCmd extends SlashCommand {
         this.bot = bot;
         this.name = "help";
         this.help = "コマンド一覧を表示します。";
-        this.category = new Category("General");
     }
 
     @Override
