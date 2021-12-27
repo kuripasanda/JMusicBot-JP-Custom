@@ -83,12 +83,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             return queue.add(qtrack);
     }
 
-    public void addTrackIfRepeat(AudioTrack track)
-    {
+    public void addTrackIfRepeat(AudioTrack track) {
         // リピートモードの場合は、キューの最後にトラックを追加します
         RepeatMode mode = manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode();
-        if(mode != RepeatMode.OFF)
-        {
+        if (mode != RepeatMode.OFF) {
             queue.add(new QueuedTrack(track.makeClone(), track.getUserData(RequestMetadata.class)));
         }
     }
@@ -119,9 +117,8 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
         return audioPlayer;
     }
 
-    public RequestMetadata getRequestMetadata()
-    {
-        if(audioPlayer.getPlayingTrack() == null)
+    public RequestMetadata getRequestMetadata() {
+        if (audioPlayer.getPlayingTrack() == null)
             return RequestMetadata.EMPTY;
         RequestMetadata rm = audioPlayer.getPlayingTrack().getUserData(RequestMetadata.class);
         return rm == null ? RequestMetadata.EMPTY : rm;
@@ -204,10 +201,9 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(guild.getSelfMember().getColor());
             RequestMetadata rm = getRequestMetadata();
-            if(rm.getOwner() != 0L)
-            {
+            if (rm.getOwner() != 0L) {
                 User u = guild.getJDA().getUserById(rm.user.id);
-                if(u==null)
+                if (u == null)
                     eb.setAuthor(rm.user.username + "#" + rm.user.discrim, null, rm.user.avatar);
                 else
                     eb.setAuthor(u.getName() + "#" + u.getDiscriminator(), null, u.getEffectiveAvatarUrl());

@@ -18,12 +18,52 @@ package dev.cosgy.jmusicbot.slashcommands.general;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jmusicbot.Bot;
 import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.util.List;
 import java.util.Objects;
 
-public class HelpCmd extends Command {
+public class HelpCmd extends SlashCommand {
+    public Bot bot;
+    public HelpCmd(Bot bot){
+        this.bot = bot;
+        this.name = "help";
+        this.help = "コマンド一覧を表示します。";
+        this.category = new Category("General");
+    }
+
+    @Override
+    protected void execute(SlashCommandEvent event) {
+        StringBuilder builder = new StringBuilder("**" + event.getJDA().getSelfUser().getName() + "** コマンド一覧:\n");
+        Category category = null;
+        List<Command> commands = client.getCommands();
+        for (Command command : commands) {
+            if (!command.isHidden() && (!command.isOwnerCommand() ||event.getMember().isOwner())) {
+                if (!Objects.equals(category, command.getCategory())) {
+                    category = command.getCategory();
+                    builder.append("\n\n  __").append(category == null ? "カテゴリなし" : category.getName()).append("__:\n");
+                }
+                builder.append("\n`").append(client.getTextualPrefix()).append(client.getPrefix() == null ? " " : "").append(command.getName())
+                        .append(command.getArguments() == null ? "`" : " " + command.getArguments() + "`")
+                        .append(" - ").append(command.getHelp());
+            }
+        }
+        if (client.getServerInvite() != null)
+            builder.append("\n\nさらにヘルプが必要な場合は、公式サーバーに参加することもできます: ").append(client.getServerInvite());
+
+        event.reply(builder.toString()).queue();
+
+        /*event.reply(builder.toString(), unused ->
+        {
+            if (event.isFromType(ChannelType.TEXT))
+                event.reactSuccess();
+        }, t -> event.replyWarning("ダイレクトメッセージをブロックしているため、ヘルプを送信できません。"));
+         */
+    }
+
     public void execute(CommandEvent event) {
         StringBuilder builder = new StringBuilder("**" + event.getJDA().getSelfUser().getName() + "** コマンド一覧:\n");
         Category category = null;
@@ -41,10 +81,15 @@ public class HelpCmd extends Command {
         }
         if (event.getClient().getServerInvite() != null)
             builder.append("\n\nさらにヘルプが必要な場合は、公式サーバーに参加することもできます: ").append(event.getClient().getServerInvite());
-        event.replyInDm(builder.toString(), unused ->
-        {
-            if (event.isFromType(ChannelType.TEXT))
-                event.reactSuccess();
-        }, t -> event.replyWarning("ダイレクトメッセージをブロックしているため、ヘルプを送信できません。"));
+
+        if(bot.getConfig().getHelpToDm()){
+            event.replyInDm(builder.toString(), unused ->
+            {
+                if (event.isFromType(ChannelType.TEXT))
+                    event.reactSuccess();
+            }, t -> event.replyWarning("ダイレクトメッセージをブロックしているため、ヘルプを送信できません。"));
+        }else{
+            event.reply(builder.toString());
+        }
     }
 }

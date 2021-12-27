@@ -40,7 +40,7 @@ public class SkipCmd extends MusicCommand {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
 
         RequestMetadata rm = handler.getRequestMetadata();
-        if(event.getAuthor().getIdLong() == rm.getOwner()){
+        if (event.getAuthor().getIdLong() == rm.getOwner()) {
             event.reply(event.getClient().getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title + "** をスキップしました。");
             handler.getPlayer().stopTrack();
         } else {
@@ -63,7 +63,7 @@ public class SkipCmd extends MusicCommand {
             int skippers = (int) event.getSelfMember().getVoiceState().getChannel().getMembers().stream()
                     .filter(m -> handler.getVotes().contains(m.getUser().getId())).count();
 
-            int required = (int)Math.ceil(listeners * bot.getSettingsManager().getSettings(event.getGuild()).getSkipRatio());
+            int required = (int) Math.ceil(listeners * bot.getSettingsManager().getSettings(event.getGuild()).getSkipRatio());
             msg += skippers + " 票, " + required + "/" + listeners + " 必要]`";
 
             // 必要投票数が、ボイチャにいる人数と相違する場合
@@ -89,7 +89,7 @@ public class SkipCmd extends MusicCommand {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
 
         RequestMetadata rm = handler.getRequestMetadata();
-        if(event.getUser().getIdLong() == rm.getOwner()){
+        if (event.getUser().getIdLong() == rm.getOwner()) {
             event.reply(client.getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title + "** をスキップしました。").queue();
             handler.getPlayer().stopTrack();
         } else {

@@ -69,8 +69,8 @@ public class StopCmd extends DJCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
-        if(!checkDJPermission(client, event)){
-            event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+        if (!checkDJPermission(client, event)) {
+            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
@@ -79,7 +79,7 @@ public class StopCmd extends DJCommand {
 
         log.debug("再生待ちのサイズ：" + queue.size());
 
-        if(event.getOption("option") == null){
+        if (event.getOption("option") == null) {
             event.reply(client.getSuccess() + " 再生待ちを削除して、再生を停止しました。").queue();
             log.info(event.getGuild().getName() + "で再生待ちを削除して,ボイスチャンネルから切断しました。");
             handler.stopAndClear();

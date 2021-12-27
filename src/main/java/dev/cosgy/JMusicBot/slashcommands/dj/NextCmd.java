@@ -25,8 +25,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 public class NextCmd extends DJCommand {
-    public NextCmd(Bot bot)
-    {
+    public NextCmd(Bot bot) {
         super(bot);
         this.name = "next";
         this.help = "リピートモードが有効な場合、再生待ちから削除せずに現在の曲をスキップします";
@@ -36,31 +35,31 @@ public class NextCmd extends DJCommand {
 
     @Override
     public void doCommand(CommandEvent event) {
-        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         User u = event.getJDA().getUserById(handler.getRequestMetadata().user.id);
 
         AudioTrack track = handler.getPlayer().getPlayingTrack();
         handler.addTrackIfRepeat(track);
 
-        event.reply(event.getClient().getSuccess()+" **"+handler.getPlayer().getPlayingTrack().getInfo().title
-                +"**をスキップしました。 ("+(u==null ? "誰か" : "**"+u.getName()+"**")+"がリクエストしました。)");
+        event.reply(event.getClient().getSuccess() + " **" + handler.getPlayer().getPlayingTrack().getInfo().title
+                + "**をスキップしました。 (" + (u == null ? "誰か" : "**" + u.getName() + "**") + "がリクエストしました。)");
         handler.getPlayer().stopTrack();
     }
 
     @Override
     public void doCommand(SlashCommandEvent event) {
-        if(!checkDJPermission(client, event)){
-            event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+        if (!checkDJPermission(client, event)) {
+            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
             return;
         }
-        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         User u = event.getJDA().getUserById(handler.getRequestMetadata().user.id);
 
         AudioTrack track = handler.getPlayer().getPlayingTrack();
         handler.addTrackIfRepeat(track);
 
-        event.reply(client.getSuccess()+" **"+handler.getPlayer().getPlayingTrack().getInfo().title
-                +"**をスキップしました。 ("+(u==null ? "誰か" : "**"+u.getName()+"**")+"がリクエストしました。)").queue();
+        event.reply(client.getSuccess() + " **" + handler.getPlayer().getPlayingTrack().getInfo().title
+                + "**をスキップしました。 (" + (u == null ? "誰か" : "**" + u.getName() + "**") + "がリクエストしました。)").queue();
         handler.getPlayer().stopTrack();
     }
 }

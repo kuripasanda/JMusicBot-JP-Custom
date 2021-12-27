@@ -55,16 +55,16 @@ public class SettingsManager implements GuildSettingsManager {
                 } catch (JSONException ignored) { /* ignored */ }
 
                 settings.put(Long.parseLong(id), new Settings(this,
-                        o.has("text_channel_id")  ? o.getString("text_channel_id") : null,
+                        o.has("text_channel_id") ? o.getString("text_channel_id") : null,
                         o.has("voice_channel_id") ? o.getString("voice_channel_id") : null,
-                        o.has("dj_role_id")       ? o.getString("dj_role_id") : null,
-                        o.has("volume")           ? o.getInt("volume") : 50,
+                        o.has("dj_role_id") ? o.getString("dj_role_id") : null,
+                        o.has("volume") ? o.getInt("volume") : 50,
                         o.has("default_playlist") ? o.getString("default_playlist") : null,
-                        o.has("repeat")           ? o.getEnum(RepeatMode.class, "repeat") : RepeatMode.OFF,
-                        o.has("prefix")           ? o.getString("prefix") : null,
+                        o.has("repeat") ? o.getEnum(RepeatMode.class, "repeat") : RepeatMode.OFF,
+                        o.has("prefix") ? o.getString("prefix") : null,
                         o.has("bitrate_warnings_readied") && o.getBoolean("bitrate_warnings_readied"),
-                        o.has("announce")         ? o.getInt("announce") : 0,
-                        o.has("skip_ratio")       ? o.getDouble("skip_ratio") : SKIP_RATIO));
+                        o.has("announce") ? o.getInt("announce") : 0,
+                        o.has("skip_ratio") ? o.getDouble("skip_ratio") : SKIP_RATIO));
             });
         } catch (IOException | JSONException e) {
             LoggerFactory.getLogger("Settings").warn("サーバー設定を読み込めませんでした(まだ設定がない場合は正常です): " + e);
@@ -111,7 +111,7 @@ public class SettingsManager implements GuildSettingsManager {
                 o.put("prefix", s.getPrefix());
             if (s.getAnnounce() != 0)
                 o.put("announce", s.getAnnounce());
-            if(s.getSkipRatio() != SKIP_RATIO)
+            if (s.getSkipRatio() != SKIP_RATIO)
                 o.put("skip_ratio", s.getSkipRatio());
             obj.put(Long.toString(key), o);
         });

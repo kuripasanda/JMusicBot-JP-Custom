@@ -104,8 +104,8 @@ public class ForceRemoveCmd extends DJCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
-        if(!checkDJPermission(client, event)){
-            event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+        if (!checkDJPermission(client, event)) {
+            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();

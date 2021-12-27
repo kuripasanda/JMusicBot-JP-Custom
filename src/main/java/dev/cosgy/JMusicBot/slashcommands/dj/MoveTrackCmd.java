@@ -106,8 +106,8 @@ public class MoveTrackCmd extends DJCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
-        if(!checkDJPermission(client, event)){
-            event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+        if (!checkDJPermission(client, event)) {
+            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
             return;
         }
         int from;

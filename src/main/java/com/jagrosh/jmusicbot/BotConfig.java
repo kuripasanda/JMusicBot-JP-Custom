@@ -74,9 +74,8 @@ public class BotConfig {
         try {
             // 設定のパスを取得（デフォルトはconfig.txt)
             path = OtherUtil.getPath(System.getProperty("config.file", System.getProperty("config", "config.txt")));
-            if(path.toFile().exists())
-            {
-                if(System.getProperty("config.file") == null)
+            if (path.toFile().exists()) {
+                if (System.getProperty("config.file") == null)
                     System.setProperty("config.file", System.getProperty("config", path.toAbsolutePath().toString()));
                 ConfigFactory.invalidateCaches();
             }
@@ -350,7 +349,9 @@ public class BotConfig {
         return auditCommands;
     }
 
-    public Config getTransforms() { return transforms; }
+    public Config getTransforms() {
+        return transforms;
+    }
 
     public boolean isOfficialInvite() {
         return officialInvite;

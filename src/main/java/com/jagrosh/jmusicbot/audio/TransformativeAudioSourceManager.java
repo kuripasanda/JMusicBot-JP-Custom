@@ -21,15 +21,16 @@ import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.track.AudioItem;
 import com.sedmelluq.discord.lavaplayer.track.AudioReference;
 import com.typesafe.config.Config;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TransformativeAudioSourceManager extends YoutubeAudioSourceManager {
     private final static Logger log = LoggerFactory.getLogger(TransformativeAudioSourceManager.class);
@@ -45,6 +46,17 @@ public class TransformativeAudioSourceManager extends YoutubeAudioSourceManager 
         this.replacement = replacement;
         this.selector = selector;
         this.format = format;
+    }
+
+    public static List<TransformativeAudioSourceManager> createTransforms(Config transforms) {
+        try {
+            return transforms.root().entrySet().stream()
+                    .map(e -> new TransformativeAudioSourceManager(e.getKey(), transforms.getConfig(e.getKey())))
+                    .collect(Collectors.toList());
+        } catch (Exception ex) {
+            log.warn("Invalid transform ", ex);
+            return Collections.emptyList();
+        }
     }
 
     @Override
@@ -70,16 +82,5 @@ public class TransformativeAudioSourceManager extends YoutubeAudioSourceManager 
             log.warn(String.format("ソース '%s'の例外", name), ex);
         }
         return null;
-    }
-
-    public static List<TransformativeAudioSourceManager> createTransforms(Config transforms) {
-        try {
-            return transforms.root().entrySet().stream()
-                    .map(e -> new TransformativeAudioSourceManager(e.getKey(), transforms.getConfig(e.getKey())))
-                    .collect(Collectors.toList());
-        } catch (Exception ex) {
-            log.warn("Invalid transform ", ex);
-            return Collections.emptyList();
-        }
     }
 }

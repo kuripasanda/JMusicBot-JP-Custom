@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class DJCommand extends MusicCommand {
     static Logger log = LoggerFactory.getLogger("DJCommand");
+
     public DJCommand(Bot bot) {
         super(bot);
         this.category = new Category("DJ", DJCommand::checkDJPermission);

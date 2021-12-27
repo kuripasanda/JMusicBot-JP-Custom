@@ -33,7 +33,7 @@ public abstract class AdminCommand extends SlashCommand {
         this.guildOnly = true;
     }
 
-    public static boolean checkAdminPermission(CommandClient client, SlashCommandEvent event){
+    public static boolean checkAdminPermission(CommandClient client, SlashCommandEvent event) {
         if (event.getUser().getId().equals(client.getOwnerId()) || event.getMember().isOwner())
             return false;
         if (event.getGuild() == null)

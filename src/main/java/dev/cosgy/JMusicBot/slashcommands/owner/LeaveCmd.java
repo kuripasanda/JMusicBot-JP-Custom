@@ -29,7 +29,7 @@ import java.util.List;
 public class LeaveCmd extends OwnerCommand {
     private final Bot bot;
 
-    public LeaveCmd(Bot bot){
+    public LeaveCmd(Bot bot) {
         this.bot = bot;
         this.name = "leave";
         List<OptionData> options = new ArrayList<>();

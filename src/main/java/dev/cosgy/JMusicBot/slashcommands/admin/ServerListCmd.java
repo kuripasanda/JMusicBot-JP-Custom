@@ -30,15 +30,15 @@ import java.util.List;
 public class ServerListCmd extends AdminCommand {
     protected Bot bot;
 
-    public ServerListCmd(Bot bot){
+    public ServerListCmd(Bot bot) {
         this.name = "slist";
         this.help = "ボットコマンドを使用できる役割DJを設定します。";
     }
 
     @Override
     protected void execute(SlashCommandEvent event) {
-        if(checkAdminPermission(client, event)){
-            event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+        if (checkAdminPermission(client, event)) {
+            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
             return;
         }
 

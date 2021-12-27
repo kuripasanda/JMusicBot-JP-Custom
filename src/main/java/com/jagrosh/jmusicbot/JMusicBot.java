@@ -128,13 +128,10 @@ public class JMusicBot {
                 .setAlternativePrefix(config.getAltPrefix())
                 .setOwnerId(Long.toString(config.getOwnerId()))
                 .setEmojis(config.getSuccess(), config.getWarning(), config.getError())
-                .setHelpWord(config.getHelp())
+                .useHelpBuilder(false)
                 .setLinkedCacheSize(200)
                 .setGuildSettingsManager(settings)
-                .setListener(new CommandAudit())
-                .setHelpConsumer((event) -> {
-                    new HelpCmd().execute(event);
-                });
+                .setListener(new CommandAudit());
 
         if (config.isOfficialInvite()) {
             cb.setServerInvite("https://discord.gg/MjNfC6TK2y");
@@ -142,6 +139,7 @@ public class JMusicBot {
 
         List<Command> commandList = new ArrayList<Command>() {{
             //その他
+            add(new HelpCmd(bot));
             add(aboutCommand);
             //add(new InviteCommand());
             add(new PingCommand());
@@ -202,6 +200,7 @@ public class JMusicBot {
 
         // スラッシュコマンドの実装
         List<SlashCommand> slashCommandList = new ArrayList<SlashCommand>() {{
+            add(new HelpCmd(bot));
             add(aboutCommand);
             //add(new InviteCommand());
             add(new PingCommand());

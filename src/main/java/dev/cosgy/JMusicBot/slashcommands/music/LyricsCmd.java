@@ -53,18 +53,15 @@ public class LyricsCmd extends MusicCommand {
     public void doCommand(SlashCommandEvent event) {
         event.getChannel().sendTyping().queue();
         String title;
-        if (event.getOption("name").getAsString().isEmpty())
-        {
+        if (event.getOption("name").getAsString().isEmpty()) {
             AudioHandler sendingHandler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
             if (sendingHandler.isMusicPlaying(event.getJDA()))
                 title = sendingHandler.getPlayer().getPlayingTrack().getInfo().title;
-            else
-            {
+            else {
                 event.reply(client.getError() + "曲が再生されていないため使用できません。").queue();
                 return;
             }
-        }
-        else
+        } else
             title = event.getOption("name").getAsString();
         lClient.getLyrics(title).thenAccept(lyrics ->
         {
@@ -103,18 +100,15 @@ public class LyricsCmd extends MusicCommand {
     public void doCommand(CommandEvent event) {
         event.getChannel().sendTyping().queue();
         String title;
-        if(event.getArgs().isEmpty())
-        {
+        if (event.getArgs().isEmpty()) {
             AudioHandler sendingHandler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
             if (sendingHandler.isMusicPlaying(event.getJDA()))
                 title = sendingHandler.getPlayer().getPlayingTrack().getInfo().title;
-            else
-            {
+            else {
                 event.replyError("曲が再生されていないため使用できません。");
                 return;
             }
-        }
-        else
+        } else
             title = event.getArgs();
         lClient.getLyrics(title).thenAccept(lyrics ->
         {
