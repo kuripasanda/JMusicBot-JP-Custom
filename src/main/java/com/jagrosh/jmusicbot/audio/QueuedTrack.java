@@ -18,7 +18,10 @@ package com.jagrosh.jmusicbot.audio;
 import com.jagrosh.jmusicbot.queue.Queueable;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import dev.cosgy.agent.GensokyoInfoAgent;
 import net.dv8tion.jda.api.entities.User;
+import org.json.JSONObject;
+import org.json.XML;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -46,6 +49,15 @@ public class QueuedTrack implements Queueable {
 
     @Override
     public String toString() {
+
+        if(track.getInfo().uri.contains("https://stream.gensokyoradio.net/")){
+            JSONObject data = XML.toJSONObject(GensokyoInfoAgent.getInfo()).getJSONObject("GENSOKYORADIODATA");
+            String title = data.getJSONObject("SONGINFO").getString("TITLE");
+            String titleUrl = data.getJSONObject("MISC").getString("CIRCLELINK").equals("") ?
+                    "https://gensokyoradio.net/" :
+                    data.getJSONObject("MISC").getString("CIRCLELINK");
+            return "`[" + FormatUtil.formatTime(data.getJSONObject("SONGTIMES").getInt("DURATION")) + "]` [**" + title + "**](" + titleUrl + ") - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
+        }
         return "`[" + FormatUtil.formatTime(track.getDuration()) + "]` [**" + track.getInfo().title + "**](" + track.getInfo().uri + ") - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
     }
 }
