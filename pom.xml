@@ -132,6 +132,11 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.mashape.unirest</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>1.4.9</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -217,7 +222,7 @@
                             <goal>testCompile</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions><configuration><source>8</source><target>8</target></configuration>
             </plugin>
         </plugins>
     </build>

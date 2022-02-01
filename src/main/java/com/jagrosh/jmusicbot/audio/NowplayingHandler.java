@@ -118,7 +118,12 @@ public class NowplayingHandler {
         // 該当する場合はボットステータスを更新します
         if (bot.getConfig().getSongInStatus()) {
             if (track != null && bot.getJDA().getGuilds().stream().filter(g -> Objects.requireNonNull(g.getSelfMember().getVoiceState()).inVoiceChannel()).count() <= 1)
-                bot.getJDA().getPresence().setActivity(Activity.listening(track.getInfo().title));
+
+                if(track.getInfo().uri.contains("https://stream.gensokyoradio.net/")){
+                    bot.getJDA().getPresence().setActivity(Activity.listening("幻想郷ラジオ"));
+                }else {
+                    bot.getJDA().getPresence().setActivity(Activity.listening(track.getInfo().title));
+                }
             else
                 bot.resetGame();
         }

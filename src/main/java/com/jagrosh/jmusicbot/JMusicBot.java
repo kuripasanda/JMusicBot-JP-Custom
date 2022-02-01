@@ -24,6 +24,7 @@ import com.jagrosh.jmusicbot.entities.Prompt;
 import com.jagrosh.jmusicbot.gui.GUI;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
+import dev.cosgy.agent.GensokyoInfoAgent;
 import dev.cosgy.jmusicbot.slashcommands.admin.*;
 import dev.cosgy.jmusicbot.slashcommands.dj.*;
 import dev.cosgy.jmusicbot.slashcommands.general.*;
@@ -309,5 +310,7 @@ public class JMusicBot {
                     "設定ファイルの場所: " + config.getConfigLocation());
             System.exit(1);
         }
+
+        new GensokyoInfoAgent().start();
     }
 }
