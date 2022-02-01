@@ -48,14 +48,17 @@ public class RepeatCmd extends DJCommand {
     protected void execute(CommandEvent event) {
         RepeatMode value;
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
-        if (event.getArgs().isEmpty()) {
+
+        String args = event.getArgs();
+
+        if (args.isEmpty()) {
             log.info("変更前の再生モード:" + settings.getRepeatMode());
             value = (settings.getRepeatMode() == RepeatMode.OFF ? RepeatMode.ALL : (settings.getRepeatMode() == RepeatMode.ALL ? RepeatMode.SINGLE : (settings.getRepeatMode() == RepeatMode.SINGLE ? RepeatMode.OFF : settings.getRepeatMode())));
-        } else if (event.getArgs().matches("(true|all|on)")) {
+        } else if (args.equalsIgnoreCase("true") || args.equalsIgnoreCase("all") || args.equalsIgnoreCase("on")) {
             value = RepeatMode.ALL;
-        } else if (event.getArgs().matches("(false|off)")) {
+        } else if (args.equalsIgnoreCase("false") || args.equalsIgnoreCase("off")) {
             value = RepeatMode.OFF;
-        } else if (event.getArgs().matches("(one|single)")) {
+        } else if (args.equalsIgnoreCase("one") || args.equalsIgnoreCase("single")) {
             value = RepeatMode.SINGLE;
         } else {
             event.replyError("有効なオプションは\n" +

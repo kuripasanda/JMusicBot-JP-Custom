@@ -142,7 +142,9 @@ public class QueueCmd extends MusicCommand {
         StringBuilder sb = new StringBuilder();
         if (ah.getPlayer().getPlayingTrack() != null) {
             sb.append(ah.getPlayer().isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI).append(" **")
-                    .append(ah.getPlayer().getPlayingTrack().getInfo().title).append("**\n");
+                    .append(
+                            ah.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" :
+                            ah.getPlayer().getPlayingTrack().getInfo().title).append("**\n");
         }
         return FormatUtil.filter(sb.append(success).append(" 再生待ち楽曲一覧 | ").append(songslength)
                 .append(" エントリー | `").append(FormatUtil.formatTime(total)).append("` ")

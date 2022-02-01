@@ -191,7 +191,7 @@ public class PlayCmd extends MusicCommand {
             // Output MSG ex:
             // <タイトル><(長さ)> を追加しました。
             // <タイトル><(長さ)> を再生待ちの<再生待ち番号>番目に追加しました。
-            String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " **" + track.getInfo().title
+            String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " **" + (track.getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : track.getInfo().title)
                     + "** (`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "を追加しました。" : "を再生待ちの" + pos + "番目に追加しました。 "));
             if (playlist == null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
                 m.editMessage(addMsg).queue();
@@ -411,7 +411,7 @@ public class PlayCmd extends MusicCommand {
             private void loadSingle(AudioTrack track, AudioPlaylist playlist) {
                 if (bot.getConfig().isTooLong(track)) {
                     m.editOriginal(FormatUtil.filter(client.getWarning() +
-                            " **" + track.getInfo().title + "**`(" + FormatUtil.formatTime(track.getDuration()) + ")` は設定された長さ`(" + FormatUtil.formatTime(bot.getConfig().getMaxSeconds() * 1000) + ")` を超えています。")).queue();
+                            " **" + (track.getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : track.getInfo().title) + "**`(" + FormatUtil.formatTime(track.getDuration()) + ")` は設定された長さ`(" + FormatUtil.formatTime(bot.getConfig().getMaxSeconds() * 1000) + ")` を超えています。")).queue();
                     return;
                 }
                 AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
@@ -420,7 +420,7 @@ public class PlayCmd extends MusicCommand {
                 // Output MSG ex:
                 // <タイトル><(長さ)> を追加しました。
                 // <タイトル><(長さ)> を再生待ちの<再生待ち番号>番目に追加しました。
-                String addMsg = FormatUtil.filter(client.getSuccess() + " **" + track.getInfo().title
+                String addMsg = FormatUtil.filter(client.getSuccess() + " **" + (track.getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : track.getInfo().title)
                         + "** (`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "を追加しました。" : "を再生待ちの" + pos + "番目に追加しました。 "));
                 if (playlist == null || !event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION)) {
                     m.editOriginal(addMsg).queue();

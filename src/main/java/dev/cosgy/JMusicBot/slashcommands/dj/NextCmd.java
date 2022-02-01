@@ -41,7 +41,7 @@ public class NextCmd extends DJCommand {
         AudioTrack track = handler.getPlayer().getPlayingTrack();
         handler.addTrackIfRepeat(track);
 
-        event.reply(event.getClient().getSuccess() + " **" + handler.getPlayer().getPlayingTrack().getInfo().title
+        event.reply(event.getClient().getSuccess() + " **" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title)
                 + "**をスキップしました。 (" + (u == null ? "誰か" : "**" + u.getName() + "**") + "がリクエストしました。)");
         handler.getPlayer().stopTrack();
     }
@@ -58,7 +58,8 @@ public class NextCmd extends DJCommand {
         AudioTrack track = handler.getPlayer().getPlayingTrack();
         handler.addTrackIfRepeat(track);
 
-        event.reply(client.getSuccess() + " **" + handler.getPlayer().getPlayingTrack().getInfo().title
+        event.reply(client.getSuccess() + " **" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title) +
+                handler.getPlayer().getPlayingTrack().getInfo().title
                 + "**をスキップしました。 (" + (u == null ? "誰か" : "**" + u.getName() + "**") + "がリクエストしました。)").queue();
         handler.getPlayer().stopTrack();
     }

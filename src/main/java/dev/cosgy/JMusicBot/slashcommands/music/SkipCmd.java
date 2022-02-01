@@ -41,7 +41,7 @@ public class SkipCmd extends MusicCommand {
 
         RequestMetadata rm = handler.getRequestMetadata();
         if (event.getAuthor().getIdLong() == rm.getOwner()) {
-            event.reply(event.getClient().getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title + "** をスキップしました。");
+            event.reply(event.getClient().getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title) + "** をスキップしました。");
             handler.getPlayer().stopTrack();
         } else {
             // ボイチャにいる人数 (Bot, スピーカーミュートは含まず)
@@ -76,7 +76,7 @@ public class SkipCmd extends MusicCommand {
 
             // 現在の投票者数が、必要投票数に達しているかどうか
             if (skippers >= required) {
-                msg += "\n" + event.getClient().getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title
+                msg += "\n" + event.getClient().getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title)
                         + "**をスキップしました。 " + (rm.getOwner() == 0L ? "(自動再生)" : "(**" + rm.user.username + "**がリクエスト)");
                 handler.getPlayer().stopTrack();
             }
@@ -90,7 +90,7 @@ public class SkipCmd extends MusicCommand {
 
         RequestMetadata rm = handler.getRequestMetadata();
         if (event.getUser().getIdLong() == rm.getOwner()) {
-            event.reply(client.getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title + "** をスキップしました。").queue();
+            event.reply(client.getSuccess() + "**" +(handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title) + "** をスキップしました。").queue();
             handler.getPlayer().stopTrack();
         } else {
             // ボイチャにいる人数 (Bot, スピーカーミュートは含まず)
@@ -125,7 +125,7 @@ public class SkipCmd extends MusicCommand {
 
             // 現在の投票者数が、必要投票数に達しているかどうか
             if (skippers >= required) {
-                msg += "\n" + client.getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title
+                msg += "\n" + client.getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title)
                         + "**をスキップしました。 " + (rm.getOwner() == 0L ? "(自動再生)" : "(**" + rm.user.username + "**がリクエスト)");
                 handler.getPlayer().stopTrack();
             }
