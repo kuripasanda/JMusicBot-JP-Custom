@@ -1,5 +1,5 @@
 #　JMusicBot JP Docker container configuration file
-#  Mainted by CyberRex (CyberRex0)
+#  Maintained by CyberRex (CyberRex0)
 
 FROM openjdk:11-buster
 
