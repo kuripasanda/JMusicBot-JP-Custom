@@ -14,7 +14,7 @@ WORKDIR /opt/jmusicbot
 RUN \
     apt update && \
     apt install -y ffmpeg wget && \
-    wget https://github.com/Cosgy-Dev/JMusicBot-JP/releases/download/$JMUSICBOT_VERSION/JMusicBot-$JMUSICBOT_VERSION.jar -O jmusicbot.jar && \
+    wget https://github.com/Cosgy-Dev/JMusicBot-JP/releases/download/$JMUSICBOT_VERSION/JMusicBot-$JMUSICBOT_VERSION-All.jar -O jmusicbot.jar && \
     echo "cd /opt/jmusicbot && java -Dnogui=true -jar jmusicbot.jar" > /opt/jmusicbot/execute.bash
 
 CMD ["bash", "/opt/jmusicbot/execute.bash"]
