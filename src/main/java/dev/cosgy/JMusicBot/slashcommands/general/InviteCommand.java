@@ -29,7 +29,7 @@ public class InviteCommand extends SlashCommand {
                         Permission.MESSAGE_EXT_EMOJI
                 };
 
-        event.reply(String.format("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=%s", botId, Permission.getRaw(permissions))).queue();
+        event.reply(String.format("https://discord.com/oauth2/authorize?client_id=%s&scope=bot%20applications.commands&permissions=%s", botId, Permission.getRaw(permissions))).queue();
     }
 
     @Override

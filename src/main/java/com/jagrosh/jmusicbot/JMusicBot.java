@@ -142,7 +142,9 @@ public class JMusicBot {
             //その他
             add(new HelpCmd(bot));
             add(aboutCommand);
-            //add(new InviteCommand());
+            if(config.isUseInviteCommand()){
+                add(new InviteCommand());
+            }
             add(new PingCommand());
             add(new SettingsCmd(bot));
             if (config.getCosgyDevHost()) add(new InfoCommand(bot));
@@ -203,7 +205,9 @@ public class JMusicBot {
         List<SlashCommand> slashCommandList = new ArrayList<SlashCommand>() {{
             add(new HelpCmd(bot));
             add(aboutCommand);
-            //add(new InviteCommand());
+            if(config.isUseInviteCommand()){
+                add(new InviteCommand());
+            }
             add(new PingCommand());
             add(new SettingsCmd(bot));
             if (config.getCosgyDevHost()) add(new InfoCommand(bot));

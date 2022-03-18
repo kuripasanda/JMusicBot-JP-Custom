@@ -55,7 +55,7 @@ public class BotConfig {
     private String nicoEmail;
     private String nicoPass;
     // [JMusicBot-JP] added useNicoNico, changeNickName, pauseNoUsers, resumeJoined, stopNoUsers, cosgyDevHost, helpToDm, officialInvite
-    private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost, helpToDm, autoStopQueueSave, auditCommands, officialInvite;
+    private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost, helpToDm, autoStopQueueSave, auditCommands, officialInvite, useinvitecommand;
     private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
     private Activity game;
@@ -124,6 +124,7 @@ public class BotConfig {
             autoStopQueueSave = config.getBoolean("autostopqueuesave");
             auditCommands = config.getBoolean("auditcommands");
             officialInvite = config.getBoolean("officialinvite");
+            useinvitecommand = config.getBoolean("useinvitecommand");
             cosgyDevHost = false;
             // [JMusicBot-JP] End
 
@@ -356,4 +357,6 @@ public class BotConfig {
     public boolean isOfficialInvite() {
         return officialInvite;
     }
+
+    public boolean isUseInviteCommand(){return useinvitecommand; }
 }
