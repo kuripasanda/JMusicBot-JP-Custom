@@ -62,7 +62,7 @@ public class DebugCmd extends OwnerCommand {
             event.reply("デバック情報").queue();
             event.getChannel().sendFile(sb.toString().getBytes(), "debug_information.txt").queue();
         } else {
-            event.reply("デバッグ情報: ```\n" + sb.toString() + "\n```").queue();
+            event.reply("デバッグ情報: ```\n" + sb + "\n```").queue();
         }
     }
 
@@ -96,13 +96,12 @@ public class DebugCmd extends OwnerCommand {
                 .append("\n  ID = ").append(event.getJDA().getSelfUser().getId())
                 .append("\n  Guilds = ").append(event.getJDA().getGuildCache().size())
                 .append("\n  Users = ").append(event.getJDA().getUserCache().size());
-        sb.append("\nこのファイルを開発者に送信する場合は編集せずに送信するようにお願いします。")
-                .append("\nこのファイルには個人情報を特定、アカウントの乗っ取りなどに使用できるデータは含んでいません。");
+        sb.append("\nこのファイルを開発者に送信する場合は編集せずに送信するようにお願いします。");
 
         if (event.isFromType(ChannelType.PRIVATE)
                 || event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ATTACH_FILES))
             event.getChannel().sendFile(sb.toString().getBytes(), "debug_information.txt").queue();
         else
-            event.reply("デバッグ情報: ```\n" + sb.toString() + "\n```");
+            event.reply("デバッグ情報: ```\n" + sb + "\n```");
     }
 }

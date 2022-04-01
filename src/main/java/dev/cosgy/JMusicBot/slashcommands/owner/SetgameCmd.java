@@ -58,7 +58,7 @@ public class SetgameCmd extends OwnerCommand {
             event.reply(event.getClient().getSuccess() + " **" + event.getSelfUser().getName()
                     + "** は " + (title.isEmpty() ? "何もなくなりました。" : "現在、`" + title + "`を再生中です。"));
         } catch (Exception e) {
-            event.reply(event.getClient().getError() + " The game could not be set!");
+            event.reply(event.getClient().getError() + " ステータスを設定できませんでした。");
         }
     }
 
@@ -103,7 +103,7 @@ public class SetgameCmd extends OwnerCommand {
                 event.reply(client.getSuccess() + " **" + event.getJDA().getSelfUser().getName()
                         + "** は " + "現在、`" + title + "`をプレイ中です。");
             } catch (Exception e) {
-                event.reply(client.getError() + " The game could not be set!");
+                event.reply(client.getError() + " ステータスを設定できませんでした。").queue();
             }
         }
 

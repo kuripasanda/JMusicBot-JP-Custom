@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class LastSendTextChannel implements CommandListener {
     static Logger log = LoggerFactory.getLogger("LastSendTextChannel");
     // ギルドIDでテキストチャンネルのIDを持ってきます。
-    private static HashMap<Long, Long> textChannel = new HashMap<>();
+    private static final HashMap<Long, Long> textChannel = new HashMap<>();
 
     public static void SetLastTextId(CommandEvent event) {
         textChannel.put(event.getGuild().getIdLong(), event.getTextChannel().getIdLong());

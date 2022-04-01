@@ -42,7 +42,6 @@ import org.json.XML;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
-import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -206,7 +205,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(guild.getSelfMember().getColor());
             RequestMetadata rm = getRequestMetadata();
-            if(!track.getInfo().uri.contains("https://stream.gensokyoradio.net/")) {
+            if (!track.getInfo().uri.contains("https://stream.gensokyoradio.net/")) {
                 if (rm.getOwner() != 0L) {
                     User u = guild.getJDA().getUserById(rm.user.id);
                     if (u == null)
@@ -233,9 +232,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                         + " `[" + FormatUtil.formatTime(track.getPosition()) + "/" + FormatUtil.formatTime(track.getDuration()) + "]` "
                         + FormatUtil.volumeIcon(audioPlayer.getVolume()));
 
-            }
-            else
-            {
+            } else {
                 JSONObject data = XML.toJSONObject(GensokyoInfoAgent.getInfo()).getJSONObject("GENSOKYORADIODATA");
 
                 String titleUrl = data.getJSONObject("MISC").getString("CIRCLELINK").equals("") ?
@@ -291,7 +288,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             AudioTrack track = audioPlayer.getPlayingTrack();
 
             // 幻想郷ラジオを再生しているか確認
-            if(track.getInfo().uri.contains("https://stream.gensokyoradio.net/")) {
+            if (track.getInfo().uri.contains("https://stream.gensokyoradio.net/")) {
                 return "**幻想郷ラジオ** [" + (userid == 0 ? "自動再生" : "<@" + userid + ">") + "]"
                         + "\n" + (audioPlayer.isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI) + " "
                         + "[LIVE] "

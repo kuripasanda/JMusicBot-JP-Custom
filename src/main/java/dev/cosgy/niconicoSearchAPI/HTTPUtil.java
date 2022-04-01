@@ -166,7 +166,7 @@ public class HTTPUtil {
                     response.close();
                 }
 
-                System.out.println("エラー: " + responseCode + "\n" + sb.toString());
+                System.out.println("エラー: " + responseCode + "\n" + sb);
             }
         } catch (MalformedURLException e) {
             throw new NullPointerException("URLが不正です: " + e.getLocalizedMessage());
@@ -188,7 +188,7 @@ public class HTTPUtil {
             } catch (Exception ignored) {
             }
 
-            System.out.println("エラーが発生しました: " + e.getLocalizedMessage() + "\n" + sb.toString());
+            System.out.println("エラーが発生しました: " + e.getLocalizedMessage() + "\n" + sb);
         } finally {
             if (connection != null) connection.disconnect();
         }

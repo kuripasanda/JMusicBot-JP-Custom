@@ -90,7 +90,7 @@ public class SkipCmd extends MusicCommand {
 
         RequestMetadata rm = handler.getRequestMetadata();
         if (event.getUser().getIdLong() == rm.getOwner()) {
-            event.reply(client.getSuccess() + "**" +(handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title) + "** をスキップしました。").queue();
+            event.reply(client.getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title) + "** をスキップしました。").queue();
             handler.getPlayer().stopTrack();
         } else {
             // ボイチャにいる人数 (Bot, スピーカーミュートは含まず)

@@ -138,7 +138,7 @@ public class BotConfig {
                         + "\nhttps://github.com/jagrosh/MusicBot/wiki/Getting-a-Bot-Token."
                         + "\nBOTトークン: ");
                 if (token == null) {
-                    prompt.alert(Prompt.Level.WARNING, CONTEXT, "トークンが入力されていません！終了します。\n\n設定ファイルの場所: " + path.toAbsolutePath().toString());
+                    prompt.alert(Prompt.Level.WARNING, CONTEXT, "トークンが入力されていません！終了します。\n\n設定ファイルの場所: " + path.toAbsolutePath());
                     return;
                 } else {
                     write = true;
@@ -157,7 +157,7 @@ public class BotConfig {
                     owner = 0;
                 }
                 if (owner <= 0) {
-                    prompt.alert(Prompt.Level.ERROR, CONTEXT, "無効なユーザーIDです！終了します。\n\n設定ファイルの場所: " + path.toAbsolutePath().toString());
+                    prompt.alert(Prompt.Level.ERROR, CONTEXT, "無効なユーザーIDです！終了します。\n\n設定ファイルの場所: " + path.toAbsolutePath());
                     System.exit(0);
                 } else {
                     write = true;
@@ -182,7 +182,7 @@ public class BotConfig {
             // if we get through the whole config, it's good to go
             valid = true;
         } catch (ConfigException | IOException ex) {
-            prompt.alert(Prompt.Level.ERROR, CONTEXT, ex + ": " + ex.getMessage() + "\n\n設定ファイルの場所: " + path.toAbsolutePath().toString());
+            prompt.alert(Prompt.Level.ERROR, CONTEXT, ex + ": " + ex.getMessage() + "\n\n設定ファイルの場所: " + path.toAbsolutePath());
         }
     }
 
@@ -358,5 +358,7 @@ public class BotConfig {
         return officialInvite;
     }
 
-    public boolean isUseInviteCommand(){return useinvitecommand; }
+    public boolean isUseInviteCommand() {
+        return useinvitecommand;
+    }
 }

@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -32,10 +33,7 @@ public class nicoSearchAPI {
         hu.setTargetAddress("https://api.search.nicovideo.jp/api/v2/video/contents/search");
         hu.setMethod("GET");
         Map<String, String> queryMap = new HashMap<>();
-        try {
-            queryMap.put("q", URLEncoder.encode(query, "UTF-8"));
-        } catch (UnsupportedEncodingException ignored) {
-        }
+        queryMap.put("q", URLEncoder.encode(query, StandardCharsets.UTF_8));
         queryMap.put("_sort", "-viewCounter");
         queryMap.put("targets", "title");
         queryMap.put("fields", "contentId,title,description,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime,lastCommentTime,lengthSeconds,thumbnailUrl");

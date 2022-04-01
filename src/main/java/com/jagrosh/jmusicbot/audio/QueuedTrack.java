@@ -50,7 +50,7 @@ public class QueuedTrack implements Queueable {
     @Override
     public String toString() {
 
-        if(track.getInfo().uri.contains("https://stream.gensokyoradio.net/")){
+        if (track.getInfo().uri.contains("https://stream.gensokyoradio.net/")) {
             JSONObject data = XML.toJSONObject(GensokyoInfoAgent.getInfo()).getJSONObject("GENSOKYORADIODATA");
             String title = data.getJSONObject("SONGINFO").getString("TITLE");
             String titleUrl = data.getJSONObject("MISC").getString("CIRCLELINK").equals("") ?

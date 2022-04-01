@@ -53,7 +53,7 @@ public class EvalCmd extends OwnerCommand {
         se.put("guild", event.getGuild());
         se.put("channel", event.getChannel());
         try {
-            event.reply(client.getSuccess() + " 正常に実行されました:\n```\n" + se.eval(event.getOption("code").getAsString()) + " ```");
+            event.reply(client.getSuccess() + " 正常に実行されました:\n```\n" + se.eval(event.getOption("code").getAsString()) + " ```").queue();
         } catch (Exception e) {
             event.reply(client.getError() + " 例外が発生しました\n```\n" + e + " ```").queue();
         }

@@ -31,6 +31,7 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -87,7 +88,7 @@ public class OtherUtil {
             into.write(buf, 0, n);
         }
         into.close();
-        return into.toString("utf-8");
+        return into.toString(StandardCharsets.UTF_8);
     }
 
     /**

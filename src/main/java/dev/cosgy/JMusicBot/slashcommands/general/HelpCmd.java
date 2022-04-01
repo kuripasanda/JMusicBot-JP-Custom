@@ -28,7 +28,8 @@ import java.util.Objects;
 
 public class HelpCmd extends SlashCommand {
     public Bot bot;
-    public HelpCmd(Bot bot){
+
+    public HelpCmd(Bot bot) {
         this.bot = bot;
         this.name = "help";
         this.help = "コマンド一覧を表示します。";
@@ -40,7 +41,7 @@ public class HelpCmd extends SlashCommand {
         Category category = null;
         List<Command> commands = client.getCommands();
         for (Command command : commands) {
-            if (!command.isHidden() && (!command.isOwnerCommand() ||event.getMember().isOwner())) {
+            if (!command.isHidden() && (!command.isOwnerCommand() || event.getMember().isOwner())) {
                 if (!Objects.equals(category, command.getCategory())) {
                     category = command.getCategory();
                     builder.append("\n\n  __").append(category == null ? "カテゴリなし" : category.getName()).append("__:\n");
@@ -81,13 +82,13 @@ public class HelpCmd extends SlashCommand {
         if (event.getClient().getServerInvite() != null)
             builder.append("\n\nさらにヘルプが必要な場合は、公式サーバーに参加することもできます: ").append(event.getClient().getServerInvite());
 
-        if(bot.getConfig().getHelpToDm()){
+        if (bot.getConfig().getHelpToDm()) {
             event.replyInDm(builder.toString(), unused ->
             {
                 if (event.isFromType(ChannelType.TEXT))
                     event.reactSuccess();
             }, t -> event.replyWarning("ダイレクトメッセージをブロックしているため、ヘルプを送信できません。"));
-        }else{
+        } else {
             event.reply(builder.toString());
         }
     }
