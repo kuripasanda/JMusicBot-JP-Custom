@@ -82,18 +82,17 @@ public class PlaylistCmd extends DJCommand {
         @Override
         public void doCommand(CommandEvent event) {
 
-            String pname = event.getArgs().replaceAll("\\s+", "_");
+            String pName = event.getArgs().replaceAll("\\s+", "_");
             String guildId = event.getGuild().getId();
 
-            if (pname.isEmpty()) {
-                event.replyError("プレイリスト名を指定してください。");
-                return;
+            if(pName == null || pName.isEmpty())
+            {
+                event.replyError("プレイリストの名前を入力してください。");
             }
-
-            if (bot.getPlaylistLoader().getPlaylist(guildId, pname) == null) {
+            else if(bot.getPlaylistLoader().getPlaylist(guildId, pName) == null) {
                 try {
-                    bot.getPlaylistLoader().createPlaylist(guildId, pname);
-                    event.reply(event.getClient().getSuccess() + "再生リスト `" + pname + "` を作成しました");
+                    bot.getPlaylistLoader().createPlaylist(guildId, pName);
+                    event.reply(event.getClient().getSuccess() + "再生リスト `" + pName + "` を作成しました");
                 } catch (IOException e) {
                     if (event.isOwner() || event.getMember().isOwner()) {
                         event.replyError("曲の読み込み中にエラーが発生しました。\n" +
@@ -105,7 +104,7 @@ public class PlaylistCmd extends DJCommand {
                     event.reply(event.getClient().getError() + " 再生リストを作成できませんでした。:" + e.getLocalizedMessage());
                 }
             } else {
-                event.reply(event.getClient().getError() + " 再生リスト `" + pname + "` は既に存在します");
+                event.reply(event.getClient().getError() + " 再生リスト `" + pName + "` は既に存在します");
             }
         }
 
@@ -117,8 +116,10 @@ public class PlaylistCmd extends DJCommand {
             }
             String pname = event.getOption("name").getAsString();
             String guildId = event.getGuild().getId();
-
-            if (bot.getPlaylistLoader().getPlaylist(guildId, pname) == null) {
+            if(pname == null || pname.isEmpty())
+            {
+                event.reply(client.getError() + "プレイリストの名前を入力してください。").queue();
+            } else if(bot.getPlaylistLoader().getPlaylist(guildId, pname) == null) {
                 try {
                     bot.getPlaylistLoader().createPlaylist(guildId, pname);
                     event.reply(client.getSuccess() + "再生リスト `" + pname + "` を作成しました").queue();
