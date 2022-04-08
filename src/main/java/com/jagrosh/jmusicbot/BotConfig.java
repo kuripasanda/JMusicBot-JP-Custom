@@ -83,7 +83,6 @@ public class BotConfig {
             // 設定ファイルにロードされ、デフォルト値が追加される
             //Config config = ConfigFactory.parseFile(path.toFile()).withFallback(ConfigFactory.load());
             Config config = ConfigFactory.load();
-
             // 設定値
             token = config.getString("token");
             prefix = config.getString("prefix");
