@@ -32,6 +32,10 @@
             <name>Maven Central</name>
             <url>https://repo.maven.apache.org/maven2/</url>
         </repository>
+        <repository>
+            <id>scarsz</id>
+            <url>https://nexus.scarsz.me/content/groups/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -44,6 +48,11 @@
             <groupId>com.github.Cosgy-Dev</groupId>
             <artifactId>lavaplayer</artifactId>
             <version>jmusicbot-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>github.scarsz</groupId>
+            <artifactId>configuralize</artifactId>
+            <version>1.4.0</version>
         </dependency>
         <!--
         <dependency>

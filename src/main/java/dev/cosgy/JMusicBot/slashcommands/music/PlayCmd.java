@@ -425,7 +425,6 @@ public class PlayCmd extends MusicCommand {
                 if (playlist == null || !event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION)) {
                     m.editOriginal(addMsg).queue();
                 } else {
-                    m.deleteOriginal().queue();
                     new ButtonMenu.Builder()
                             .setText(addMsg + "\n" + client.getWarning() + " この曲の再生リストには他に**" + playlist.getTracks().size() + "**曲が付属しています。トラックを読み込むには " + LOAD + " を選択して下さい。")
                             .setChoices(LOAD, CANCEL)
@@ -441,10 +440,10 @@ public class PlayCmd extends MusicCommand {
                             {
                                 try {
                                     m.clearReactions().queue();
+                                    m.delete().queue();
                                 } catch (PermissionException ignore) {
                                 }
                             }).build().display(event.getChannel());
-
                 }
             }
 
