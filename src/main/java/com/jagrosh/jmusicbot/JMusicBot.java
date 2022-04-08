@@ -139,7 +139,64 @@ public class JMusicBot {
         }
 
         List<Command> commandList = new ArrayList<Command>() {{
+            //その他
+            add(new HelpCmd(bot));
+            add(aboutCommand);
+            if(config.isUseInviteCommand()){
+                add(new InviteCommand());
+            }
+            add(new PingCommand());
+            add(new SettingsCmd(bot));
+            if (config.getCosgyDevHost()) add(new InfoCommand(bot));
+            // General
+            add(new ServerInfo());
+            //add(new UserInfo());
+            add(new CashCmd(bot));
+            // Music
+            add(new LyricsCmd(bot));
+            add(new NowplayingCmd(bot));
             add(new PlayCmd(bot));
+            add(new PlaylistsCmd(bot));
+            add(new MylistCmd(bot));
+            //add(new QueueCmd(bot));
+            add(new QueueCmd(bot));
+            add(new RemoveCmd(bot));
+            add(new SearchCmd(bot));
+            add(new SCSearchCmd(bot));
+            add(new NicoSearchCmd(bot));
+            add(new ShuffleCmd(bot));
+            add(new SkipCmd(bot));
+            add(new VolumeCmd(bot));
+            // DJ
+            add(new ForceRemoveCmd(bot));
+            add(new ForceskipCmd(bot));
+            add(new NextCmd(bot));
+            add(new MoveTrackCmd(bot));
+            add(new PauseCmd(bot));
+            add(new PlaynextCmd(bot));
+            //add(new RepeatCmd(bot));
+            add(new RepeatCmd(bot));
+            add(new SkipToCmd(bot));
+            add(new PlaylistCmd(bot));
+            add(new StopCmd(bot));
+            //add(new VolumeCmd(bot));
+            // Admin
+            add(new PrefixCmd(bot));
+            add(new SetdjCmd(bot));
+            add(new SkipratioCmd(bot));
+            add(new SettcCmd(bot));
+            add(new SetvcCmd(bot));
+            add(new AutoplaylistCmd(bot));
+            add(new ServerListCmd(bot));
+            // Owner
+            add(new DebugCmd(bot));
+            add(new SetavatarCmd(bot));
+            add(new SetgameCmd(bot));
+            add(new SetnameCmd(bot));
+            add(new SetstatusCmd(bot));
+            add(new PublistCmd(bot));
+            add(new ShutdownCmd(bot));
+            //add(new LeaveCmd(bot));
         }};
         cb.addCommands(commandList.toArray(new Command[0]));
 
@@ -213,7 +270,7 @@ public class JMusicBot {
         if (config.getStatus() != OnlineStatus.UNKNOWN)
             cb.setStatus(config.getStatus());
         if (config.getGame() == null)
-            cb.setActivity(Activity.playing("/" + config.getHelp() + "でヘルプを確認"));
+            cb.setActivity(Activity.playing(config.getPrefix() + config.getHelp() + "でヘルプを確認"));
         else if (config.getGame().getName().toLowerCase().matches("(none|なし)")) {
             cb.setActivity(null);
             nogame = true;
