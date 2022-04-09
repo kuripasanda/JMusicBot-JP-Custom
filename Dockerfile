@@ -4,7 +4,7 @@
 FROM openjdk:11-buster
 
 # change the version if new release is appeared
-ENV JMUSICBOT_VERSION=0.6.5
+ENV JMUSICBOT_VERSION=0.6.8
 
 # DO NOT EDIT UNDER THIS LINE
 RUN mkdir -p /opt/jmusicbot
@@ -12,9 +12,12 @@ RUN mkdir -p /opt/jmusicbot
 WORKDIR /opt/jmusicbot
 
 RUN \
-    apt update && \
-    apt install -y ffmpeg wget && \
-    wget https://github.com/Cosgy-Dev/JMusicBot-JP/releases/download/$JMUSICBOT_VERSION/JMusicBot-$JMUSICBOT_VERSION-All.jar -O jmusicbot.jar && \
-    echo "cd /opt/jmusicbot && java -Dnogui=true -jar jmusicbot.jar" > /opt/jmusicbot/execute.bash
+    echo "JMusicBot-JP Docker Container Builder v1.1\nMaintained by CyberRex (CyberRex0)"; \
+    echo "Preconfiguring apt..." & apt-get update > /dev/null; \
+    echo "Installing packages..." & apt-get install -y ffmpeg wget curl jq > /dev/null; \
+    echo "Downloading latest version of JMusicBot-JP..."; \
+    wget $(curl https://api.github.com/repos/Cosgy-Dev/JMusicBot-JP/releases/latest | jq -r '.assets[] | select(.browser_download_url | contains(".jar")) | .browser_download_url') -O /opt/jmusicbot/jmusicbot.jar; \
+    echo "cd /opt/jmusicbot && java -Dnogui=true -jar jmusicbot.jar" > /opt/jmusicbot/execute.bash; \
+    echo "Build Completed."
 
 CMD ["bash", "/opt/jmusicbot/execute.bash"]
