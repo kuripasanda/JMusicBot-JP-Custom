@@ -69,11 +69,11 @@ public class GensokyoInfoAgent extends Thread {
                 fetch();
                 sleep(INTERVAL_MILLIS);
             } catch (Exception e) {
-                log.error("情報を取得中に例外が発生しました！", e);
+                //log.error("情報を取得中に例外が発生しました！", e);
                 try {
                     sleep(1000);
                 } catch (InterruptedException e1) {
-                    log.error("エージェントの例外後にスリープ中に中断されました", e);
+                    //log.error("エージェントの例外後にスリープ中に中断されました", e);
                     break;
                 }
             }
