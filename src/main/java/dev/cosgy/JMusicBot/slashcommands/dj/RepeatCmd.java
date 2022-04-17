@@ -136,7 +136,7 @@ public class RepeatCmd extends DJCommand {
         public OffCmd(Bot bot) {
             super(bot);
             this.name = "off";
-            this.help = "全曲リピートモードに変更します。";
+            this.help = "リピートを無効に変更します。";
             this.guildOnly = true;
         }
 
