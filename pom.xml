@@ -49,11 +49,6 @@
             <artifactId>lavaplayer</artifactId>
             <version>jmusicbot-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>github.scarsz</groupId>
-            <artifactId>configuralize</artifactId>
-            <version>1.4.0</version>
-        </dependency>
         <!--
         <dependency>
             <groupId>com.sedmelluq</groupId>

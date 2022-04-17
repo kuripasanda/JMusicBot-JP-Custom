@@ -37,7 +37,7 @@ public class RemoveCmd extends MusicCommand {
     public RemoveCmd(Bot bot) {
         super(bot);
         this.name = "remove";
-        this.help = "再生再生待ちから曲を削除します";
+        this.help = "再生待ちから曲を削除します";
         this.arguments = "<再生待ち番号|すべて|ALL>";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.beListening = true;
