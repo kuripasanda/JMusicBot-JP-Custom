@@ -42,7 +42,6 @@ import org.slf4j.Logger;
 
 import javax.security.auth.login.LoginException;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -145,7 +144,7 @@ public class JMusicBot {
             //その他
             add(new HelpCmd(bot));
             add(aboutCommand);
-            if(config.isUseInviteCommand()){
+            if (config.isUseInviteCommand()) {
                 add(new InviteCommand());
             }
             add(new PingCommand());

@@ -27,9 +27,8 @@ import java.util.Scanner;
 public class Prompt {
     private final String title;
     private final String noguiMessage;
-
-    private boolean nogui;
     private final boolean noprompt;
+    private boolean nogui;
     private Scanner scanner;
 
     public Prompt(String title) {
