@@ -85,11 +85,9 @@ public class PlaylistCmd extends DJCommand {
             String pName = event.getArgs().replaceAll("\\s+", "_");
             String guildId = event.getGuild().getId();
 
-            if(pName == null || pName.isEmpty())
-            {
+            if (pName == null || pName.isEmpty()) {
                 event.replyError("プレイリストの名前を入力してください。");
-            }
-            else if(bot.getPlaylistLoader().getPlaylist(guildId, pName) == null) {
+            } else if (bot.getPlaylistLoader().getPlaylist(guildId, pName) == null) {
                 try {
                     bot.getPlaylistLoader().createPlaylist(guildId, pName);
                     event.reply(event.getClient().getSuccess() + "再生リスト `" + pName + "` を作成しました");
@@ -116,10 +114,9 @@ public class PlaylistCmd extends DJCommand {
             }
             String pname = event.getOption("name").getAsString();
             String guildId = event.getGuild().getId();
-            if(pname == null || pname.isEmpty())
-            {
+            if (pname == null || pname.isEmpty()) {
                 event.reply(client.getError() + "プレイリストの名前を入力してください。").queue();
-            } else if(bot.getPlaylistLoader().getPlaylist(guildId, pname) == null) {
+            } else if (bot.getPlaylistLoader().getPlaylist(guildId, pname) == null) {
                 try {
                     bot.getPlaylistLoader().createPlaylist(guildId, pname);
                     event.reply(client.getSuccess() + "再生リスト `" + pname + "` を作成しました").queue();
