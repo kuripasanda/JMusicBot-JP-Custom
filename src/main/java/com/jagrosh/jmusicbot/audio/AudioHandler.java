@@ -41,6 +41,7 @@ import org.json.JSONObject;
 import org.json.XML;
 
 import java.awt.*;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -233,7 +234,12 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                         + FormatUtil.volumeIcon(audioPlayer.getVolume()));
 
             } else {
-                JSONObject data = XML.toJSONObject(GensokyoInfoAgent.getInfo()).getJSONObject("GENSOKYORADIODATA");
+                JSONObject data = null;
+                try {
+                    data = XML.toJSONObject(GensokyoInfoAgent.getInfo()).getJSONObject("GENSOKYORADIODATA");
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
 
                 String titleUrl = data.getJSONObject("MISC").getString("CIRCLELINK").equals("") ?
                         "https://gensokyoradio.net/" :

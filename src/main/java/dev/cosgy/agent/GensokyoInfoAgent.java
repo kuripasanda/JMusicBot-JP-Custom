@@ -17,11 +17,15 @@
 package dev.cosgy.agent;
 
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class GensokyoInfoAgent extends Thread {
     private static final Logger log = LoggerFactory.getLogger(GensokyoInfoAgent.class);
@@ -35,27 +39,31 @@ public class GensokyoInfoAgent extends Thread {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    private static String fetch() {
-        try {
-            info = Unirest.get("https://gensokyoradio.net/xml").asString().getBody();
+    private static String fetch() throws Exception {
+        HttpURLConnection connection = null;
+        try{
+            // XMLの取得元URL設定
+            URL url = new URL("https://gensokyoradio.net/xml");
 
-            JSONObject data = XML.toJSONObject(GensokyoInfoAgent.getInfo()).getJSONObject("GENSOKYORADIODATA");
-
-            String newSong = data.getJSONObject("SONGINFO").getString("TITLE");
-
-            if (!newSong.equals(lastSong)) {
-                log.info("再生中 " + newSong);
+            // コネクションをオープン
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            // レスポンスが来た場合は処理続行
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                // InputStreamを返す
+                return connection.getInputStream().toString();
+            }else{
+                throw new IOException();
             }
 
-            lastSong = data.getJSONObject("SONGINFO").getString("TITLE");
-
-            return info;
-        } catch (UnirestException e) {
-            throw new RuntimeException(e);
+        } finally{
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
     }
 
-    public static String getInfo() {
+    public static String getInfo() throws Exception {
         return info == null ? fetch() : info;
     }
 

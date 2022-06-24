@@ -23,6 +23,8 @@ import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 import org.json.XML;
 
+import java.io.IOException;
+
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
  */
@@ -51,7 +53,12 @@ public class QueuedTrack implements Queueable {
     public String toString() {
 
         if (track.getInfo().uri.contains("https://stream.gensokyoradio.net/")) {
-            JSONObject data = XML.toJSONObject(GensokyoInfoAgent.getInfo()).getJSONObject("GENSOKYORADIODATA");
+            JSONObject data = null;
+            try {
+                data = XML.toJSONObject(GensokyoInfoAgent.getInfo()).getJSONObject("GENSOKYORADIODATA");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             String title = data.getJSONObject("SONGINFO").getString("TITLE");
             String titleUrl = data.getJSONObject("MISC").getString("CIRCLELINK").equals("") ?
                     "https://gensokyoradio.net/" :
