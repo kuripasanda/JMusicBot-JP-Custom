@@ -197,7 +197,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
 
 
     // Formatting
-    public Message getNowPlaying(JDA jda) {
+    public Message getNowPlaying(JDA jda) throws Exception {
         if (isMusicPlaying(jda)) {
             Guild guild = guild(jda);
             AudioTrack track = audioPlayer.getPlayingTrack();
@@ -206,7 +206,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(guild.getSelfMember().getColor());
             RequestMetadata rm = getRequestMetadata();
-            if (!track.getInfo().uri.contains("https://stream.gensokyoradio.net/")) {
+            if (!track.getInfo().uri.matches(".*stream.gensokyoradio.net/.*")) {
                 if (rm.getOwner() != 0L) {
                     User u = guild.getJDA().getUserById(rm.user.id);
                     if (u == null)
@@ -234,37 +234,31 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                         + FormatUtil.volumeIcon(audioPlayer.getVolume()));
 
             } else {
-                JSONObject data = null;
-                try {
-                    data = XML.toJSONObject(GensokyoInfoAgent.getInfo()).getJSONObject("GENSOKYORADIODATA");
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
 
-                String titleUrl = data.getJSONObject("MISC").getString("CIRCLELINK").equals("") ?
+                String titleUrl = GensokyoInfoAgent.getInfo().getMisc().getCirclelink().equals("") ?
                         "https://gensokyoradio.net/" :
-                        data.getJSONObject("MISC").getString("CIRCLELINK");
+                        GensokyoInfoAgent.getInfo().getMisc().getCirclelink();
 
-                String albumArt = data.getJSONObject("MISC").getString("ALBUMART").equals("") ?
+                String albumArt = GensokyoInfoAgent.getInfo().getMisc().getAlbumart().equals("") ?
                         "https://cdn.discordapp.com/attachments/240116420946427905/373019550725177344/gr-logo-placeholder.png" :
-                        "https://gensokyoradio.net/images/albums/original/" + data.getJSONObject("MISC").getString("ALBUMART");
+                        "https://gensokyoradio.net/images/albums/original/" + GensokyoInfoAgent.getInfo().getMisc().getAlbumart();
 
-                eb.setTitle(data.getJSONObject("SONGINFO").getString("TITLE"), titleUrl)
-                        .addField("アルバム", data.getJSONObject("SONGINFO").getString("ALBUM"), true)
-                        .addField("アーティスト", data.getJSONObject("SONGINFO").getString("ARTIST"), true)
-                        .addField("サークル", data.getJSONObject("SONGINFO").getString("CIRCLE"), true);
+                eb.setTitle(GensokyoInfoAgent.getInfo().getSonginfo().getTitle(), titleUrl)
+                        .addField("アルバム", GensokyoInfoAgent.getInfo().getSonginfo().getAlbum(), true)
+                        .addField("アーティスト", GensokyoInfoAgent.getInfo().getSonginfo().getArtist(), true)
+                        .addField("サークル", GensokyoInfoAgent.getInfo().getSonginfo().getCircle(), true);
 
-                if (data.getJSONObject("SONGINFO").optInt("YEAR") != 0) {
-                    eb.addField("リリース", Integer.toString(data.getJSONObject("SONGINFO").getInt("YEAR")), true);
+                if (Integer.parseInt(GensokyoInfoAgent.getInfo().getSonginfo().getYear()) != 0) {
+                    eb.addField("リリース", GensokyoInfoAgent.getInfo().getSonginfo().getYear(), true);
                 }
 
-                double progress = (double) data.getJSONObject("SONGTIMES").getInt("PLAYED") / data.getJSONObject("SONGTIMES").getInt("DURATION");
+                double progress = (double) GensokyoInfoAgent.getInfo().getSongtimes().getPlayed() / GensokyoInfoAgent.getInfo().getSongtimes().getDuration();
                 eb.setDescription((audioPlayer.isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI)
                         + " " + FormatUtil.progressBar(progress)
-                        + " `[" + FormatUtil.formatTime(data.getJSONObject("SONGTIMES").getInt("PLAYED")) + "/" + FormatUtil.formatTime(data.getJSONObject("SONGTIMES").getInt("DURATION")) + "]` "
+                        + " `[" + FormatUtil.formatTime(GensokyoInfoAgent.getInfo().getSongtimes().getPlayed()) + "/" + FormatUtil.formatTime(GensokyoInfoAgent.getInfo().getSongtimes().getDuration()) + "]` "
                         + FormatUtil.volumeIcon(audioPlayer.getVolume()));
 
-                eb.addField("リスナー", Integer.toString(data.getJSONObject("SERVERINFO").getInt("LISTENERS")), true)
+                eb.addField("リスナー", Integer.toString(GensokyoInfoAgent.getInfo().getServerinfo().getListeners()), true)
                         .setImage(albumArt)
                         .setColor(new Color(66, 16, 80))
                         .setFooter("コンテンツはgensokyoradio.netによって提供されています。\n" +
@@ -294,7 +288,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             AudioTrack track = audioPlayer.getPlayingTrack();
 
             // 幻想郷ラジオを再生しているか確認
-            if (track.getInfo().uri.contains("https://stream.gensokyoradio.net/")) {
+            if (track.getInfo().uri.matches(".*stream.gensokyoradio.net/.*")) {
                 return "**幻想郷ラジオ** [" + (userid == 0 ? "自動再生" : "<@" + userid + ">") + "]"
                         + "\n" + (audioPlayer.isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI) + " "
                         + "[LIVE] "

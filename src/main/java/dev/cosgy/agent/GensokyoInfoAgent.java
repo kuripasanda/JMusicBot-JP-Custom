@@ -16,21 +16,23 @@
 
 package dev.cosgy.agent;
 
-import com.mashape.unirest.http.Unirest;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
-import org.json.XML;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.cosgy.agent.objects.ResultSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 
 public class GensokyoInfoAgent extends Thread {
     private static final Logger log = LoggerFactory.getLogger(GensokyoInfoAgent.class);
     private static final int INTERVAL_MILLIS = 5000; // 5 secs
-    private static String info = null;
+    private static ResultSet info = null;
     private static String lastSong = "";
 
     public GensokyoInfoAgent() {
@@ -39,21 +41,37 @@ public class GensokyoInfoAgent extends Thread {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    private static String fetch() throws Exception {
+    private static ResultSet fetch() throws Exception {
         HttpURLConnection connection = null;
         try{
             // XMLの取得元URL設定
-            URL url = new URL("https://gensokyoradio.net/xml");
+            //URL url = new URL("https://gensokyoradio.net/xml");
 
-            // コネクションをオープン
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            // レスポンスが来た場合は処理続行
-            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                // InputStreamを返す
-                return connection.getInputStream().toString();
-            }else{
-                throw new IOException();
+            HttpRequest req = HttpRequest.newBuilder(new URI("https://gensokyoradio.net/json"))
+                    .GET()
+                    .timeout(Duration.ofSeconds(10))
+                    .build();
+
+            HttpClient client = HttpClient.newBuilder()
+                    .version(HttpClient.Version.HTTP_1_1)
+                    .followRedirects(HttpClient.Redirect.NORMAL)
+                    .connectTimeout(Duration.ofSeconds(10))
+                    .build();
+
+            HttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());
+            String body = res.body();
+
+            switch (res.statusCode()) {
+                case 200:
+                    // HTTP レスポンスの JSON を ResultSet クラスにマッピング
+                    info = new ObjectMapper().readValue(body, ResultSet.class);
+                    return info;
+                case 403:
+                    log.info("幻想郷ラジオの情報取得エラー(403)");
+                    return null;
+                default:
+                    log.info("幻想郷ラジオの情報取得エラー(other)");
+                    return null;
             }
 
         } finally{
@@ -63,7 +81,7 @@ public class GensokyoInfoAgent extends Thread {
         }
     }
 
-    public static String getInfo() throws Exception {
+    public static ResultSet getInfo() throws Exception {
         return info == null ? fetch() : info;
     }
 
@@ -77,11 +95,11 @@ public class GensokyoInfoAgent extends Thread {
                 fetch();
                 sleep(INTERVAL_MILLIS);
             } catch (Exception e) {
-                //log.error("情報を取得中に例外が発生しました！", e);
+                log.error("情報を取得中に例外が発生しました！", e);
                 try {
                     sleep(1000);
                 } catch (InterruptedException e1) {
-                    //log.error("エージェントの例外後にスリープ中に中断されました", e);
+                    log.error("エージェントの例外後にスリープ中に中断されました", e);
                     break;
                 }
             }

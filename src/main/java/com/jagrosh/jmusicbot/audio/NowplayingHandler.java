@@ -73,7 +73,12 @@ public class NowplayingHandler {
                 continue;
             }
             AudioHandler handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
-            Message msg = Objects.requireNonNull(handler).getNowPlaying(bot.getJDA());
+            Message msg = null;
+            try {
+                msg = Objects.requireNonNull(handler).getNowPlaying(bot.getJDA());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             if (msg == null) {
                 msg = handler.getNoMusicPlaying(bot.getJDA());
                 toRemove.add(guildId);
@@ -119,7 +124,7 @@ public class NowplayingHandler {
         if (bot.getConfig().getSongInStatus()) {
             if (track != null && bot.getJDA().getGuilds().stream().filter(g -> Objects.requireNonNull(g.getSelfMember().getVoiceState()).inVoiceChannel()).count() <= 1)
 
-                if (track.getInfo().uri.contains("https://stream.gensokyoradio.net/")) {
+                if (track.getInfo().uri.matches(".*stream.gensokyoradio.net/.*")) {
                     bot.getJDA().getPresence().setActivity(Activity.listening("幻想郷ラジオ"));
                 } else {
                     bot.getJDA().getPresence().setActivity(Activity.listening(track.getInfo().title));

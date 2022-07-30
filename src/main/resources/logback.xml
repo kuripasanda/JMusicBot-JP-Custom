@@ -44,14 +44,14 @@
         <appender-ref ref="Simple"/>
         <appender-ref ref="File"/>
     </root>-->
-    <root level="DEBUG">
-        <appender-ref ref="Simple"/>
-        <appender-ref ref="File"/>
-    </root>
-
-    <!--<root level="TRACE">
+    <!--<root level="DEBUG">
         <appender-ref ref="Simple"/>
         <appender-ref ref="File"/>
     </root>-->
+
+    <root level="TRACE">
+        <appender-ref ref="Simple"/>
+        <appender-ref ref="File"/>
+    </root>
 
 </configuration>

@@ -79,14 +79,20 @@ public class QueueCmd extends MusicCommand {
         AudioHandler ah = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         List<QueuedTrack> list = ah.getQueue().getList();
         if (list.isEmpty()) {
-            Message nowp = ah.getNowPlaying(event.getJDA());
+            Message nowp = null;
+            try {
+                nowp = ah.getNowPlaying(event.getJDA());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             Message nonowp = ah.getNoMusicPlaying(event.getJDA());
             Message built = new MessageBuilder()
                     .setContent(event.getClient().getWarning() + " 再生待ちの楽曲はありません。")
                     .setEmbeds((nowp == null ? nonowp : nowp).getEmbeds().get(0)).build();
+            Message finalNowp = nowp;
             event.reply(built, m ->
             {
-                if (nowp != null)
+                if (finalNowp != null)
                     bot.getNowplayingHandler().setLastNPMessage(m);
             });
             return;
@@ -114,7 +120,12 @@ public class QueueCmd extends MusicCommand {
         AudioHandler ah = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         List<QueuedTrack> list = ah.getQueue().getList();
         if (list.isEmpty()) {
-            Message nowp = ah.getNowPlaying(event.getJDA());
+            Message nowp = null;
+            try {
+                nowp = ah.getNowPlaying(event.getJDA());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             Message nonowp = ah.getNoMusicPlaying(event.getJDA());
             Message built = new MessageBuilder()
                     .setContent(client.getWarning() + " 再生待ちの楽曲はありません。")
@@ -143,7 +154,7 @@ public class QueueCmd extends MusicCommand {
         if (ah.getPlayer().getPlayingTrack() != null) {
             sb.append(ah.getPlayer().isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI).append(" **")
                     .append(
-                            ah.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" :
+                            ah.getPlayer().getPlayingTrack().getInfo().uri.matches(".*stream.gensokyoradio.net/.*") ? "幻想郷ラジオ" :
                                     ah.getPlayer().getPlayingTrack().getInfo().title).append("**\n");
         }
         return FormatUtil.filter(sb.append(success).append(" 再生待ち楽曲一覧 | ").append(songslength)

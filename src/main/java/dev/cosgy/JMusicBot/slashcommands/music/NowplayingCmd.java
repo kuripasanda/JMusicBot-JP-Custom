@@ -38,7 +38,12 @@ public class NowplayingCmd extends MusicCommand {
     @Override
     public void doCommand(CommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-        Message m = handler.getNowPlaying(event.getJDA());
+        Message m = null;
+        try {
+            m = handler.getNowPlaying(event.getJDA());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         if (m == null) {
             event.reply(handler.getNoMusicPlaying(event.getJDA()));
             bot.getNowplayingHandler().clearLastNPMessage(event.getGuild());
@@ -50,7 +55,12 @@ public class NowplayingCmd extends MusicCommand {
     @Override
     public void doCommand(SlashCommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-        Message m = handler.getNowPlaying(event.getJDA());
+        Message m = null;
+        try {
+            m = handler.getNowPlaying(event.getJDA());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         event.reply("現在再生中の楽曲を表示します...").queue(h -> h.deleteOriginal().queue());
 
         if (m == null) {

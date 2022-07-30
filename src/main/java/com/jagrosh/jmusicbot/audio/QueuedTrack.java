@@ -19,11 +19,8 @@ import com.jagrosh.jmusicbot.queue.Queueable;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import dev.cosgy.agent.GensokyoInfoAgent;
+import dev.cosgy.agent.objects.ResultSet;
 import net.dv8tion.jda.api.entities.User;
-import org.json.JSONObject;
-import org.json.XML;
-
-import java.io.IOException;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -53,17 +50,19 @@ public class QueuedTrack implements Queueable {
     public String toString() {
 
         if (track.getInfo().uri.contains("https://stream.gensokyoradio.net/")) {
-            JSONObject data = null;
+
+            ResultSet data = null;
             try {
-                data = XML.toJSONObject(GensokyoInfoAgent.getInfo()).getJSONObject("GENSOKYORADIODATA");
+                data = GensokyoInfoAgent.getInfo();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            String title = data.getJSONObject("SONGINFO").getString("TITLE");
-            String titleUrl = data.getJSONObject("MISC").getString("CIRCLELINK").equals("") ?
+
+            String title = data.getSonginfo().getTitle();
+            String titleUrl = data.getMisc().getCirclelink().equals("") ?
                     "https://gensokyoradio.net/" :
-                    data.getJSONObject("MISC").getString("CIRCLELINK");
-            return "`[" + FormatUtil.formatTime(data.getJSONObject("SONGTIMES").getInt("DURATION")) + "]` [**" + title + "**](" + titleUrl + ") - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
+                    data.getMisc().getCirclelink();
+            return "`[" + FormatUtil.formatTime(data.getSongtimes().getDuration()) + "]` [**" + title + "**](" + titleUrl + ") - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
         }
         return "`[" + FormatUtil.formatTime(track.getDuration()) + "]` [**" + track.getInfo().title + "**](" + track.getInfo().uri + ") - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
     }
