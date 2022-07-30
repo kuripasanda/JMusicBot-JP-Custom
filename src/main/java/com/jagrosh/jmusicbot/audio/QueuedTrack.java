@@ -18,6 +18,7 @@ package com.jagrosh.jmusicbot.audio;
 import com.jagrosh.jmusicbot.queue.Queueable;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import dev.cosgy.agent.GensokyoInfoAgent;
 import dev.cosgy.agent.objects.ResultSet;
 import net.dv8tion.jda.api.entities.User;
@@ -64,6 +65,10 @@ public class QueuedTrack implements Queueable {
                     data.getMisc().getCirclelink();
             return "`[" + FormatUtil.formatTime(data.getSongtimes().getDuration()) + "]` [**" + title + "**](" + titleUrl + ") - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
         }
-        return "`[" + FormatUtil.formatTime(track.getDuration()) + "]` [**" + track.getInfo().title + "**](" + track.getInfo().uri + ") - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
+
+        String entry = "`[" + FormatUtil.formatTime(track.getDuration()) + "]` ";
+        AudioTrackInfo trackInfo = track.getInfo();
+        entry = entry + (trackInfo.uri.startsWith("http") ? "[**" + trackInfo.title + "**]("+trackInfo.uri+")" : "**" + trackInfo.title + "**");
+        return entry + " - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
     }
 }
