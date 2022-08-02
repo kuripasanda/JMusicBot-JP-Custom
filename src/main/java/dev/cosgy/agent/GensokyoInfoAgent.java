@@ -31,7 +31,7 @@ import java.time.Duration;
 
 public class GensokyoInfoAgent extends Thread {
     private static final Logger log = LoggerFactory.getLogger(GensokyoInfoAgent.class);
-    private static final int INTERVAL_MILLIS = 5000; // 5 secs
+    private static final int INTERVAL_MILLIS = 60000; // 5 secs
     private static ResultSet info = null;
     private static String lastSong = "";
 
