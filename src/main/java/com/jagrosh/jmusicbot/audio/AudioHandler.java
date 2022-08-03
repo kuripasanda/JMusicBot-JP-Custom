@@ -37,11 +37,8 @@ import net.dv8tion.jda.api.audio.AudioSendHandler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import org.json.JSONObject;
-import org.json.XML;
 
 import java.awt.*;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -239,10 +236,12 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                         "https://gensokyoradio.net/" :
                         GensokyoInfoAgent.getInfo().getMisc().getCirclelink();
 
-                String albumArt = GensokyoInfoAgent.getInfo().getMisc().getAlbumart().equals("") ?
+                String albumArt = "";
+                if(manager.getBot().getConfig().useNPImages()){
+                    albumArt = GensokyoInfoAgent.getInfo().getMisc().getAlbumart().equals("") ?
                         "https://cdn.discordapp.com/attachments/240116420946427905/373019550725177344/gr-logo-placeholder.png" :
                         "https://gensokyoradio.net/images/albums/original/" + GensokyoInfoAgent.getInfo().getMisc().getAlbumart();
-
+                }
                 eb.setTitle(GensokyoInfoAgent.getInfo().getSonginfo().getTitle(), titleUrl)
                         .addField("アルバム", GensokyoInfoAgent.getInfo().getSonginfo().getAlbum(), true)
                         .addField("アーティスト", GensokyoInfoAgent.getInfo().getSonginfo().getArtist(), true)
@@ -259,11 +258,13 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                         + FormatUtil.volumeIcon(audioPlayer.getVolume()));
 
                 eb.addField("リスナー", Integer.toString(GensokyoInfoAgent.getInfo().getServerinfo().getListeners()), true)
-                        .setImage(albumArt)
                         .setColor(new Color(66, 16, 80))
                         .setFooter("コンテンツはgensokyoradio.netによって提供されています。\n" +
                                 "GRロゴはGensokyo Radioの商標です。" +
                                 "\nGensokyo Radio is © LunarSpotlight.", null);
+                if(manager.getBot().getConfig().useNPImages()){
+                    eb.setImage(albumArt);
+                }
             }
 
             return mb.setEmbeds(eb.build()).build();
