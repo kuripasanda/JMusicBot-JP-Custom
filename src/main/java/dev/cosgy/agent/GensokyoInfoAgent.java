@@ -44,12 +44,15 @@ public class GensokyoInfoAgent extends Thread {
         HttpURLConnection connection = null;
         try{
 
-            if(info.getSongtimes().getPlayed() < info.getSongtimes().getDuration()){
-                return info;
+            if(info != null){
+                if(info.getSongtimes().getPlayed() < info.getSongtimes().getDuration()){
+                    return info;
+                }
             }
-
             // XMLの取得元URL設定
             //URL url = new URL("https://gensokyoradio.net/xml");
+
+            System.setProperty("http.agent", "Chrome");
 
             HttpRequest req = HttpRequest.newBuilder(new URI("https://gensokyoradio.net/json"))
                     .GET()
@@ -59,8 +62,6 @@ public class GensokyoInfoAgent extends Thread {
                     .build();
 
             HttpClient client = HttpClient.newBuilder()
-                    .version(HttpClient.Version.HTTP_1_1)
-                    .followRedirects(HttpClient.Redirect.NORMAL)
                     .connectTimeout(Duration.ofSeconds(10))
                     .build();
 
@@ -74,6 +75,7 @@ public class GensokyoInfoAgent extends Thread {
                     return info;
                 case 403:
                     log.info("幻想郷ラジオの情報取得エラー(403)");
+                    log.info("Body:{}", res.body());
                     return null;
                 default:
                     log.info("幻想郷ラジオの情報取得エラー(other)");

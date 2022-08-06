@@ -231,8 +231,32 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                         + FormatUtil.volumeIcon(audioPlayer.getVolume()));
 
             } else {
+                if (rm.getOwner() != 0L) {
+                    User u = guild.getJDA().getUserById(rm.user.id);
+                    if (u == null)
+                        eb.setAuthor(rm.user.username + "#" + rm.user.discrim, null, rm.user.avatar);
+                    else
+                        eb.setAuthor(u.getName() + "#" + u.getDiscriminator(), null, u.getEffectiveAvatarUrl());
+                }
+                try {
+                    eb.setTitle(track.getInfo().title, track.getInfo().uri);
+                } catch (Exception e) {
+                    eb.setTitle(track.getInfo().title);
+                }
 
-                String titleUrl = GensokyoInfoAgent.getInfo().getMisc().getCirclelink().equals("") ?
+                if (track instanceof YoutubeAudioTrack && manager.getBot().getConfig().useNPImages()) {
+                    eb.setThumbnail("https://img.youtube.com/vi/" + track.getIdentifier() + "/maxresdefault.jpg");
+                }
+
+                if (track.getInfo().author != null && !track.getInfo().author.isEmpty())
+                    eb.setFooter("出典: " + track.getInfo().author, null);
+
+                double progress = (double) audioPlayer.getPlayingTrack().getPosition() / track.getDuration();
+                eb.setDescription((audioPlayer.isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI)
+                        + " " + FormatUtil.progressBar(progress)
+                        + " `[" + FormatUtil.formatTime(track.getPosition()) + "/" + FormatUtil.formatTime(track.getDuration()) + "]` "
+                        + FormatUtil.volumeIcon(audioPlayer.getVolume()));
+                /*String titleUrl = GensokyoInfoAgent.getInfo().getMisc().getCirclelink().equals("") ?
                         "https://gensokyoradio.net/" :
                         GensokyoInfoAgent.getInfo().getMisc().getCirclelink();
 
@@ -264,7 +288,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                                 "\nGensokyo Radio is © LunarSpotlight.", null);
                 if(manager.getBot().getConfig().useNPImages()){
                     eb.setImage(albumArt);
-                }
+                }*/
             }
 
             return mb.setEmbeds(eb.build()).build();
