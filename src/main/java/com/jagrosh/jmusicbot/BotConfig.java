@@ -54,6 +54,8 @@ public class BotConfig {
     private String searchingEmoji;
     private String nicoEmail;
     private String nicoPass;
+    private String ytEmail;
+    private String ytPass;
     // [JMusicBot-JP] added useNicoNico, changeNickName, pauseNoUsers, resumeJoined, stopNoUsers, cosgyDevHost, helpToDm, officialInvite
     private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost, helpToDm, autoStopQueueSave, auditCommands, officialInvite, useinvitecommand;
     private long owner, maxSeconds, aloneTimeUntilStop;
@@ -124,6 +126,9 @@ public class BotConfig {
             auditCommands = config.getBoolean("auditcommands");
             officialInvite = config.getBoolean("officialinvite");
             useinvitecommand = config.getBoolean("useinvitecommand");
+            ytEmail = config.getString("ytemail");
+            ytPass = config.getString("ytpass");
+
             cosgyDevHost = false;
             // [JMusicBot-JP] End
 
@@ -331,6 +336,11 @@ public class BotConfig {
     public String getNicoNicoPassword() {
         return nicoPass;
     }
+
+    public String getYouTubeEmailAddress(){return ytEmail;}
+
+    public String getYouTubePassword(){return ytPass; }
+
     // [JMusicBot-JP] End
 
     public boolean getCosgyDevHost() {

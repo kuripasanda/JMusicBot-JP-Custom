@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -31,7 +30,7 @@ import java.time.Duration;
 
 public class GensokyoInfoAgent extends Thread {
     private static final Logger log = LoggerFactory.getLogger(GensokyoInfoAgent.class);
-    private static final int INTERVAL_MILLIS = 60000; // 5 secs
+    private static long INTERVAL_MILLIS = 1000; // 5 secs
     private static ResultSet info = null;
     private static String lastSong = "";
 
@@ -44,17 +43,25 @@ public class GensokyoInfoAgent extends Thread {
     private static ResultSet fetch() throws Exception {
         HttpURLConnection connection = null;
         try{
+
+            if(info != null){
+                if(info.getSongtimes().getPlayed() < info.getSongtimes().getDuration()){
+                    return info;
+                }
+            }
             // XMLの取得元URL設定
             //URL url = new URL("https://gensokyoradio.net/xml");
+
+            System.setProperty("http.agent", "Chrome");
 
             HttpRequest req = HttpRequest.newBuilder(new URI("https://gensokyoradio.net/json"))
                     .GET()
                     .timeout(Duration.ofSeconds(10))
+                    .setHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36")
+                    .setHeader("accept-language", "ja,en-US;q=0.9,en;q=0.8")
                     .build();
 
             HttpClient client = HttpClient.newBuilder()
-                    .version(HttpClient.Version.HTTP_1_1)
-                    .followRedirects(HttpClient.Redirect.NORMAL)
                     .connectTimeout(Duration.ofSeconds(10))
                     .build();
 
@@ -68,6 +75,7 @@ public class GensokyoInfoAgent extends Thread {
                     return info;
                 case 403:
                     log.info("幻想郷ラジオの情報取得エラー(403)");
+                    log.info("Body:{}", res.body());
                     return null;
                 default:
                     log.info("幻想郷ラジオの情報取得エラー(other)");
@@ -82,7 +90,7 @@ public class GensokyoInfoAgent extends Thread {
     }
 
     public static ResultSet getInfo() throws Exception {
-        return info == null ? fetch() : info;
+        return fetch();
     }
 
     @Override
@@ -91,17 +99,16 @@ public class GensokyoInfoAgent extends Thread {
 
         //noinspection InfiniteLoopStatement
         while (true) {
+
             try {
-                fetch();
-                sleep(INTERVAL_MILLIS);
-            } catch (Exception e) {
-                log.error("情報を取得中に例外が発生しました！", e);
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e1) {
-                    log.error("エージェントの例外後にスリープ中に中断されました", e);
-                    break;
+                sleep(1000);
+                // 現在再生中の曲が終わるまで幻想郷ラジオに曲の情報をリクエストしない。
+                // DDos攻撃になってしまうので...
+                if (info != null) {
+                    info.getSongtimes().setPlayed(info.getSongtimes().getPlayed() + 1);
                 }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }

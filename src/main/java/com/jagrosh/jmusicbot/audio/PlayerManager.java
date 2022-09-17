@@ -46,6 +46,12 @@ public class PlayerManager extends DefaultAudioPlayerManager {
             );
         }
 
+        registerSourceManager(new YoutubeAudioSourceManager(
+                true,
+                bot.getConfig().getYouTubeEmailAddress(),
+                bot.getConfig().getYouTubePassword()
+        ));
+
         TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(this::registerSourceManager);
         AudioSourceManagers.registerRemoteSources(this);
         AudioSourceManagers.registerLocalSource(this);
