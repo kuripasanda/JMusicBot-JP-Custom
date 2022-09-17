@@ -81,7 +81,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.0</version>
+            <version>1.2.11</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe</groupId>
@@ -113,17 +113,17 @@
         <dependency>
             <groupId>org.msgpack</groupId>
             <artifactId>msgpack-core</artifactId>
-            <version>0.9.3</version>
+            <version>0.9.1</version>
         </dependency>
         <dependency>
             <groupId>org.msgpack</groupId>
             <artifactId>jackson-dataformat-msgpack</artifactId>
-            <version>0.9.3</version>
+            <version>0.9.1</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.15.3</version>
+            <version>1.14.3</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
