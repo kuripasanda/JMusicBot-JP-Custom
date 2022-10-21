@@ -17,15 +17,16 @@ package com.jagrosh.jmusicbot;
 
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
+import com.sedmelluq.discord.lavaplayer.player.event.AudioEvent;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.ShutdownEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
+import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
+import net.dv8tion.jda.api.events.session.ReadyEvent;
+import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -78,24 +79,38 @@ public class Listener extends ListenerAdapter {
         }
     }
 
+    /*
     @Override
-    public void onGuildMessageDelete(GuildMessageDeleteEvent event) {
+    public void onGuildMessageDelete(MessageDeleteEvent event) {
+        bot.getNowplayingHandler().onMessageDelete(event.getGuild(), event.getMessageIdLong());
+    }*/
+
+    @Override
+    public void onMessageDelete(@NotNull MessageDeleteEvent event) {
         bot.getNowplayingHandler().onMessageDelete(event.getGuild(), event.getMessageIdLong());
     }
 
     @Override
     public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event) {
         bot.getAloneInVoiceHandler().onVoiceUpdate(event);
+
+        // 退出時のイベント
+        onGuildVoiceLeave(event);
+        // 退出時のイベント終了
+
+        // 参加時のイベント
+        onGuildVoiceJoin(event);
+        // 参加時のイベント終了
     }
 
-    @Override
-    public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
+
+
+    public void onGuildVoiceLeave(@NotNull GuildVoiceUpdateEvent event) {
         //NUP = false -> NUS = false -> return
         //NUP = false -> NUS = true -> GO
         //NUP = true -> GO
         if (!bot.getConfig().getNoUserPause())
             if (!bot.getConfig().getNoUserStop()) return;
-
         Member botMember = event.getGuild().getSelfMember();
         //ボイチャにいる人数が1人、botがボイチャにいるか
         if (event.getChannelLeft().getMembers().size() == 1 && event.getChannelLeft().getMembers().contains(botMember)) {
@@ -126,8 +141,8 @@ public class Listener extends ListenerAdapter {
         }
     }
 
-    @Override
-    public void onGuildVoiceJoin(@NotNull GuildVoiceJoinEvent event) {
+
+    public void onGuildVoiceJoin(@NotNull GuildVoiceUpdateEvent event) {
         if (!bot.getConfig().getResumeJoined()) return;
         //▶
         Member botMember = event.getGuild().getSelfMember();

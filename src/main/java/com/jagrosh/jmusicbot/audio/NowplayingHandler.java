@@ -27,6 +27,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -74,7 +75,7 @@ public class NowplayingHandler {
                 continue;
             }
             AudioHandler handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
-            Message msg = null;
+            MessageCreateData msg = null;
             try {
                 msg = Objects.requireNonNull(handler).getNowPlaying(bot.getJDA());
             } catch (Exception e) {
