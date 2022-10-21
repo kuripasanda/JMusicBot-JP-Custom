@@ -52,19 +52,19 @@ public abstract class MusicCommand extends SlashCommand {
     @Override
     protected void execute(SlashCommandEvent event) {
 
-        Settings settings = client.getSettingsFor(event.getGuild());
+        Settings settings = event.getClient().getSettingsFor(event.getGuild());
         TextChannel channel = settings.getTextChannel(event.getGuild());
         if (bot.getConfig().getCosgyDevHost()) {
             try {
 
-                MaintenanceInfo.CommandInfo(event, client);
+                MaintenanceInfo.CommandInfo(event, event.getClient());
             } catch (IOException | ParseException e) {
                 e.printStackTrace();
             }
         }
         bot.getPlayerManager().setUpHandler(event.getGuild());
         if (bePlaying && !((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA())) {
-            event.reply(client.getError() + "コマンドを使用するには、再生中である必要があります。").queue();
+            event.reply(event.getClient().getError() + "コマンドを使用するには、再生中である必要があります。").queue();
             return;
         }
         if (beListening) {
@@ -75,18 +75,18 @@ public abstract class MusicCommand extends SlashCommand {
             GuildVoiceState userState = event.getMember().getVoiceState();
 
             if (!userState.inAudioChannel() || userState.isDeafened() || (current != null && !userState.getChannel().equals(current))) {
-                event.reply(client.getError() + String.format("このコマンドを使用するには、%sに参加している必要があります！", (current == null ? "音声チャンネル" : "**" + current.getAsMention() + "**"))).queue();
+                event.reply(event.getClient().getError() + String.format("このコマンドを使用するには、%sに参加している必要があります！", (current == null ? "音声チャンネル" : "**" + current.getAsMention() + "**"))).queue();
                 return;
             }
             if (!event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) {
                 try {
                     event.getGuild().getAudioManager().openAudioConnection(userState.getChannel());
                 } catch (PermissionException ex) {
-                    event.reply(client.getError() + String.format("**%s**に接続できません!", userState.getChannel().getAsMention())).queue();
+                    event.reply(event.getClient().getError() + String.format("**%s**に接続できません!", userState.getChannel().getAsMention())).queue();
                     return;
                 }
                 if (userState.getChannel().getType() == ChannelType.STAGE) {
-                    event.reply(client.getWarning() + String.format("ステージチャンネルに参加しました。ステージチャンネルで%sを使用するには手動でスピーカーに招待する必要があります。", event.getGuild().getSelfMember().getNickname())).queue();
+                    event.reply(event.getClient().getWarning() + String.format("ステージチャンネルに参加しました。ステージチャンネルで%sを使用するには手動でスピーカーに招待する必要があります。", event.getGuild().getSelfMember().getNickname())).queue();
                 }
             }
         }

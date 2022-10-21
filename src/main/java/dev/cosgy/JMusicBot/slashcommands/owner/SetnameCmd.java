@@ -15,9 +15,9 @@
  */
 package dev.cosgy.jmusicbot.slashcommands.owner;
 
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.jmusicbot.slashcommands.OwnerCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -46,11 +46,11 @@ public class SetnameCmd extends OwnerCommand {
         try {
             String oldname = event.getJDA().getSelfUser().getName();
             event.getJDA().getSelfUser().getManager().setName(event.getOption("name").getAsString()).complete(false);
-            event.reply(client.getSuccess() + "ボットの名前を`" + oldname + "` から `" + event.getOption("name").getAsString() + "`に変更しました。").queue();
+            event.reply(event.getClient().getSuccess() + "ボットの名前を`" + oldname + "` から `" + event.getOption("name").getAsString() + "`に変更しました。").queue();
         } catch (RateLimitedException e) {
-            event.reply(client.getError() + "名前は1時間に2回しか変更できません。").queue();
+            event.reply(event.getClient().getError() + "名前は1時間に2回しか変更できません。").queue();
         } catch (Exception e) {
-            event.reply(client.getError() + " その名前は使用できません。").queue();
+            event.reply(event.getClient().getError() + " その名前は使用できません。").queue();
         }
     }
 }

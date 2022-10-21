@@ -16,10 +16,10 @@
 package dev.cosgy.jmusicbot.slashcommands.owner;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.jmusicbot.slashcommands.OwnerCommand;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -100,10 +100,10 @@ public class SetgameCmd extends OwnerCommand {
             String title = event.getOption("title").getAsString();
             try {
                 event.getJDA().getPresence().setActivity(Activity.playing(title));
-                event.reply(client.getSuccess() + " **" + event.getJDA().getSelfUser().getName()
+                event.reply(event.getClient().getSuccess() + " **" + event.getJDA().getSelfUser().getName()
                         + "** は " + "現在、`" + title + "`をプレイ中です。");
             } catch (Exception e) {
-                event.reply(client.getError() + " ステータスを設定できませんでした。").queue();
+                event.reply(event.getClient().getError() + " ステータスを設定できませんでした。").queue();
             }
         }
 
@@ -129,10 +129,10 @@ public class SetgameCmd extends OwnerCommand {
         protected void execute(SlashCommandEvent event) {
             try {
                 event.getJDA().getPresence().setActivity(Activity.streaming(event.getOption("game").getAsString(), "https://twitch.tv/" + event.getOption("user").getAsString()));
-                event.reply(client.getSuccess() + "**" + event.getJDA().getSelfUser().getName()
+                event.reply(event.getClient().getSuccess() + "**" + event.getJDA().getSelfUser().getName()
                         + "** は、現在`" + event.getOption("game").getAsString() + "`をストリーム中です。").queue();
             } catch (Exception e) {
-                event.reply(client.getError() + " ゲームを設定できませんでした。").queue();
+                event.reply(event.getClient().getError() + " ゲームを設定できませんでした。").queue();
             }
         }
 
@@ -170,9 +170,9 @@ public class SetgameCmd extends OwnerCommand {
             String title = event.getOption("title").getAsString();
             try {
                 event.getJDA().getPresence().setActivity(Activity.listening(title));
-                event.reply(client.getSuccess() + "**" + event.getJDA().getSelfUser().getName() + "** は、現在`" + title + "`を聴いています。").queue();
+                event.reply(event.getClient().getSuccess() + "**" + event.getJDA().getSelfUser().getName() + "** は、現在`" + title + "`を聴いています。").queue();
             } catch (Exception e) {
-                event.reply(client.getError() + " ゲームを設定できませんでした。").queue();
+                event.reply(event.getClient().getError() + " ゲームを設定できませんでした。").queue();
             }
         }
 
@@ -209,9 +209,9 @@ public class SetgameCmd extends OwnerCommand {
             String title = event.getOption("title").getAsString();
             try {
                 event.getJDA().getPresence().setActivity(Activity.watching(title));
-                event.reply(client.getSuccess() + "**" + event.getJDA().getSelfUser().getName() + "** は、現在`" + title + "`を見ています。").queue();
+                event.reply(event.getClient().getSuccess() + "**" + event.getJDA().getSelfUser().getName() + "** は、現在`" + title + "`を見ています。").queue();
             } catch (Exception e) {
-                event.reply(client.getError() + " ゲームを設定できませんでした。").queue();
+                event.reply(event.getClient().getError() + " ゲームを設定できませんでした。").queue();
             }
         }
 
@@ -247,9 +247,9 @@ public class SetgameCmd extends OwnerCommand {
             String title = event.getOption("title").getAsString();
             try {
                 event.getJDA().getPresence().setActivity(Activity.competing(title));
-                event.reply(client.getSuccess() + "**" + event.getJDA().getSelfUser().getName() + "** は、現在`" + title + "`を競い合っています。").queue();
+                event.reply(event.getClient().getSuccess() + "**" + event.getJDA().getSelfUser().getName() + "** は、現在`" + title + "`を競い合っています。").queue();
             } catch (Exception e) {
-                event.reply(client.getError() + " ゲームを設定できませんでした。").queue();
+                event.reply(event.getClient().getError() + " ゲームを設定できませんでした。").queue();
             }
         }
 

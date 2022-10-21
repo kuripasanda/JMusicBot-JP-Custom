@@ -2,8 +2,8 @@ package dev.cosgy.jmusicbot.slashcommands.general;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -30,7 +30,8 @@ public class ServerInfo extends SlashCommand {
         String GuildTextChannelCount = String.valueOf(event.getGuild().getTextChannels().size());
         String GuildVoiceChannelCount = String.valueOf(event.getGuild().getVoiceChannels().size());
 
-        String GuildRegion = event.getGuild().getRegionRaw()
+        String GuildLocation = event.getGuild().getLocale().getNativeName();
+                /*
                 .replace("japan", ":flag_jp: 日本")
                 .replace("singapore", ":flag_sg: シンガポール")
                 .replace("hongkong", ":flag_hk: 香港")
@@ -43,14 +44,14 @@ public class ServerInfo extends SlashCommand {
                 .replace("eu-west", ":flag_eu: 西ヨーロッパ")
                 .replace("eu-central", ":flag_eu: 中央ヨーロッパ")
                 .replace("russia", ":flag_ru: ロシア");
-
+                 */
 
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setAuthor("サーバー " + GuildName + " の情報", null, GuildIconURL);
 
         eb.addField("サーバーID", GuildId, true);
-        eb.addField("サーバーリージョン", GuildRegion, true);
+        eb.addField("サーバー第一言語", GuildLocation, true);
         eb.addField("サーバーオーナー", GuildOwner, true);
         eb.addField("メンバー数", GuildMember, true);
         eb.addField("役職数", GuildRolesCount, true);
@@ -76,8 +77,8 @@ public class ServerInfo extends SlashCommand {
         String GuildCategoryCount = String.valueOf(event.getGuild().getCategories().size());
         String GuildTextChannelCount = String.valueOf(event.getGuild().getTextChannels().size());
         String GuildVoiceChannelCount = String.valueOf(event.getGuild().getVoiceChannels().size());
-        String GuildRegion = event.getGuild().getRegionRaw()
-                .replace("japan", ":flag_jp: 日本")
+        String GuildLocation = event.getGuild().getLocale().getNativeName();
+                /*.replace("japan", ":flag_jp: 日本")
                 .replace("singapore", ":flag_sg: シンガポール")
                 .replace("hongkong", ":flag_hk: 香港")
                 .replace("Brazil", ":flag_br: ブラジル")
@@ -88,7 +89,8 @@ public class ServerInfo extends SlashCommand {
                 .replace("sydney", ":flag_au: シドニー")
                 .replace("eu-west", ":flag_eu: 西ヨーロッパ")
                 .replace("eu-central", ":flag_eu: 中央ヨーロッパ")
-                .replace("russia", ":flag_ru: ロシア");
+                .replace("russia", ":flag_ru: ロシア");*/
+
 
 
         EmbedBuilder eb = new EmbedBuilder();
@@ -96,7 +98,7 @@ public class ServerInfo extends SlashCommand {
         eb.setAuthor("サーバー " + GuildName + " の情報", null, GuildIconURL);
 
         eb.addField("サーバーID", GuildId, true);
-        eb.addField("サーバーリージョン", GuildRegion, true);
+        eb.addField("サーバー第一言語", GuildLocation, true);
         eb.addField("サーバーオーナー", GuildOwner, true);
         eb.addField("メンバー数", GuildMember, true);
         eb.addField("役職数", GuildRolesCount, true);

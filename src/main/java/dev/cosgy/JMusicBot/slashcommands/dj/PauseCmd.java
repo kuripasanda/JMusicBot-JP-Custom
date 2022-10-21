@@ -16,11 +16,11 @@
 package dev.cosgy.jmusicbot.slashcommands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.PlayStatus;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import dev.cosgy.jmusicbot.slashcommands.DJCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,18 +54,18 @@ public class PauseCmd extends DJCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
-        if (!checkDJPermission(client, event)) {
-            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+        if (!checkDJPermission(event.getClient(), event)) {
+            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (handler.getPlayer().isPaused()) {
-            event.reply(client.getWarning() + "曲はすでに一時停止しています。 `" + client.getPrefix() + " play` を使用して一時停止を解除する事ができます。").queue();
+            event.reply(event.getClient().getWarning() + "曲はすでに一時停止しています。 `" + event.getClient().getPrefix() + " play` を使用して一時停止を解除する事ができます。").queue();
             return;
         }
         handler.getPlayer().setPaused(true);
         log.info(event.getGuild().getName() + "で" + handler.getPlayer().getPlayingTrack().getInfo().title + "を一時停止しました。");
-        event.reply(client.getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title + "**を一時停止にしました。 `" + client.getPrefix() + " play` を使用すると一時停止を解除できます。").queue();
+        event.reply(event.getClient().getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title + "**を一時停止にしました。 `" + event.getClient().getPrefix() + " play` を使用すると一時停止を解除できます。").queue();
 
         Bot.updatePlayStatus(event.getGuild(), event.getGuild().getSelfMember(), PlayStatus.PAUSED);
     }

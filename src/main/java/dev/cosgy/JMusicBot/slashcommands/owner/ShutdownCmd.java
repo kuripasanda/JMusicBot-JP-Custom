@@ -16,9 +16,9 @@
 package dev.cosgy.jmusicbot.slashcommands.owner;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.jmusicbot.slashcommands.OwnerCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -36,7 +36,7 @@ public class ShutdownCmd extends OwnerCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
-        event.reply(client.getWarning() + "シャットダウンしています...\n不具合で正常に停止できないことがあります。その場合は強制的にボットを停止して下さい。").queue();
+        event.reply(event.getClient().getWarning() + "シャットダウンしています...\n不具合で正常に停止できないことがあります。その場合は強制的にボットを停止して下さい。").queue();
         bot.shutdown();
     }
 

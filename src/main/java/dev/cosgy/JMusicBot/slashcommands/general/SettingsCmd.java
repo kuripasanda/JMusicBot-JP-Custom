@@ -17,16 +17,16 @@ package dev.cosgy.jmusicbot.slashcommands.general;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import dev.cosgy.jmusicbot.settings.RepeatMode;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 
 import java.util.Objects;
 
@@ -45,11 +45,11 @@ public class SettingsCmd extends SlashCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
-        Settings s = client.getSettingsFor(event.getGuild());
-        MessageBuilder builder = new MessageBuilder()
-                .append(EMOJI + " **")
-                .append(FormatUtil.filter(event.getJDA().getSelfUser().getName()))
-                .append("** の設定:");
+        Settings s = event.getClient().getSettingsFor(event.getGuild());
+        MessageCreateBuilder builder = new MessageCreateBuilder()
+                .addContent(EMOJI + " **")
+                .addContent(FormatUtil.filter(event.getJDA().getSelfUser().getName()))
+                .addContent("** の設定:");
         TextChannel tChan = s.getTextChannel(event.getGuild());
         VoiceChannel vChan = s.getVoiceChannel(event.getGuild());
         Role role = s.getRole(event.getGuild());
@@ -63,18 +63,18 @@ public class SettingsCmd extends SlashCommand {
                 .setFooter(String.format(
                                 "%s 個のサーバーに参加 | %s 個のボイスチャンネルに接続",
                                 event.getJDA().getGuilds().size(),
-                                event.getJDA().getGuilds().stream().filter(g -> Objects.requireNonNull(g.getSelfMember().getVoiceState()).inVoiceChannel()).count()),
+                                event.getJDA().getGuilds().stream().filter(g -> Objects.requireNonNull(g.getSelfMember().getVoiceState()).inAudioChannel()).count()),
                         null);
-        event.replyEmbeds(ebuilder.build()).queue();
+        event.reply(builder.addEmbeds(ebuilder.build()).build()).queue();
     }
 
     @Override
     protected void execute(CommandEvent event) {
         Settings s = event.getClient().getSettingsFor(event.getGuild());
-        MessageBuilder builder = new MessageBuilder()
-                .append(EMOJI + " **")
-                .append(FormatUtil.filter(event.getSelfUser().getName()))
-                .append("** の設定:");
+        MessageCreateBuilder builder = new MessageCreateBuilder()
+                .addContent(EMOJI + " **")
+                .addContent(FormatUtil.filter(event.getSelfUser().getName()))
+                .addContent("** の設定:");
         TextChannel tChan = s.getTextChannel(event.getGuild());
         VoiceChannel vChan = s.getVoiceChannel(event.getGuild());
         Role role = s.getRole(event.getGuild());
@@ -89,9 +89,9 @@ public class SettingsCmd extends SlashCommand {
                 .setFooter(String.format(
                                 "%s 個のサーバーに参加 | %s 個のボイスチャンネルに接続",
                                 event.getJDA().getGuilds().size(),
-                                event.getJDA().getGuilds().stream().filter(g -> Objects.requireNonNull(g.getSelfMember().getVoiceState()).inVoiceChannel()).count()),
+                                event.getJDA().getGuilds().stream().filter(g -> Objects.requireNonNull(g.getSelfMember().getVoiceState()).inAudioChannel()).count()),
                         null);
-        event.getChannel().sendMessage(builder.setEmbed(ebuilder.build()).build()).queue();
+        event.getChannel().sendMessage(builder.addEmbeds(ebuilder.build()).build()).queue();
     }
 
 }

@@ -17,13 +17,13 @@ package dev.cosgy.jmusicbot.slashcommands.admin;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import dev.cosgy.jmusicbot.slashcommands.AdminCommand;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.slf4j.Logger;
@@ -47,20 +47,20 @@ public class SetdjCmd extends AdminCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
-        if (checkAdminPermission(client, event)) {
-            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+        if (checkAdminPermission(event.getClient(), event)) {
+            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
             return;
         }
-        Settings s = client.getSettingsFor(event.getGuild());
+        Settings s = event.getClient().getSettingsFor(event.getGuild());
 
         if (event.getOption("role") != null) {
             s.setDJRole(event.getOption("role").getAsRole());
-            event.reply(client.getSuccess() + "DJコマンドを役割が、**" + event.getOption("role").getAsRole().getName() + "**のユーザーが使用できるように設定しました。").queue();
+            event.reply(event.getClient().getSuccess() + "DJコマンドを役割が、**" + event.getOption("role").getAsRole().getName() + "**のユーザーが使用できるように設定しました。").queue();
             return;
         }
         if (event.getOption("none").getAsString().toLowerCase().matches("(none|なし)")) {
             s.setDJRole(null);
-            event.reply(client.getSuccess() + "DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。").queue();
+            event.reply(event.getClient().getSuccess() + "DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。").queue();
         } else {
             event.reply("コマンドが間違っています。").queue();
         }
@@ -103,11 +103,11 @@ public class SetdjCmd extends AdminCommand {
 
         @Override
         protected void execute(SlashCommandEvent event) {
-            Settings s = client.getSettingsFor(event.getGuild());
+            Settings s = event.getClient().getSettingsFor(event.getGuild());
             Role role = event.getOption("role").getAsRole();
 
             s.setDJRole(role);
-            event.reply(client.getSuccess() + "DJコマンドを役割が、**" + role.getName() + "**のユーザーが使用できるように設定しました。").queue();
+            event.reply(event.getClient().getSuccess() + "DJコマンドを役割が、**" + role.getName() + "**のユーザーが使用できるように設定しました。").queue();
         }
     }
 
@@ -119,9 +119,9 @@ public class SetdjCmd extends AdminCommand {
 
         @Override
         protected void execute(SlashCommandEvent event) {
-            Settings s = client.getSettingsFor(event.getGuild());
+            Settings s =event.getClient().getSettingsFor(event.getGuild());
             s.setDJRole(null);
-            event.reply(client.getSuccess() + "DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。").queue();
+            event.reply(event.getClient().getSuccess() + "DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。").queue();
         }
 
         @Override

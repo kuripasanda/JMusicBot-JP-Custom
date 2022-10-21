@@ -16,13 +16,13 @@
 package dev.cosgy.jmusicbot.slashcommands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.queue.FairQueue;
 import dev.cosgy.jmusicbot.playlist.CacheLoader;
 import dev.cosgy.jmusicbot.slashcommands.DJCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.slf4j.Logger;
@@ -69,8 +69,8 @@ public class StopCmd extends DJCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
-        if (!checkDJPermission(client, event)) {
-            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+        if (!checkDJPermission(event.getClient(), event)) {
+            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
@@ -80,7 +80,7 @@ public class StopCmd extends DJCommand {
         log.debug("再生待ちのサイズ：" + queue.size());
 
         if (event.getOption("option") == null) {
-            event.reply(client.getSuccess() + " 再生待ちを削除して、再生を停止しました。").queue();
+            event.reply(event.getClient().getSuccess() + " 再生待ちを削除して、再生を停止しました。").queue();
             log.info(event.getGuild().getName() + "で再生待ちを削除して,ボイスチャンネルから切断しました。");
             handler.stopAndClear();
             event.getGuild().getAudioManager().closeAudioConnection();
@@ -89,10 +89,10 @@ public class StopCmd extends DJCommand {
 
         if (queue.size() > 0 && event.getOption("option").getAsString().equals("save")) {
             cache.Save(event.getGuild().getId(), handler.getQueue());
-            event.reply(client.getSuccess() + " 再生待ちの" + queue.size() + "曲を保存して再生を停止しました。").queue();
+            event.reply(event.getClient().getSuccess() + " 再生待ちの" + queue.size() + "曲を保存して再生を停止しました。").queue();
             log.info(event.getGuild().getName() + "で再生待ちを保存して,ボイスチャンネルから切断しました。");
         } else {
-            event.reply(client.getSuccess() + " 再生待ちを削除して、再生を停止しました。").queue();
+            event.reply(event.getClient().getSuccess() + " 再生待ちを削除して、再生を停止しました。").queue();
             log.info(event.getGuild().getName() + "で再生待ちを削除して,ボイスチャンネルから切断しました。");
         }
         handler.stopAndClear();

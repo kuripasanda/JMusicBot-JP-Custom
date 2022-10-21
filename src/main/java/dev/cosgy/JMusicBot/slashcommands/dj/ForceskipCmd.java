@@ -16,11 +16,11 @@
 package dev.cosgy.jmusicbot.slashcommands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.RequestMetadata;
 import dev.cosgy.jmusicbot.slashcommands.DJCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -45,13 +45,13 @@ public class ForceskipCmd extends DJCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
-        if (!checkDJPermission(client, event)) {
-            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+        if (!checkDJPermission(event.getClient(), event)) {
+            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         RequestMetadata rm = handler.getRequestMetadata();
-        event.reply(client.getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title
+        event.reply(event.getClient().getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title
                 + "** " + (rm.getOwner() == 0L ? "(自動再生)" : "(**" + rm.user.username + "**がリクエスト)")).queue();
         handler.getPlayer().stopTrack();
     }

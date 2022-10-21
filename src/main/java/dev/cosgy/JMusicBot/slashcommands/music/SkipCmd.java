@@ -16,11 +16,11 @@
 package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.RequestMetadata;
 import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -90,7 +90,7 @@ public class SkipCmd extends MusicCommand {
 
         RequestMetadata rm = handler.getRequestMetadata();
         if (event.getUser().getIdLong() == rm.getOwner()) {
-            event.reply(client.getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title) + "** をスキップしました。").queue();
+            event.reply(event.getClient().getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title) + "** をスキップしました。").queue();
             handler.getPlayer().stopTrack();
         } else {
             // ボイチャにいる人数 (Bot, スピーカーミュートは含まず)
@@ -102,9 +102,9 @@ public class SkipCmd extends MusicCommand {
 
             // 現在の投票を取得して、メッセージの送信者が含まれているかどうか
             if (handler.getVotes().contains(event.getUser().getId())) {
-                msg = client.getWarning() + " 再生中の曲はスキップリクエスト済みです。 `[";
+                msg = event.getClient().getWarning() + " 再生中の曲はスキップリクエスト済みです。 `[";
             } else {
-                msg = client.getSuccess() + "現在の曲をスキップリクエストしました。`[";
+                msg = event.getClient().getSuccess() + "現在の曲をスキップリクエストしました。`[";
                 handler.getVotes().add(event.getUser().getId());
             }
 
@@ -125,7 +125,7 @@ public class SkipCmd extends MusicCommand {
 
             // 現在の投票者数が、必要投票数に達しているかどうか
             if (skippers >= required) {
-                msg += "\n" + client.getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title)
+                msg += "\n" + event.getClient().getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title)
                         + "**をスキップしました。 " + (rm.getOwner() == 0L ? "(自動再生)" : "(**" + rm.user.username + "**がリクエスト)");
                 handler.getPlayer().stopTrack();
             }

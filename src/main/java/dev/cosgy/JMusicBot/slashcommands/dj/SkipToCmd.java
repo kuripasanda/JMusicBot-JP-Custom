@@ -16,10 +16,10 @@
 package dev.cosgy.jmusicbot.slashcommands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import dev.cosgy.jmusicbot.slashcommands.DJCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.slf4j.Logger;
@@ -69,24 +69,24 @@ public class SkipToCmd extends DJCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
-        if (!checkDJPermission(client, event)) {
-            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+        if (!checkDJPermission(event.getClient(), event)) {
+            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
             return;
         }
         int index = 0;
         try {
             index = Integer.parseInt(event.getOption("position").getAsString());
         } catch (NumberFormatException e) {
-            event.reply(client.getError() + " `" + event.getOption("position").getAsString() + "` は有効な整数ではありません。").queue();
+            event.reply(event.getClient().getError() + " `" + event.getOption("position").getAsString() + "` は有効な整数ではありません。").queue();
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (index < 1 || index > handler.getQueue().size()) {
-            event.reply(client.getError() + " 1から" + handler.getQueue().size() + "の間の整数でないといけません!").queue();
+            event.reply(event.getClient().getError() + " 1から" + handler.getQueue().size() + "の間の整数でないといけません!").queue();
             return;
         }
         handler.getQueue().skip(index - 1);
-        event.reply(client.getSuccess() + " **" + handler.getQueue().get(0).getTrack().getInfo().title + "にスキップしました。**").queue();
+        event.reply(event.getClient().getSuccess() + " **" + handler.getQueue().get(0).getTrack().getInfo().title + "にスキップしました。**").queue();
         handler.getPlayer().stopTrack();
     }
 }

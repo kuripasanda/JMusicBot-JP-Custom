@@ -17,14 +17,15 @@ package dev.cosgy.jmusicbot.slashcommands.admin;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import dev.cosgy.jmusicbot.slashcommands.AdminCommand;
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.slf4j.Logger;
@@ -88,20 +89,20 @@ public class SetvcCmd extends AdminCommand {
 
         @Override
         protected void execute(SlashCommandEvent event) {
-            if (checkAdminPermission(client, event)) {
-                event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+            if (checkAdminPermission(event.getClient(), event)) {
+                event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
                 return;
             }
-            Settings s = client.getSettingsFor(event.getGuild());
+            Settings s = event.getClient().getSettingsFor(event.getGuild());
             Long channel = event.getOption("channel").getAsLong();
 
             if (event.getOption("channel").getChannelType() != ChannelType.VOICE) {
-                event.reply(client.getError() + "音声チャンネルを設定して下さい").queue();
+                event.reply(event.getClient().getError() + "音声チャンネルを設定して下さい").queue();
             }
 
             VoiceChannel vc = event.getGuild().getVoiceChannelById(channel);
             s.setVoiceChannel(vc);
-            event.reply(client.getSuccess() + "音楽は**" + vc.getAsMention() + "**でのみ再生できるようになりました。").queue();
+            event.reply(event.getClient().getSuccess() + "音楽は**" + vc.getAsMention() + "**でのみ再生できるようになりました。").queue();
         }
     }
 
@@ -113,13 +114,13 @@ public class SetvcCmd extends AdminCommand {
 
         @Override
         protected void execute(SlashCommandEvent event) {
-            if (checkAdminPermission(client, event)) {
-                event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+            if (checkAdminPermission(event.getClient(), event)) {
+                event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
                 return;
             }
-            Settings s = client.getSettingsFor(event.getGuild());
+            Settings s = event.getClient().getSettingsFor(event.getGuild());
             s.setVoiceChannel(null);
-            event.reply(client.getSuccess() + "音楽はどの音声チャンネルでも再生できます。").queue();
+            event.reply(event.getClient().getSuccess() + "音楽はどの音声チャンネルでも再生できます。").queue();
         }
 
         @Override

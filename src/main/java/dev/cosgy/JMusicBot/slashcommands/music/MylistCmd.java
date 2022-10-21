@@ -2,12 +2,12 @@ package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.jmusicbot.playlist.MylistLoader;
 import dev.cosgy.jmusicbot.slashcommands.DJCommand;
 import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
 import dev.cosgy.jmusicbot.util.StackTraceUtil;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -100,26 +100,26 @@ public class MylistCmd extends MusicCommand {
             String userId = event.getUser().getId();
 
             if (pName.isEmpty()) {
-                event.reply(client.getError() + "プレイリスト名を指定してください。").queue();
+                event.reply(event.getClient().getError() + "プレイリスト名を指定してください。").queue();
                 return;
             }
 
             if (bot.getMylistLoader().getPlaylist(userId, pName) == null) {
                 try {
                     bot.getMylistLoader().createPlaylist(userId, pName);
-                    event.reply(client.getSuccess() + "マイリスト `" + pName + "` を作成しました").queue();
+                    event.reply(event.getClient().getSuccess() + "マイリスト `" + pName + "` を作成しました").queue();
                 } catch (IOException e) {
-                    if (client.getOwnerId() == event.getMember().getId() || event.getMember().isOwner()) {
-                        event.reply(client.getError() + "曲の読み込み中にエラーが発生しました。\n" +
+                    if (event.getClient().getOwnerId() == event.getMember().getId() || event.getMember().isOwner()) {
+                        event.reply(event.getClient().getError() + "曲の読み込み中にエラーが発生しました。\n" +
                                 "**エラーの内容: " + e.getLocalizedMessage() + "**").queue();
                         StackTraceUtil.sendStackTrace(event.getTextChannel(), e);
                         return;
                     }
 
-                    event.reply(client.getError() + " マイリストを作成できませんでした。:" + e.getLocalizedMessage()).queue();
+                    event.reply(event.getClient().getError() + " マイリストを作成できませんでした。:" + e.getLocalizedMessage()).queue();
                 }
             } else {
-                event.reply(client.getError() + " マイリスト `" + pName + "` は既に存在します").queue();
+                event.reply(event.getClient().getError() + " マイリスト `" + pName + "` は既に存在します").queue();
             }
         }
     }
@@ -166,13 +166,13 @@ public class MylistCmd extends MusicCommand {
             String userId = event.getUser().getId();
 
             if (bot.getMylistLoader().getPlaylist(userId, pName) == null)
-                event.reply(client.getError() + " マイリストは存在しません:`" + pName + "`");
+                event.reply(event.getClient().getError() + " マイリストは存在しません:`" + pName + "`").queue();
             else {
                 try {
                     bot.getMylistLoader().deletePlaylist(userId, pName);
-                    event.reply(client.getSuccess() + " マイリストを削除しました:`" + pName + "`");
+                    event.reply(event.getClient().getSuccess() + " マイリストを削除しました:`" + pName + "`").queue();
                 } catch (IOException e) {
-                    event.reply(client.getError() + " マイリストを削除できませんでした: " + e.getLocalizedMessage());
+                    event.reply(event.getClient().getError() + " マイリストを削除できませんでした: " + e.getLocalizedMessage()).queue();
                 }
             }
         }
@@ -231,7 +231,7 @@ public class MylistCmd extends MusicCommand {
             String pname = event.getOption("name").getAsString();
             MylistLoader.Playlist playlist = bot.getMylistLoader().getPlaylist(userId, pname);
             if (playlist == null)
-                event.reply(client.getError() + " マイリストは存在しません:`" + pname + "`").queue();
+                event.reply(event.getClient().getError() + " マイリストは存在しません:`" + pname + "`").queue();
             else {
                 StringBuilder builder = new StringBuilder();
                 playlist.getItems().forEach(item -> builder.append("\r\n").append(item));
@@ -244,9 +244,9 @@ public class MylistCmd extends MusicCommand {
                 }
                 try {
                     bot.getMylistLoader().writePlaylist(userId, pname, builder.toString());
-                    event.reply(client.getSuccess() + urls.length + " 項目をマイリストに追加しました:`" + pname + "`").queue();
+                    event.reply(event.getClient().getSuccess() + urls.length + " 項目をマイリストに追加しました:`" + pname + "`").queue();
                 } catch (IOException e) {
-                    event.reply(client.getError() + " マイリストに追加できませんでした: " + e.getLocalizedMessage()).queue();
+                    event.reply(event.getClient().getError() + " マイリストに追加できませんでした: " + e.getLocalizedMessage()).queue();
                 }
             }
         }
@@ -291,16 +291,16 @@ public class MylistCmd extends MusicCommand {
             if (!bot.getMylistLoader().folderUserExists(userId))
                 bot.getMylistLoader().createUserFolder(userId);
             if (!bot.getMylistLoader().folderUserExists(userId)) {
-                event.reply(client.getWarning() + " マイリストフォルダが存在しないため作成できませんでした。").queue();
+                event.reply(event.getClient().getWarning() + " マイリストフォルダが存在しないため作成できませんでした。").queue();
                 return;
             }
             List<String> list = bot.getMylistLoader().getPlaylistNames(userId);
             if (list == null)
-                event.reply(client.getError() + " 利用可能なマイリストを読み込めませんでした。").queue();
+                event.reply(event.getClient().getError() + " 利用可能なマイリストを読み込めませんでした。").queue();
             else if (list.isEmpty())
-                event.reply(client.getWarning() + " マイリストフォルダに再生リストがありません。").queue();
+                event.reply(event.getClient().getWarning() + " マイリストフォルダに再生リストがありません。").queue();
             else {
-                StringBuilder builder = new StringBuilder(client.getSuccess() + " 利用可能なマイリスト:\n");
+                StringBuilder builder = new StringBuilder(event.getClient().getSuccess() + " 利用可能なマイリスト:\n");
                 list.forEach(str -> builder.append("`").append(str).append("` "));
                 event.reply(builder.toString()).queue();
             }

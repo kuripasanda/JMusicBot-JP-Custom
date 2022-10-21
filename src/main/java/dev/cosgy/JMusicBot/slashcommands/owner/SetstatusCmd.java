@@ -16,10 +16,10 @@
 package dev.cosgy.jmusicbot.slashcommands.owner;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.jmusicbot.slashcommands.OwnerCommand;
 import net.dv8tion.jda.api.OnlineStatus;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -46,13 +46,13 @@ public class SetstatusCmd extends OwnerCommand {
         try {
             OnlineStatus status = OnlineStatus.fromKey(event.getOption("status").getAsString());
             if (status == OnlineStatus.UNKNOWN) {
-                event.reply(client.getError() + "次のいずれかのステータスを含めてください。 :`ONLINE`, `IDLE`, `DND`, `INVISIBLE`").queue();
+                event.reply(event.getClient().getError() + "次のいずれかのステータスを含めてください。 :`ONLINE`, `IDLE`, `DND`, `INVISIBLE`").queue();
             } else {
                 event.getJDA().getPresence().setStatus(status);
-                event.reply(client.getSuccess() + "ステータスを`" + status.getKey().toUpperCase() + "`に設定しました。").queue();
+                event.reply(event.getClient().getSuccess() + "ステータスを`" + status.getKey().toUpperCase() + "`に設定しました。").queue();
             }
         } catch (Exception e) {
-            event.reply(client.getError() + " ステータスを設定できませんでした。").queue();
+            event.reply(event.getClient().getError() + " ステータスを設定できませんでした。").queue();
         }
     }
 

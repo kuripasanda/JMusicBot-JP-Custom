@@ -17,9 +17,9 @@ package dev.cosgy.jmusicbot.slashcommands.general;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import com.jagrosh.jdautilities.examples.doc.Author;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.time.temporal.ChronoUnit;
 
