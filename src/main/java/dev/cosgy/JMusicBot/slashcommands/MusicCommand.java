@@ -17,15 +17,16 @@ package dev.cosgy.jmusicbot.slashcommands;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.settings.Settings;
 import dev.cosgy.jmusicbot.util.MaintenanceInfo;
-import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,7 @@ public abstract class MusicCommand extends SlashCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
+
         Settings settings = client.getSettingsFor(event.getGuild());
         TextChannel channel = settings.getTextChannel(event.getGuild());
         if (bot.getConfig().getCosgyDevHost()) {
@@ -66,17 +68,17 @@ public abstract class MusicCommand extends SlashCommand {
             return;
         }
         if (beListening) {
-            VoiceChannel current = event.getGuild().getSelfMember().getVoiceState().getChannel();
+            AudioChannelUnion current = event.getGuild().getSelfMember().getVoiceState().getChannel();
 
             if (current == null)
-                current = settings.getVoiceChannel(event.getGuild());
+                current = (AudioChannelUnion) settings.getVoiceChannel(event.getGuild());
             GuildVoiceState userState = event.getMember().getVoiceState();
 
-            if (!userState.inVoiceChannel() || userState.isDeafened() || (current != null && !userState.getChannel().equals(current))) {
+            if (!userState.inAudioChannel() || userState.isDeafened() || (current != null && !userState.getChannel().equals(current))) {
                 event.reply(client.getError() + String.format("このコマンドを使用するには、%sに参加している必要があります！", (current == null ? "音声チャンネル" : "**" + current.getAsMention() + "**"))).queue();
                 return;
             }
-            if (!event.getGuild().getSelfMember().getVoiceState().inVoiceChannel()) {
+            if (!event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) {
                 try {
                     event.getGuild().getAudioManager().openAudioConnection(userState.getChannel());
                 } catch (PermissionException ex) {
@@ -118,16 +120,16 @@ public abstract class MusicCommand extends SlashCommand {
             return;
         }
         if (beListening) {
-            VoiceChannel current = event.getGuild().getSelfMember().getVoiceState().getChannel();
+            AudioChannelUnion current = event.getGuild().getSelfMember().getVoiceState().getChannel();
 
             if (current == null)
-                current = settings.getVoiceChannel(event.getGuild());
+                current = (AudioChannelUnion) settings.getVoiceChannel(event.getGuild());
             GuildVoiceState userState = event.getMember().getVoiceState();
-            if (!userState.inVoiceChannel() || userState.isDeafened() || (current != null && !userState.getChannel().equals(current))) {
+            if (!userState.inAudioChannel()|| userState.isDeafened() || (current != null && !userState.getChannel().equals(current))) {
                 event.replyError(String.format("このコマンドを使用するには、%sに参加している必要があります！", (current == null ? "音声チャンネル" : "**" + current.getName() + "**")));
                 return;
             }
-            if (!event.getGuild().getSelfMember().getVoiceState().inVoiceChannel()) {
+            if (!event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) {
                 try {
                     event.getGuild().getAudioManager().openAudioConnection(userState.getChannel());
                 } catch (PermissionException ex) {
