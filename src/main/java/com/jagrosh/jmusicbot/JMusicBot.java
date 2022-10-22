@@ -203,7 +203,7 @@ public class JMusicBot {
         cb.addCommands(commandList.toArray(new Command[0]));
 
         // スラッシュコマンドの実装
-        List<SlashCommand> slashCommandList = new ArrayList<SlashCommand>() {{
+        List<SlashCommand> slashCommandList = new ArrayList<>() {{
             add(new HelpCmd(bot));
             add(aboutCommand);
             if (config.isUseInviteCommand()) {

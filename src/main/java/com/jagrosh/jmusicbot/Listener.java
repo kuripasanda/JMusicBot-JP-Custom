@@ -79,12 +79,6 @@ public class Listener extends ListenerAdapter {
         }
     }
 
-    /*
-    @Override
-    public void onGuildMessageDelete(MessageDeleteEvent event) {
-        bot.getNowplayingHandler().onMessageDelete(event.getGuild(), event.getMessageIdLong());
-    }*/
-
     @Override
     public void onMessageDelete(@NotNull MessageDeleteEvent event) {
         bot.getNowplayingHandler().onMessageDelete(event.getGuild(), event.getMessageIdLong());
@@ -126,9 +120,6 @@ public class Listener extends ListenerAdapter {
             // config.txtの nouserpause が true の場合
             if (bot.getConfig().getNoUserPause()) {
                 //⏸
-                Logger log = LoggerFactory.getLogger("MusicBot");
-                log.info("プレイヤーを一時停止");
-
                 // プレイヤーを一時停止する
                 Objects.requireNonNull(handler).getPlayer().setPaused(true);
 
