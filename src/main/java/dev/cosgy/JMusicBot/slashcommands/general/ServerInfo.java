@@ -29,7 +29,8 @@ public class ServerInfo extends SlashCommand {
         String GuildCategoryCount = String.valueOf(event.getGuild().getCategories().size());
         String GuildTextChannelCount = String.valueOf(event.getGuild().getTextChannels().size());
         String GuildVoiceChannelCount = String.valueOf(event.getGuild().getVoiceChannels().size());
-
+        String GuildStageChannelCount = String.valueOf(event.getGuild().getStageChannels().size());
+        String GuildForumChannelCount = String.valueOf(event.getGuild().getForumChannels().size());
         String GuildLocation = event.getGuild().getLocale().getNativeName();
                 /*
                 .replace("japan", ":flag_jp: 日本")
@@ -58,6 +59,8 @@ public class ServerInfo extends SlashCommand {
         eb.addField("カテゴリの数", GuildCategoryCount, true);
         eb.addField("テキストチャンネルの数", GuildTextChannelCount, true);
         eb.addField("ボイスチャンネルの数", GuildVoiceChannelCount, true);
+        eb.addField("ステージチャンネルの数", GuildStageChannelCount, true);
+        eb.addField("フォーラムチャンネルの数", GuildForumChannelCount, true);
 
         eb.setFooter("サーバー作成日時: " + GuildCreatedDate, null);
 
@@ -77,6 +80,8 @@ public class ServerInfo extends SlashCommand {
         String GuildCategoryCount = String.valueOf(event.getGuild().getCategories().size());
         String GuildTextChannelCount = String.valueOf(event.getGuild().getTextChannels().size());
         String GuildVoiceChannelCount = String.valueOf(event.getGuild().getVoiceChannels().size());
+        String GuildStageChannelCount = String.valueOf(event.getGuild().getStageChannels().size());
+        String GuildForumChannelCount = String.valueOf(event.getGuild().getForumChannels().size());
         String GuildLocation = event.getGuild().getLocale().getNativeName();
                 /*.replace("japan", ":flag_jp: 日本")
                 .replace("singapore", ":flag_sg: シンガポール")
@@ -105,6 +110,8 @@ public class ServerInfo extends SlashCommand {
         eb.addField("カテゴリの数", GuildCategoryCount, true);
         eb.addField("テキストチャンネルの数", GuildTextChannelCount, true);
         eb.addField("ボイスチャンネルの数", GuildVoiceChannelCount, true);
+        eb.addField("ステージチャンネルの数", GuildStageChannelCount, true);
+        eb.addField("フォーラムチャンネルの数", GuildForumChannelCount, true);
 
         eb.setFooter("サーバー作成日時: " + GuildCreatedDate, null);
 

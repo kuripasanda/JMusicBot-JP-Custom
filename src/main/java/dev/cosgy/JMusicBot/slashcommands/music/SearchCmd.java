@@ -97,13 +97,13 @@ public class SearchCmd extends MusicCommand {
         @Override
         public void trackLoaded(AudioTrack track) {
             if (bot.getConfig().isTooLong(track)) {
-                m.editOriginal(FormatUtil.filter(client.getWarning() + "**" + track.getInfo().title + "**`は許可されている最大長より長いです。"
+                m.editOriginal(FormatUtil.filter(event.getClient().getWarning() + "**" + track.getInfo().title + "**`は許可されている最大長より長いです。"
                         + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`")).queue();
                 return;
             }
             AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
             int pos = handler.addTrack(new QueuedTrack(track, event.getUser())) + 1;
-            m.editOriginal(FormatUtil.filter(client.getSuccess() + "**" + track.getInfo().title
+            m.editOriginal(FormatUtil.filter(event.getClient().getSuccess() + "**" + track.getInfo().title
                     + "**(`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "を追加しました。"
                     : "を" + pos + "番目の再生待ちに追加しました。"))).queue();
         }

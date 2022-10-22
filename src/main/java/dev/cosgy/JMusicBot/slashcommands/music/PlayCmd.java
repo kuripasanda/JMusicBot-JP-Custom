@@ -426,10 +426,6 @@ public class PlayCmd extends MusicCommand {
                 if (playlist == null || !event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION)) {
                     m.editOriginal(addMsg).queue();
                 } else {
-
-
-
-
                     new ButtonMenu.Builder()
                             .setText(addMsg + "\n" + event.getClient().getWarning() + " この曲の再生リストには他に**" + playlist.getTracks().size() + "**曲が付属しています。トラックを読み込むには " + LOAD + " を選択して下さい。")
                             .setChoices(LOAD, CANCEL)
