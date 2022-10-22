@@ -86,7 +86,7 @@ public abstract class MusicCommand extends SlashCommand {
                     return;
                 }
                 if (userState.getChannel().getType() == ChannelType.STAGE) {
-                    event.reply(event.getClient().getWarning() + String.format("ステージチャンネルに参加しました。ステージチャンネルで%sを使用するには手動でスピーカーに招待する必要があります。", event.getGuild().getSelfMember().getNickname())).queue();
+                    event.getTextChannel().sendMessage(event.getClient().getWarning() + String.format("ステージチャンネルに参加しました。ステージチャンネルで%sを使用するには手動でスピーカーに招待する必要があります。", event.getGuild().getSelfMember().getNickname())).queue();
                 }
             }
         }
@@ -137,7 +137,7 @@ public abstract class MusicCommand extends SlashCommand {
                     return;
                 }
                 if (userState.getChannel().getType() == ChannelType.STAGE) {
-                    event.reply(event.getClient().getWarning() + String.format("ステージチャンネルに参加しました。ステージチャンネルで%sを使用するには手動でスピーカーに招待する必要があります。", event.getGuild().getSelfMember().getNickname()));
+                    event.getTextChannel().sendMessage(event.getClient().getWarning() + String.format("ステージチャンネルに参加しました。ステージチャンネルで%sを使用するには手動でスピーカーに招待する必要があります。", event.getGuild().getSelfMember().getNickname())).queue();
                 }
             }
         }

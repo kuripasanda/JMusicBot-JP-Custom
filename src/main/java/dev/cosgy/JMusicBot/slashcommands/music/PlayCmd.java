@@ -335,7 +335,8 @@ public class PlayCmd extends MusicCommand {
                     CacheLoader.CacheResult cache = bot.getCacheLoader().ConvertCache(data);
                     event.reply(":calling: キャッシュファイルを読み込んでいます... (" + cache.getItems().size() + "曲)").queue(m -> {
                         cache.loadTracks(bot.getPlayerManager(), (at) -> {
-                            handler.addTrack(new QueuedTrack(at, (User) jda.retrieveUserById(data.get(count.get()).getUserId())));
+                            // TODO:キャッシュに保存されているユーザーIDを使用する。
+                            handler.addTrack(new QueuedTrack(at, event.getUser()));
                             count.getAndIncrement();
                         }, () -> {
                             StringBuilder builder = new StringBuilder(cache.getTracks().isEmpty()
@@ -425,6 +426,10 @@ public class PlayCmd extends MusicCommand {
                 if (playlist == null || !event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION)) {
                     m.editOriginal(addMsg).queue();
                 } else {
+
+
+
+
                     new ButtonMenu.Builder()
                             .setText(addMsg + "\n" + event.getClient().getWarning() + " この曲の再生リストには他に**" + playlist.getTracks().size() + "**曲が付属しています。トラックを読み込むには " + LOAD + " を選択して下さい。")
                             .setChoices(LOAD, CANCEL)

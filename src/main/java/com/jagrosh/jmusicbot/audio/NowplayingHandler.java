@@ -24,10 +24,9 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
-import net.dv8tion.jda.api.utils.messages.MessageCreateData;
+import net.dv8tion.jda.api.utils.messages.MessageEditData;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -75,18 +74,18 @@ public class NowplayingHandler {
                 continue;
             }
             AudioHandler handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
-            MessageCreateData msg = null;
+            MessageEditData msg = null;
             try {
-                msg = Objects.requireNonNull(handler).getNowPlaying(bot.getJDA());
+                msg = MessageEditData.fromCreateData(Objects.requireNonNull(handler).getNowPlaying(bot.getJDA()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             if (msg == null) {
-                msg = handler.getNoMusicPlaying(bot.getJDA());
+                msg = MessageEditData.fromCreateData(handler.getNoMusicPlaying(bot.getJDA()));
                 toRemove.add(guildId);
             }
             try {
-                tc.editMessageById(pair.getValue(), (CharSequence) msg).queue(m -> {
+                tc.editMessageById(pair.getValue(), msg).queue(m -> {
                 }, t -> lastNP.remove(guildId));
             } catch (Exception e) {
                 toRemove.add(guildId);

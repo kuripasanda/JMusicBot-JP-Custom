@@ -84,7 +84,6 @@ public class AloneInVoiceHandler {
     }
 
     public void onVoiceUpdate(GuildVoiceUpdateEvent event) {
-
         if (aloneTimeUntilStop <= 0) return;
 
         Guild guild = event.getEntity().getGuild();

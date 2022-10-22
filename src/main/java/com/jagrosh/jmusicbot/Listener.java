@@ -92,20 +92,27 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event) {
+        Logger log = LoggerFactory.getLogger("onGuildVoiceUpdate");
         bot.getAloneInVoiceHandler().onVoiceUpdate(event);
 
         // 退出時のイベント
+        log.debug("onGuildVoiceLeave Start");
         onGuildVoiceLeave(event);
+        log.debug("onGuildVoiceLeave End");
         // 退出時のイベント終了
 
         // 参加時のイベント
+        log.debug("onGuildVoiceJoin Start");
         onGuildVoiceJoin(event);
+        log.debug("onGuildVoiceJoin End");
         // 参加時のイベント終了
     }
 
 
 
     public void onGuildVoiceLeave(@NotNull GuildVoiceUpdateEvent event) {
+        if(event.getChannelLeft() == null) return;
+
         //NUP = false -> NUS = false -> return
         //NUP = false -> NUS = true -> GO
         //NUP = true -> GO
@@ -143,14 +150,19 @@ public class Listener extends ListenerAdapter {
 
 
     public void onGuildVoiceJoin(@NotNull GuildVoiceUpdateEvent event) {
+        if(event.getChannelJoined() == null) return;
+
+        Logger log = LoggerFactory.getLogger("onGuildVoiceJoin");
         if (!bot.getConfig().getResumeJoined()) return;
         //▶
         Member botMember = event.getGuild().getSelfMember();
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
 
+        log.debug("再生再開判定 {}", ((event.getChannelJoined().getMembers().size() > 1 && event.getChannelJoined().getMembers().contains(botMember)) && Objects.requireNonNull(handler).getPlayer().isPaused()));
         //ボイチャにいる人数が1人以上、botがボイチャにいるか、再生が一時停止されているか
         if ((event.getChannelJoined().getMembers().size() > 1 && event.getChannelJoined().getMembers().contains(botMember)) && Objects.requireNonNull(handler).getPlayer().isPaused()) {
             handler.getPlayer().setPaused(false);
+            log.debug("再生を再開しました。");
 
             Bot.updatePlayStatus(event.getGuild(), event.getGuild().getSelfMember(), PlayStatus.PLAYING);
         }
