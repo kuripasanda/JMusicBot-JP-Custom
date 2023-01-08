@@ -23,6 +23,8 @@ import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.queue.FairQueue;
 import dev.cosgy.jmusicbot.playlist.CacheLoader;
 import dev.cosgy.jmusicbot.slashcommands.DJCommand;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.slf4j.Logger;
@@ -30,6 +32,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -97,5 +101,17 @@ public class StopCmd extends DJCommand {
         }
         handler.stopAndClear();
         event.getGuild().getAudioManager().closeAudioConnection();
+    }
+
+    @Override
+    public void onAutoComplete(CommandAutoCompleteInteractionEvent event) {
+        String[] cmdOptions = {"save"};
+        if(event.getName().equals("stop") && event.getFocusedOption().getName().equals("option")) {
+            List<Command.Choice> options = Stream.of(cmdOptions)
+                    .filter(word -> word.startsWith(event.getFocusedOption().getValue())) // only display words that start with the user's current input
+                    .map(word -> new Command.Choice(word, word)) // map the words to choices
+                    .collect(Collectors.toList());
+            event.replyChoices(options).queue();
+        }
     }
 }
