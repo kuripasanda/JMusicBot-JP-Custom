@@ -24,11 +24,11 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "SERVERINFO",
-    "SONGINFO",
-    "SONGTIMES",
-    "SONGDATA",
-    "MISC"
+        "SERVERINFO",
+        "SONGINFO",
+        "SONGTIMES",
+        "SONGDATA",
+        "MISC"
 })
 
 public class ResultSet {

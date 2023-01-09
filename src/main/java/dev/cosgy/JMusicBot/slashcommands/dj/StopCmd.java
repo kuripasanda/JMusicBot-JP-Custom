@@ -106,7 +106,7 @@ public class StopCmd extends DJCommand {
     @Override
     public void onAutoComplete(CommandAutoCompleteInteractionEvent event) {
         String[] cmdOptions = {"save"};
-        if(event.getName().equals("stop") && event.getFocusedOption().getName().equals("option")) {
+        if (event.getName().equals("stop") && event.getFocusedOption().getName().equals("option")) {
             List<Command.Choice> options = Stream.of(cmdOptions)
                     .filter(word -> word.startsWith(event.getFocusedOption().getValue())) // only display words that start with the user's current input
                     .map(word -> new Command.Choice(word, word)) // map the words to choices

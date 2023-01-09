@@ -25,7 +25,6 @@ import com.jagrosh.jmusicbot.utils.FormatUtil;
 import dev.cosgy.jmusicbot.slashcommands.AdminCommand;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
-import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.slf4j.Logger;
