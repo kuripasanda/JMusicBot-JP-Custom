@@ -42,10 +42,10 @@ public class GensokyoInfoAgent extends Thread {
     @SuppressWarnings("UnusedReturnValue")
     private static ResultSet fetch() throws Exception {
         HttpURLConnection connection = null;
-        try{
+        try {
 
-            if(info != null){
-                if(info.getSongtimes().getPlayed() < info.getSongtimes().getDuration()){
+            if (info != null) {
+                if (info.getSongtimes().getPlayed() < info.getSongtimes().getDuration()) {
                     return info;
                 }
             }
@@ -82,7 +82,7 @@ public class GensokyoInfoAgent extends Thread {
                     return null;
             }
 
-        } finally{
+        } finally {
             if (connection != null) {
                 connection.disconnect();
             }

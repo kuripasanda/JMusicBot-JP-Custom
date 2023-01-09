@@ -97,7 +97,6 @@ public class ServerInfo extends SlashCommand {
                 .replace("russia", ":flag_ru: ロシア");*/
 
 
-
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setAuthor("サーバー " + GuildName + " の情報", null, GuildIconURL);

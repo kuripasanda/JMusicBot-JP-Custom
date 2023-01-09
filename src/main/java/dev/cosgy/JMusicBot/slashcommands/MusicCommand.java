@@ -25,7 +25,6 @@ import dev.cosgy.jmusicbot.util.MaintenanceInfo;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import org.slf4j.Logger;
@@ -125,7 +124,7 @@ public abstract class MusicCommand extends SlashCommand {
             if (current == null)
                 current = (AudioChannelUnion) settings.getVoiceChannel(event.getGuild());
             GuildVoiceState userState = event.getMember().getVoiceState();
-            if (!userState.inAudioChannel()|| userState.isDeafened() || (current != null && !userState.getChannel().equals(current))) {
+            if (!userState.inAudioChannel() || userState.isDeafened() || (current != null && !userState.getChannel().equals(current))) {
                 event.replyError(String.format("このコマンドを使用するには、%sに参加している必要があります！", (current == null ? "音声チャンネル" : "**" + current.getName() + "**")));
                 return;
             }

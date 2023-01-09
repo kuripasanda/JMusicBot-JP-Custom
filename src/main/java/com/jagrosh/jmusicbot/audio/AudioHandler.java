@@ -37,7 +37,6 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
-import java.awt.*;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -51,12 +50,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     private final FairQueue<QueuedTrack> queue = new FairQueue<>();
     private final List<AudioTrack> defaultQueue = new LinkedList<>();
     private final Set<String> votes = new HashSet<>();
-
     private final PlayerManager manager;
     private final AudioPlayer audioPlayer;
     private final long guildId;
     private final String stringGuildId;
-
     private AudioFrame lastFrame;
 
     protected AudioHandler(PlayerManager manager, Guild guild, AudioPlayer player) {

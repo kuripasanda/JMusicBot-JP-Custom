@@ -17,12 +17,9 @@ package com.jagrosh.jmusicbot;
 
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
-import com.sedmelluq.discord.lavaplayer.player.event.AudioEvent;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
-import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
@@ -103,9 +100,8 @@ public class Listener extends ListenerAdapter {
     }
 
 
-
     public void onGuildVoiceLeave(@NotNull GuildVoiceUpdateEvent event) {
-        if(event.getChannelLeft() == null) return;
+        if (event.getChannelLeft() == null) return;
 
         //NUP = false -> NUS = false -> return
         //NUP = false -> NUS = true -> GO
@@ -141,7 +137,7 @@ public class Listener extends ListenerAdapter {
 
 
     public void onGuildVoiceJoin(@NotNull GuildVoiceUpdateEvent event) {
-        if(event.getChannelJoined() == null) return;
+        if (event.getChannelJoined() == null) return;
 
         Logger log = LoggerFactory.getLogger("onGuildVoiceJoin");
         if (!bot.getConfig().getResumeJoined()) return;

@@ -100,6 +100,7 @@ public class MylistLoader {
     public void writePlaylist(String userId, String name, String text) throws IOException {
         Files.write(Paths.get(config.getMylistfolder() + File.separator + userId + File.separator + name + ".txt"), text.trim().getBytes(StandardCharsets.UTF_8));
     }
+
     public Playlist getPlaylist(String userId, String name) {
         if (!getPlaylistNames(userId).contains(name))
             return null;
