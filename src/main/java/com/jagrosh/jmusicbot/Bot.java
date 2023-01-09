@@ -33,7 +33,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -76,7 +75,7 @@ public class Bot {
         this.aloneInVoiceHandler.init();
     }
 
-    public static void updatePlayStatus(@Nonnull Guild guild, @Nonnull Member selfMember, @Nonnull PlayStatus status) {
+    public static void updatePlayStatus(Guild guild, Member selfMember, PlayStatus status) {
         if (!INSTANCE.getConfig().getChangeNickName()) return;
         if (!selfMember.hasPermission(Permission.NICKNAME_CHANGE)) {
             LoggerFactory.getLogger("UpdName").error("ニックネームを変更できませんでした: 権限が不足しています。");

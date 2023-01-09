@@ -2,11 +2,11 @@ package dev.cosgy.jmusicbot.slashcommands.owner;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.jmusicbot.playlist.PubliclistLoader.Playlist;
 import dev.cosgy.jmusicbot.slashcommands.OwnerCommand;
 import dev.cosgy.jmusicbot.slashcommands.admin.AutoplaylistCmd;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -78,12 +78,12 @@ public class PublistCmd extends OwnerCommand {
             if (bot.getPublistLoader().getPlaylist(pname) == null) {
                 try {
                     bot.getPublistLoader().createPlaylist(pname);
-                    event.reply(client.getSuccess() + " `" + pname + "`という名前で再生リストを作成しました!").queue();
+                    event.reply(event.getClient().getSuccess() + " `" + pname + "`という名前で再生リストを作成しました!").queue();
                 } catch (IOException e) {
-                    event.reply(client.getError() + " 再生リストを作成できませんでした。:" + e.getLocalizedMessage()).queue();
+                    event.reply(event.getClient().getError() + " 再生リストを作成できませんでした。:" + e.getLocalizedMessage()).queue();
                 }
             } else
-                event.reply(client.getError() + " 再生リスト `" + pname + "` はすでに存在しています!").queue();
+                event.reply(event.getClient().getError() + " 再生リスト `" + pname + "` はすでに存在しています!").queue();
         }
 
         @Override
@@ -118,13 +118,13 @@ public class PublistCmd extends OwnerCommand {
         protected void execute(SlashCommandEvent event) {
             String pname = event.getOption("name").getAsString().replaceAll("\\s+", "_");
             if (bot.getPublistLoader().getPlaylist(pname) == null)
-                event.reply(client.getError() + " 再生リスト `" + pname + "` は存在しません!").queue();
+                event.reply(event.getClient().getError() + " 再生リスト `" + pname + "` は存在しません!").queue();
             else {
                 try {
                     bot.getPublistLoader().deletePlaylist(pname);
-                    event.reply(client.getSuccess() + " 再生リスト `" + pname + "`を削除しました。!").queue();
+                    event.reply(event.getClient().getSuccess() + " 再生リスト `" + pname + "`を削除しました。!").queue();
                 } catch (IOException e) {
-                    event.reply(client.getError() + " 再生リストを削除できませんでした: " + e.getLocalizedMessage()).queue();
+                    event.reply(event.getClient().getError() + " 再生リストを削除できませんでした: " + e.getLocalizedMessage()).queue();
                 }
             }
         }
@@ -163,7 +163,7 @@ public class PublistCmd extends OwnerCommand {
             String pname = event.getOption("name").getAsString();
             Playlist playlist = bot.getPublistLoader().getPlaylist(pname);
             if (playlist == null)
-                event.reply(client.getError() + " 再生リスト `" + pname + "` は存在しません!").queue();
+                event.reply(event.getClient().getError() + " 再生リスト `" + pname + "` は存在しません!").queue();
             else {
                 StringBuilder builder = new StringBuilder();
                 playlist.getItems().forEach(item -> builder.append("\r\n").append(item));
@@ -176,9 +176,9 @@ public class PublistCmd extends OwnerCommand {
                 }
                 try {
                     bot.getPublistLoader().writePlaylist(pname, builder.toString());
-                    event.reply(client.getSuccess() + urls.length + " 項目を再生リスト `" + pname + "`に追加しました!").queue();
+                    event.reply(event.getClient().getSuccess() + urls.length + " 項目を再生リスト `" + pname + "`に追加しました!").queue();
                 } catch (IOException e) {
-                    event.reply(client.getError() + " 再生リストに追加できませんでした: " + e.getLocalizedMessage()).queue();
+                    event.reply(event.getClient().getError() + " 再生リストに追加できませんでした: " + e.getLocalizedMessage()).queue();
                 }
             }
         }
@@ -227,16 +227,16 @@ public class PublistCmd extends OwnerCommand {
             if (!bot.getPublistLoader().folderExists())
                 bot.getPublistLoader().createFolder();
             if (!bot.getPublistLoader().folderExists()) {
-                event.reply(client.getWarning() + " 再生リストフォルダが存在しないため作成できませんでした。").queue();
+                event.reply(event.getClient().getWarning() + " 再生リストフォルダが存在しないため作成できませんでした。").queue();
                 return;
             }
             List<String> list = bot.getPublistLoader().getPlaylistNames();
             if (list == null)
-                event.reply(client.getError() + " 利用可能な再生リストを読み込めませんでした。").queue();
+                event.reply(event.getClient().getError() + " 利用可能な再生リストを読み込めませんでした。").queue();
             else if (list.isEmpty())
-                event.reply(client.getWarning() + " 再生リストフォルダに再生リストがありません。").queue();
+                event.reply(event.getClient().getWarning() + " 再生リストフォルダに再生リストがありません。").queue();
             else {
-                StringBuilder builder = new StringBuilder(client.getSuccess() + " 利用可能な再生リスト:\n");
+                StringBuilder builder = new StringBuilder(event.getClient().getSuccess() + " 利用可能な再生リスト:\n");
                 list.forEach(str -> builder.append("`").append(str).append("` "));
                 event.reply(builder.toString()).queue();
             }

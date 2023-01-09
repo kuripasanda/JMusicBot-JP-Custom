@@ -23,9 +23,10 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.utils.messages.MessageEditData;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,11 +48,11 @@ public class NowplayingHandler {
 
     public void init() {
         if (!bot.getConfig().useNPImages())
-            bot.getThreadpool().scheduleWithFixedDelay(this::updateAll, 0, 5, TimeUnit.SECONDS);
+            bot.getThreadpool().scheduleWithFixedDelay(this::updateAll, 0, 10, TimeUnit.SECONDS);
     }
 
     public void setLastNPMessage(Message m) {
-        lastNP.put(m.getGuild().getIdLong(), new Pair<>(m.getTextChannel().getIdLong(), m.getIdLong()));
+        lastNP.put(m.getGuild().getIdLong(), new Pair<>(m.getChannel().getIdLong(), m.getIdLong()));
     }
 
     public void clearLastNPMessage(Guild guild) {
@@ -73,14 +74,14 @@ public class NowplayingHandler {
                 continue;
             }
             AudioHandler handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
-            Message msg = null;
+            MessageEditData msg = null;
             try {
-                msg = Objects.requireNonNull(handler).getNowPlaying(bot.getJDA());
+                msg = MessageEditData.fromCreateData(Objects.requireNonNull(handler).getNowPlaying(bot.getJDA()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             if (msg == null) {
-                msg = handler.getNoMusicPlaying(bot.getJDA());
+                msg = MessageEditData.fromCreateData(handler.getNoMusicPlaying(bot.getJDA()));
                 toRemove.add(guildId);
             }
             try {
@@ -122,7 +123,7 @@ public class NowplayingHandler {
     public void onTrackUpdate(long guildId, AudioTrack track, AudioHandler handler) {
         // 該当する場合はボットステータスを更新します
         if (bot.getConfig().getSongInStatus()) {
-            if (track != null && bot.getJDA().getGuilds().stream().filter(g -> Objects.requireNonNull(g.getSelfMember().getVoiceState()).inVoiceChannel()).count() <= 1)
+            if (track != null && bot.getJDA().getGuilds().stream().filter(g -> Objects.requireNonNull(g.getSelfMember().getVoiceState()).inAudioChannel()).count() <= 1)
 
                 if (track.getInfo().uri.matches(".*stream.gensokyoradio.net/.*")) {
                     bot.getJDA().getPresence().setActivity(Activity.listening("幻想郷ラジオ"));

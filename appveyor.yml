@@ -26,4 +26,4 @@ on_finish:
 artifacts:
   - path: "**/target/*.?ar"
 
-version: "0.7.3.{build}"
+version: "0.8.0.{build}"

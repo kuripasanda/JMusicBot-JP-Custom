@@ -16,10 +16,10 @@
 package dev.cosgy.jmusicbot.slashcommands.admin;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.settings.Settings;
 import dev.cosgy.jmusicbot.slashcommands.AdminCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -49,23 +49,23 @@ public class AutoplaylistCmd extends AdminCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
-        if (checkAdminPermission(client, event)) {
-            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+        if (checkAdminPermission(event.getClient(), event)) {
+            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
             return;
         }
         String pName = event.getOption("name").getAsString();
         if (pName.toLowerCase().matches("(none|なし)")) {
-            Settings settings = client.getSettingsFor(event.getGuild());
+            Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setDefaultPlaylist(null);
-            event.reply(client.getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、なしに設定しました。").queue();
+            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、なしに設定しました。").queue();
             return;
         }
         if (bot.getPlaylistLoader().getPlaylist(event.getGuild().getId(), pName) == null) {
-            event.reply(client.getError() + "`" + pName + "`を見つけることができませんでした!").queue();
+            event.reply(event.getClient().getError() + "`" + pName + "`を見つけることができませんでした!").queue();
         } else {
-            Settings settings = client.getSettingsFor(event.getGuild());
+            Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setDefaultPlaylist(pName);
-            event.reply(client.getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、`" + pName + "`に設定しました。\n"
+            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、`" + pName + "`に設定しました。\n"
                     + "再生待ちに曲がないときは、自動再生リストの曲が再生されます。").queue();
         }
     }

@@ -58,7 +58,7 @@ public class SettingsManager implements GuildSettingsManager {
                         o.has("text_channel_id") ? o.getString("text_channel_id") : null,
                         o.has("voice_channel_id") ? o.getString("voice_channel_id") : null,
                         o.has("dj_role_id") ? o.getString("dj_role_id") : null,
-                        o.has("volume") ? o.getInt("volume") : 50,
+                        o.has("volume") ? o.getInt("volume") : 10,
                         o.has("default_playlist") ? o.getString("default_playlist") : null,
                         o.has("repeat") ? o.getEnum(RepeatMode.class, "repeat") : RepeatMode.OFF,
                         o.has("prefix") ? o.getString("prefix") : null,
@@ -87,7 +87,7 @@ public class SettingsManager implements GuildSettingsManager {
     }
 
     private Settings createDefaultSettings() {
-        return new Settings(this, 0, 0, 0, 50, null, RepeatMode.OFF, null, false, 0, SKIP_RATIO);
+        return new Settings(this, 0, 0, 0, 10, null, RepeatMode.OFF, null, false, 0, SKIP_RATIO);
     }
 
     protected void writeSettings() {

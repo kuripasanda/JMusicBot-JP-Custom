@@ -16,9 +16,9 @@
 package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.util.List;
 
@@ -71,22 +71,22 @@ public class PlaylistsCmd extends MusicCommand {
         if (!bot.getPlaylistLoader().folderGuildExists(guildID))
             bot.getPlaylistLoader().createGuildFolder(guildID);
         if (!bot.getPlaylistLoader().folderExists()) {
-            event.reply(client.getWarning() + " 再生リストフォルダが存在しないため作成できませんでした。").queue();
+            event.reply(event.getClient().getWarning() + " 再生リストフォルダが存在しないため作成できませんでした。").queue();
             return;
         }
         if (!bot.getPlaylistLoader().folderGuildExists(guildID)) {
-            event.reply(client.getWarning() + " このサーバーの再生リストフォルダが存在しないため作成できませんでした。").queue();
+            event.reply(event.getClient().getWarning() + " このサーバーの再生リストフォルダが存在しないため作成できませんでした。").queue();
             return;
         }
         List<String> list = bot.getPlaylistLoader().getPlaylistNames(guildID);
         if (list == null)
-            event.reply(client.getError() + " 利用可能な再生リストを読み込めませんでした。").queue();
+            event.reply(event.getClient().getError() + " 利用可能な再生リストを読み込めませんでした。").queue();
         else if (list.isEmpty())
-            event.reply(client.getWarning() + " 再生リストフォルダにプレイリストがありません。").queue();
+            event.reply(event.getClient().getWarning() + " 再生リストフォルダにプレイリストがありません。").queue();
         else {
-            StringBuilder builder = new StringBuilder(client.getSuccess() + " 利用可能な再生リスト:\n");
+            StringBuilder builder = new StringBuilder(event.getClient().getSuccess() + " 利用可能な再生リスト:\n");
             list.forEach(str -> builder.append("`").append(str).append("` "));
-            builder.append("\n`").append(client.getTextualPrefix()).append("play playlist <name>` と入力することで再生リストを再生できます。");
+            builder.append("\n`").append(event.getClient().getTextualPrefix()).append("play playlist <name>` と入力することで再生リストを再生できます。");
             event.reply(builder.toString()).queue();
         }
     }

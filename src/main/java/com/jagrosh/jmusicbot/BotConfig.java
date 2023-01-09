@@ -337,9 +337,13 @@ public class BotConfig {
         return nicoPass;
     }
 
-    public String getYouTubeEmailAddress(){return ytEmail;}
+    public String getYouTubeEmailAddress() {
+        return ytEmail;
+    }
 
-    public String getYouTubePassword(){return ytPass; }
+    public String getYouTubePassword() {
+        return ytPass;
+    }
 
     // [JMusicBot-JP] End
 

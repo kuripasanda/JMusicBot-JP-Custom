@@ -16,12 +16,12 @@
 package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -38,7 +38,7 @@ public class NowplayingCmd extends MusicCommand {
     @Override
     public void doCommand(CommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-        Message m = null;
+        MessageCreateData m = null;
         try {
             m = handler.getNowPlaying(event.getJDA());
         } catch (Exception e) {
@@ -55,7 +55,7 @@ public class NowplayingCmd extends MusicCommand {
     @Override
     public void doCommand(SlashCommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-        Message m = null;
+        MessageCreateData m = null;
         try {
             m = handler.getNowPlaying(event.getJDA());
         } catch (Exception e) {

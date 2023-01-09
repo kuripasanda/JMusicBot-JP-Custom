@@ -16,11 +16,11 @@
 package dev.cosgy.jmusicbot.slashcommands.owner;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
 import dev.cosgy.jmusicbot.slashcommands.OwnerCommand;
 import net.dv8tion.jda.api.entities.Icon;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -50,14 +50,14 @@ public class SetavatarCmd extends OwnerCommand {
         String url = event.getOption("image").getAsString();
         InputStream s = OtherUtil.imageFromUrl(url);
         if (s == null) {
-            event.reply(client.getError() + " 無効または見つからないURL").queue();
+            event.reply(event.getClient().getError() + " 無効または見つからないURL").queue();
         } else {
             try {
                 event.getJDA().getSelfUser().getManager().setAvatar(Icon.from(s)).queue(
-                        v -> event.reply(client.getSuccess() + "アバターを変更しました。").queue(),
-                        t -> event.reply(client.getError() + "アバターを設定できませんでした。").queue());
+                        v -> event.reply(event.getClient().getSuccess() + "アバターを変更しました。").queue(),
+                        t -> event.reply(event.getClient().getError() + "アバターを設定できませんでした。").queue());
             } catch (IOException e) {
-                event.reply(client.getError() + " 提供されたURLから読み込めませんでした。").queue();
+                event.reply(event.getClient().getError() + " 提供されたURLから読み込めませんでした。").queue();
             }
         }
     }

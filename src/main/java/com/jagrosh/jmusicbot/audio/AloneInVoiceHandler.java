@@ -18,8 +18,8 @@ package com.jagrosh.jmusicbot.audio;
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.jmusicbot.playlist.CacheLoader;
 import dev.cosgy.jmusicbot.util.LastSendTextChannel;
-import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +84,6 @@ public class AloneInVoiceHandler {
     }
 
     public void onVoiceUpdate(GuildVoiceUpdateEvent event) {
-
         if (aloneTimeUntilStop <= 0) return;
 
         Guild guild = event.getEntity().getGuild();

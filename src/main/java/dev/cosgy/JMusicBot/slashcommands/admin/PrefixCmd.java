@@ -17,10 +17,10 @@
 package dev.cosgy.jmusicbot.slashcommands.admin;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.settings.Settings;
 import dev.cosgy.jmusicbot.slashcommands.AdminCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -46,18 +46,18 @@ public class PrefixCmd extends AdminCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
-        if (checkAdminPermission(client, event)) {
-            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+        if (checkAdminPermission(event.getClient(), event)) {
+            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
             return;
         }
-        Settings s = client.getSettingsFor(event.getGuild());
+        Settings s = event.getClient().getSettingsFor(event.getGuild());
         String prefix = event.getOption("prefix").getAsString();
         if (prefix.toLowerCase().matches("(none|なし)")) {
             s.setPrefix(null);
-            event.reply(client.getSuccess() + "プレフィックスがクリアされました。").queue();
+            event.reply(event.getClient().getSuccess() + "プレフィックスがクリアされました。").queue();
         } else {
             s.setPrefix(prefix);
-            event.reply(client.getSuccess() + "*" + event.getGuild().getName() + "* でのプレフィックスを、 `" + prefix + "`に設定しました。").queue();
+            event.reply(event.getClient().getSuccess() + "*" + event.getGuild().getName() + "* でのプレフィックスを、 `" + prefix + "`に設定しました。").queue();
         }
     }
 

@@ -2,11 +2,11 @@ package dev.cosgy.jmusicbot.slashcommands.general;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.slf4j.Logger;
@@ -102,8 +102,9 @@ public class UserInfo extends SlashCommand {
 
         if (event.getArgs().length() > 0) {
             try {
-                if (event.getMessage().getMentionedUsers().size() != 0) {
-                    memb = event.getMessage().getMentionedMembers().get(0);
+
+                if (event.getMessage().getReferencedMessage().getMentions().getMembers().size() != 0) {
+                    memb = event.getMessage().getReferencedMessage().getMentions().getMembers().get(0);
                 } else {
                     memb = FinderUtil.findMembers(event.getArgs(), event.getGuild()).get(0);
                 }
@@ -172,6 +173,6 @@ public class UserInfo extends SlashCommand {
             eb.setAuthor(memb.getUser().getName() + TAG + " のユーザー情報", null, AVATAR);
         }
 
-        event.getChannel().sendMessage(eb.build()).queue();
+        event.getChannel().sendMessageEmbeds(eb.build()).queue();
     }
 }

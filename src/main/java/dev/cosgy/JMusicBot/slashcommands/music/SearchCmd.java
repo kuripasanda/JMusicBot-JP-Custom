@@ -16,6 +16,7 @@
 package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jdautilities.menu.OrderedMenu;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
@@ -29,7 +30,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -97,13 +97,13 @@ public class SearchCmd extends MusicCommand {
         @Override
         public void trackLoaded(AudioTrack track) {
             if (bot.getConfig().isTooLong(track)) {
-                m.editOriginal(FormatUtil.filter(client.getWarning() + "**" + track.getInfo().title + "**`は許可されている最大長より長いです。"
+                m.editOriginal(FormatUtil.filter(event.getClient().getWarning() + "**" + track.getInfo().title + "**`は許可されている最大長より長いです。"
                         + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`")).queue();
                 return;
             }
             AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
             int pos = handler.addTrack(new QueuedTrack(track, event.getUser())) + 1;
-            m.editOriginal(FormatUtil.filter(client.getSuccess() + "**" + track.getInfo().title
+            m.editOriginal(FormatUtil.filter(event.getClient().getSuccess() + "**" + track.getInfo().title
                     + "**(`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "を追加しました。"
                     : "を" + pos + "番目の再生待ちに追加しました。"))).queue();
         }
@@ -111,19 +111,19 @@ public class SearchCmd extends MusicCommand {
         @Override
         public void playlistLoaded(AudioPlaylist playlist) {
             builder.setColor(event.getGuild().getSelfMember().getColor())
-                    .setText(FormatUtil.filter(client.getSuccess() + " `" + event.getOption("input").getAsString() + "`の検索結果:"))
+                    .setText(FormatUtil.filter(event.getClient().getSuccess() + " `" + event.getOption("input").getAsString() + "`の検索結果:"))
                     .setChoices()
                     .setSelection((msg, i) ->
                     {
                         AudioTrack track = playlist.getTracks().get(i - 1);
                         if (bot.getConfig().isTooLong(track)) {
-                            event.reply(client.getWarning() + "**" + track.getInfo().title + "**`は許可されている最大長よりも長いです。"
+                            event.reply(event.getClient().getWarning() + "**" + track.getInfo().title + "**`は許可されている最大長よりも長いです。"
                                     + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`").queue();
                             return;
                         }
                         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
                         int pos = handler.addTrack(new QueuedTrack(track, event.getUser())) + 1;
-                        event.reply(client.getSuccess() + "**" + track.getInfo().title
+                        event.reply(event.getClient().getSuccess() + "**" + track.getInfo().title
                                 + "**(`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "を追加しました。"
                                 : " を" + pos + "番目の再生待ちに追加しました。 ")).queue();
                     })
@@ -140,16 +140,16 @@ public class SearchCmd extends MusicCommand {
 
         @Override
         public void noMatches() {
-            m.editOriginal(FormatUtil.filter(client.getWarning() + " の検索結果はありません。 `" + event.getOption("input").getAsString() + "`.")).queue();
+            m.editOriginal(FormatUtil.filter(event.getClient().getWarning() + " の検索結果はありません。 `" + event.getOption("input").getAsString() + "`.")).queue();
         }
 
         @Override
         public void loadFailed(FriendlyException throwable) {
 
             if (throwable.severity == Severity.COMMON)
-                m.editOriginal(client.getError() + " 読み込み中にエラーが発生しました: " + throwable.getMessage()).queue();
+                m.editOriginal(event.getClient().getError() + " 読み込み中にエラーが発生しました: " + throwable.getMessage()).queue();
             else
-                m.editOriginal(client.getError() + " 読み込み中にエラーが発生しました").queue();
+                m.editOriginal(event.getClient().getError() + " 読み込み中にエラーが発生しました").queue();
         }
     }
 

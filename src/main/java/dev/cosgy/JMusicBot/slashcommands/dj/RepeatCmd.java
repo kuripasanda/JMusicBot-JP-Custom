@@ -17,11 +17,11 @@ package dev.cosgy.jmusicbot.slashcommands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.settings.Settings;
 import dev.cosgy.jmusicbot.settings.RepeatMode;
 import dev.cosgy.jmusicbot.slashcommands.DJCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,11 +94,11 @@ public class RepeatCmd extends DJCommand {
 
         @Override
         public void doCommand(SlashCommandEvent event) {
-            if (!checkDJPermission(client, event)) {
-                event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+            if (!checkDJPermission(event.getClient(), event)) {
+                event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
                 return;
             }
-            Settings settings = client.getSettingsFor(event.getGuild());
+            Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setRepeatMode(RepeatMode.SINGLE);
             event.reply("リピートを `有効(1曲リピート)` にしました。").queue();
         }
@@ -118,11 +118,11 @@ public class RepeatCmd extends DJCommand {
 
         @Override
         public void doCommand(SlashCommandEvent event) {
-            if (!checkDJPermission(client, event)) {
-                event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+            if (!checkDJPermission(event.getClient(), event)) {
+                event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
                 return;
             }
-            Settings settings = client.getSettingsFor(event.getGuild());
+            Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setRepeatMode(RepeatMode.ALL);
             event.reply("リピートを `有効(全曲リピート)` にしました。").queue();
         }
@@ -142,11 +142,11 @@ public class RepeatCmd extends DJCommand {
 
         @Override
         public void doCommand(SlashCommandEvent event) {
-            if (!checkDJPermission(client, event)) {
-                event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+            if (!checkDJPermission(event.getClient(), event)) {
+                event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
                 return;
             }
-            Settings settings = client.getSettingsFor(event.getGuild());
+            Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setRepeatMode(RepeatMode.OFF);
             event.reply("リピートを `無効` にしました。").queue();
         }

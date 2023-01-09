@@ -1,6 +1,5 @@
 package dev.cosgy.niconicoSearchAPI;
 
-import javax.annotation.Nonnull;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -20,14 +19,14 @@ public class HTTPUtil {
     private HttpURLConnection connection;
     private URL url;
 
-    public HTTPUtil(@Nonnull String method, @Nonnull String targetAddress, Map<String, String> query, Map<String, String> headers) {
+    public HTTPUtil(String method, String targetAddress, Map<String, String> query, Map<String, String> headers) {
         this.method = method;
         this.targetAddress = targetAddress;
         this.query = query;
         this.headers = headers;
     }
 
-    public HTTPUtil(@Nonnull String method, @Nonnull String targetAddress) {
+    public HTTPUtil(String method, String targetAddress) {
         this.method = method;
         this.targetAddress = targetAddress;
     }

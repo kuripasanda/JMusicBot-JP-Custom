@@ -28,17 +28,15 @@ import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
-import dev.cosgy.agent.GensokyoInfoAgent;
 import dev.cosgy.jmusicbot.settings.RepeatMode;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
-import java.awt.*;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -52,12 +50,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     private final FairQueue<QueuedTrack> queue = new FairQueue<>();
     private final List<AudioTrack> defaultQueue = new LinkedList<>();
     private final Set<String> votes = new HashSet<>();
-
     private final PlayerManager manager;
     private final AudioPlayer audioPlayer;
     private final long guildId;
     private final String stringGuildId;
-
     private AudioFrame lastFrame;
 
     protected AudioHandler(PlayerManager manager, Guild guild, AudioPlayer player) {
@@ -108,7 +104,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     }
 
     public boolean isMusicPlaying(JDA jda) {
-        return guild(jda).getSelfMember().getVoiceState().inVoiceChannel() && audioPlayer.getPlayingTrack() != null;
+        return guild(jda).getSelfMember().getVoiceState().inAudioChannel() && audioPlayer.getPlayingTrack() != null;
     }
 
     public Set<String> getVotes() {
@@ -194,12 +190,12 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
 
 
     // Formatting
-    public Message getNowPlaying(JDA jda) throws Exception {
+    public MessageCreateData getNowPlaying(JDA jda) throws Exception {
         if (isMusicPlaying(jda)) {
             Guild guild = guild(jda);
             AudioTrack track = audioPlayer.getPlayingTrack();
-            MessageBuilder mb = new MessageBuilder();
-            mb.append(FormatUtil.filter(manager.getBot().getConfig().getSuccess() + " **" + guild.getSelfMember().getVoiceState().getChannel().getAsMention() + "**で、再生中です..."));
+            MessageCreateBuilder mb = new MessageCreateBuilder();
+            mb.addContent(FormatUtil.filter(manager.getBot().getConfig().getSuccess() + " **" + guild.getSelfMember().getVoiceState().getChannel().getAsMention() + "**で、再生中です..."));
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(guild.getSelfMember().getColor());
             RequestMetadata rm = getRequestMetadata();
@@ -291,13 +287,13 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                 }*/
             }
 
-            return mb.setEmbeds(eb.build()).build();
+            return mb.addEmbeds(eb.build()).build();
         } else return null;
     }
 
-    public Message getNoMusicPlaying(JDA jda) {
+    public MessageCreateData getNoMusicPlaying(JDA jda) {
         Guild guild = guild(jda);
-        return new MessageBuilder()
+        return new MessageCreateBuilder()
                 .setContent(FormatUtil.filter(manager.getBot().getConfig().getSuccess() + " **音楽を再生していません。**"))
                 .setEmbeds(new EmbedBuilder()
                         .setTitle("音楽を再生していません。")
