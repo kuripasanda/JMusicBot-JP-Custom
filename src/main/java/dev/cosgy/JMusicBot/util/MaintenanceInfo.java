@@ -19,16 +19,17 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.settings.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -109,7 +110,8 @@ public class MaintenanceInfo {
         if (Announce && AnnounceID > s.getAnnounce() && StartBoolean && EndBoolean) {
             MaintenanceInfo InfoResult = MaintenanceInfo.GetInfo();
 
-            MessageBuilder builder = new MessageBuilder().append("**").append(InfoResult.Title).append("**");
+
+            MessageCreateBuilder builder = new MessageCreateBuilder().addContent("**").addContent(InfoResult.Title).addContent("**");
             EmbedBuilder ebuilder = new EmbedBuilder()
                     .setColor(Color.orange)
                     .setDescription(InfoResult.Content);
@@ -122,7 +124,7 @@ public class MaintenanceInfo {
             ebuilder.addField("更新日時:", InfoResult.LastUpdate, false)
                     .addField("現在時刻", sdf.format(NowTime), false)
                     .setFooter("※メンテナンス期間は予定なく変更する場合があります。", null);
-            event.getChannel().sendMessage(builder.append(ebuilder.build()).build()).complete();
+            event.getChannel().sendMessage(builder.addEmbeds(ebuilder.build()).build()).complete();
             s.setAnnounce(AnnounceID);
         }
     }
@@ -158,7 +160,7 @@ public class MaintenanceInfo {
         if (Announce && AnnounceID > s.getAnnounce() && StartBoolean && EndBoolean) {
             MaintenanceInfo InfoResult = MaintenanceInfo.GetInfo();
 
-            MessageBuilder builder = new MessageBuilder().append("**").append(InfoResult.Title).append("**");
+            MessageCreateBuilder builder = new MessageCreateBuilder().addContent("**").addContent(InfoResult.Title).addContent("**");
             EmbedBuilder ebuilder = new EmbedBuilder()
                     .setColor(Color.orange)
                     .setDescription(InfoResult.Content);
@@ -171,7 +173,7 @@ public class MaintenanceInfo {
             ebuilder.addField("更新日時:", InfoResult.LastUpdate, false)
                     .addField("現在時刻", sdf.format(NowTime), false)
                     .setFooter("※メンテナンス期間は予定なく変更する場合があります。", null);
-            event.getChannel().sendMessage(builder.append(ebuilder.build()).build()).complete();
+            event.getChannel().sendMessage(builder.addEmbeds(ebuilder.build()).build()).complete();
             s.setAnnounce(AnnounceID);
         }
     }

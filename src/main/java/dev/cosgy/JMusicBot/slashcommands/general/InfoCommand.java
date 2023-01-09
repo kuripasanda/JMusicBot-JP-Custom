@@ -2,12 +2,12 @@ package dev.cosgy.jmusicbot.slashcommands.general;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.jmusicbot.util.MaintenanceInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 
 import java.awt.*;
 import java.io.IOException;
@@ -36,7 +36,7 @@ public class InfoCommand extends SlashCommand {
                 if (MaintenanceInfo.Verification()) {
                     MaintenanceInfo InfoResult = MaintenanceInfo.GetInfo();
 
-                    MessageBuilder builder = new MessageBuilder().append("**").append(InfoResult.Title).append("**");
+                    MessageCreateBuilder builder = new MessageCreateBuilder().addContent("**").addContent(InfoResult.Title).addContent("**");
                     EmbedBuilder ebuilder = new EmbedBuilder()
                             .setColor(Color.orange)
                             .setDescription(InfoResult.Content);
@@ -49,7 +49,7 @@ public class InfoCommand extends SlashCommand {
                     ebuilder.addField("更新日時:", InfoResult.LastUpdate, false)
                             .addField("現在時刻", sdf.format(NowTime), false)
                             .setFooter("※メンテナンス期間は予定なく変更する場合があります。", null);
-                    m.editOriginal(builder.append(ebuilder.build()).build()).queue();
+                    m.editOriginalEmbeds(ebuilder.build()).queue();
                 } else {
                     m.editOriginal("お知らせはありません。").queue();
                 }
@@ -70,7 +70,7 @@ public class InfoCommand extends SlashCommand {
             if (MaintenanceInfo.Verification()) {
                 MaintenanceInfo InfoResult = MaintenanceInfo.GetInfo();
 
-                MessageBuilder builder = new MessageBuilder().append("**").append(InfoResult.Title).append("**");
+                MessageCreateBuilder builder = new MessageCreateBuilder().addContent("**").addContent(InfoResult.Title).addContent("**");
                 EmbedBuilder ebuilder = new EmbedBuilder()
                         .setColor(Color.orange)
                         .setDescription(InfoResult.Content);
@@ -83,7 +83,7 @@ public class InfoCommand extends SlashCommand {
                 ebuilder.addField("更新日時:", InfoResult.LastUpdate, false)
                         .addField("現在時刻", sdf.format(NowTime), false)
                         .setFooter("※メンテナンス期間は予定なく変更する場合があります。", null);
-                m.editMessage(builder.append(ebuilder.build()).build()).queue();
+                m.editMessageEmbeds(ebuilder.build()).queue();
 
             } else {
                 m.editMessage("お知らせはありません。").queue();

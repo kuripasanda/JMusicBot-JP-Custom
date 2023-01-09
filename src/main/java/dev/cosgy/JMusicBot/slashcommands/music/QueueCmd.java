@@ -16,6 +16,7 @@
 package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jdautilities.menu.Paginator;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.JMusicBot;
@@ -25,12 +26,13 @@ import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import dev.cosgy.jmusicbot.settings.RepeatMode;
 import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
+import net.dv8tion.jda.api.utils.messages.MessageEditBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageEditData;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -79,17 +81,17 @@ public class QueueCmd extends MusicCommand {
         AudioHandler ah = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         List<QueuedTrack> list = ah.getQueue().getList();
         if (list.isEmpty()) {
-            Message nowp = null;
+            MessageCreateData nowp = null;
             try {
                 nowp = ah.getNowPlaying(event.getJDA());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            Message nonowp = ah.getNoMusicPlaying(event.getJDA());
-            Message built = new MessageBuilder()
+            MessageCreateData nonowp = ah.getNoMusicPlaying(event.getJDA());
+            MessageCreateData built = new MessageCreateBuilder()
                     .setContent(event.getClient().getWarning() + " 再生待ちの楽曲はありません。")
                     .setEmbeds((nowp == null ? nonowp : nowp).getEmbeds().get(0)).build();
-            Message finalNowp = nowp;
+            MessageCreateData finalNowp = nowp;
             event.reply(built, m ->
             {
                 if (finalNowp != null)
@@ -120,16 +122,16 @@ public class QueueCmd extends MusicCommand {
         AudioHandler ah = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         List<QueuedTrack> list = ah.getQueue().getList();
         if (list.isEmpty()) {
-            Message nowp = null;
+            MessageCreateData nowp = null;
             try {
                 nowp = ah.getNowPlaying(event.getJDA());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            Message nonowp = ah.getNoMusicPlaying(event.getJDA());
-            Message built = new MessageBuilder()
+            MessageCreateData nonowp = ah.getNoMusicPlaying(event.getJDA());
+            MessageEditData built = new MessageEditBuilder()
                     .setContent(client.getWarning() + " 再生待ちの楽曲はありません。")
-                    .append((nowp == null ? nonowp : nowp).getEmbeds().get(0)).build();
+                    .setEmbeds((nowp == null ? nonowp : nowp).getEmbeds().get(0)).build();
             m.editOriginal(built).queue();
             return;
         }
@@ -139,9 +141,9 @@ public class QueueCmd extends MusicCommand {
             total += list.get(i).getTrack().getDuration();
             songs[i] = list.get(i).toString();
         }
-        Settings settings = client.getSettingsFor(event.getGuild());
+        Settings settings = event.getClient().getSettingsFor(event.getGuild());
         long finTotal = total;
-        builder.setText((i1, i2) -> getQueueTitle(ah, client.getSuccess(), songs.length, finTotal, settings.getRepeatMode()))
+        builder.setText((i1, i2) -> getQueueTitle(ah, event.getClient().getSuccess(), songs.length, finTotal, settings.getRepeatMode()))
                 .setItems(songs)
                 .setUsers(event.getUser())
                 .setColor(event.getGuild().getSelfMember().getColor());

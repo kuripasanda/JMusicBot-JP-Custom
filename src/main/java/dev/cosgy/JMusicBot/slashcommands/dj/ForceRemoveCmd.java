@@ -16,6 +16,7 @@
 package dev.cosgy.jmusicbot.slashcommands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.jagrosh.jdautilities.menu.OrderedMenu;
 import com.jagrosh.jmusicbot.Bot;
@@ -24,7 +25,6 @@ import dev.cosgy.jmusicbot.slashcommands.DJCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -104,22 +104,22 @@ public class ForceRemoveCmd extends DJCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
-        if (!checkDJPermission(client, event)) {
-            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+        if (!checkDJPermission(event.getClient(), event)) {
+            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (handler.getQueue().isEmpty()) {
-            event.reply(client.getError() + "再生待ちには何もありません！").queue();
+            event.reply(event.getClient().getError() + "再生待ちには何もありません！").queue();
             return;
         }
 
         User target = event.getOption("user").getAsUser();
         int count = ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).getQueue().removeAll(target.getIdLong());
         if (count == 0) {
-            event.reply(client.getWarning() + "**" + target.getName() + "** の再生待ちに曲がありません！").queue();
+            event.reply(event.getClient().getWarning() + "**" + target.getName() + "** の再生待ちに曲がありません！").queue();
         } else {
-            event.reply(client.getSuccess() + "**" + target.getName() + "**#" + target.getDiscriminator() + "から`" + count + "`曲削除しました。").queue();
+            event.reply(event.getClient().getSuccess() + "**" + target.getName() + "**#" + target.getDiscriminator() + "から`" + count + "`曲削除しました。").queue();
         }
     }
 

@@ -17,15 +17,16 @@ package com.jagrosh.jmusicbot;
 
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
+import com.sedmelluq.discord.lavaplayer.player.event.AudioEvent;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.ShutdownEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
+import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
+import net.dv8tion.jda.api.events.session.ReadyEvent;
+import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -79,23 +80,38 @@ public class Listener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMessageDelete(GuildMessageDeleteEvent event) {
+    public void onMessageDelete(@NotNull MessageDeleteEvent event) {
         bot.getNowplayingHandler().onMessageDelete(event.getGuild(), event.getMessageIdLong());
     }
 
     @Override
     public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event) {
+        Logger log = LoggerFactory.getLogger("onGuildVoiceUpdate");
         bot.getAloneInVoiceHandler().onVoiceUpdate(event);
+
+        // 退出時のイベント
+        log.debug("onGuildVoiceLeave Start");
+        onGuildVoiceLeave(event);
+        log.debug("onGuildVoiceLeave End");
+        // 退出時のイベント終了
+
+        // 参加時のイベント
+        log.debug("onGuildVoiceJoin Start");
+        onGuildVoiceJoin(event);
+        log.debug("onGuildVoiceJoin End");
+        // 参加時のイベント終了
     }
 
-    @Override
-    public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
+
+
+    public void onGuildVoiceLeave(@NotNull GuildVoiceUpdateEvent event) {
+        if(event.getChannelLeft() == null) return;
+
         //NUP = false -> NUS = false -> return
         //NUP = false -> NUS = true -> GO
         //NUP = true -> GO
         if (!bot.getConfig().getNoUserPause())
             if (!bot.getConfig().getNoUserStop()) return;
-
         Member botMember = event.getGuild().getSelfMember();
         //ボイチャにいる人数が1人、botがボイチャにいるか
         if (event.getChannelLeft().getMembers().size() == 1 && event.getChannelLeft().getMembers().contains(botMember)) {
@@ -104,9 +120,6 @@ public class Listener extends ListenerAdapter {
             // config.txtの nouserpause が true の場合
             if (bot.getConfig().getNoUserPause()) {
                 //⏸
-                Logger log = LoggerFactory.getLogger("MusicBot");
-                log.info("プレイヤーを一時停止");
-
                 // プレイヤーを一時停止する
                 Objects.requireNonNull(handler).getPlayer().setPaused(true);
 
@@ -126,16 +139,21 @@ public class Listener extends ListenerAdapter {
         }
     }
 
-    @Override
-    public void onGuildVoiceJoin(@NotNull GuildVoiceJoinEvent event) {
+
+    public void onGuildVoiceJoin(@NotNull GuildVoiceUpdateEvent event) {
+        if(event.getChannelJoined() == null) return;
+
+        Logger log = LoggerFactory.getLogger("onGuildVoiceJoin");
         if (!bot.getConfig().getResumeJoined()) return;
         //▶
         Member botMember = event.getGuild().getSelfMember();
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
 
+        log.debug("再生再開判定 {}", ((event.getChannelJoined().getMembers().size() > 1 && event.getChannelJoined().getMembers().contains(botMember)) && Objects.requireNonNull(handler).getPlayer().isPaused()));
         //ボイチャにいる人数が1人以上、botがボイチャにいるか、再生が一時停止されているか
         if ((event.getChannelJoined().getMembers().size() > 1 && event.getChannelJoined().getMembers().contains(botMember)) && Objects.requireNonNull(handler).getPlayer().isPaused()) {
             handler.getPlayer().setPaused(false);
+            log.debug("再生を再開しました。");
 
             Bot.updatePlayStatus(event.getGuild(), event.getGuild().getSelfMember(), PlayStatus.PLAYING);
         }

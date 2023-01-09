@@ -16,9 +16,9 @@
 package dev.cosgy.jmusicbot.slashcommands.owner;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.jmusicbot.slashcommands.OwnerCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -53,9 +53,9 @@ public class EvalCmd extends OwnerCommand {
         se.put("guild", event.getGuild());
         se.put("channel", event.getChannel());
         try {
-            event.reply(client.getSuccess() + " 正常に実行されました:\n```\n" + se.eval(event.getOption("code").getAsString()) + " ```").queue();
+            event.reply(event.getClient().getSuccess() + " 正常に実行されました:\n```\n" + se.eval(event.getOption("code").getAsString()) + " ```").queue();
         } catch (Exception e) {
-            event.reply(client.getError() + " 例外が発生しました\n```\n" + e + " ```").queue();
+            event.reply(event.getClient().getError() + " 例外が発生しました\n```\n" + e + " ```").queue();
         }
     }
 

@@ -16,12 +16,12 @@
 package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.slf4j.Logger;
@@ -76,7 +76,7 @@ public class VolumeCmd extends MusicCommand {
     public void doCommand(SlashCommandEvent event) {
 
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-        Settings settings = client.getSettingsFor(event.getGuild());
+        Settings settings = event.getClient().getSettingsFor(event.getGuild());
         int volume = handler.getPlayer().getVolume();
         int nvolume;
         try {
@@ -85,7 +85,7 @@ public class VolumeCmd extends MusicCommand {
             nvolume = -1;
         }
         if (nvolume < 0 || nvolume > 150)
-            event.reply(client.getError() + " 音量は0から150までの整数でないといけません。").queue();
+            event.reply(event.getClient().getError() + " 音量は0から150までの整数でないといけません。").queue();
         else {
             handler.getPlayer().setVolume(nvolume);
             settings.setVolume(nvolume);

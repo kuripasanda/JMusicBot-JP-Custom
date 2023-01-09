@@ -19,8 +19,9 @@ import com.jagrosh.jdautilities.command.GuildSettingsProvider;
 import dev.cosgy.jmusicbot.settings.RepeatMode;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -167,7 +168,7 @@ public class Settings implements GuildSettingsProvider {
         this.manager.writeSettings();
     }
 
-    public void setVoiceChannel(VoiceChannel vc) {
+    public void setVoiceChannel(AudioChannel vc) {
         this.voiceId = vc == null ? 0 : vc.getIdLong();
         this.manager.writeSettings();
     }

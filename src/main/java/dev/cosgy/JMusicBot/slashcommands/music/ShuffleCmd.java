@@ -16,10 +16,10 @@
 package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -57,13 +57,13 @@ public class ShuffleCmd extends MusicCommand {
         int s = handler.getQueue().shuffle(event.getUser().getIdLong());
         switch (s) {
             case 0:
-                event.reply(client.getError() + "再生待ちに曲がありません!").queue();
+                event.reply(event.getClient().getError() + "再生待ちに曲がありません!").queue();
                 break;
             case 1:
-                event.reply(client.getWarning() + "再生待ちには現在1曲しかありません!").queue();
+                event.reply(event.getClient().getWarning() + "再生待ちには現在1曲しかありません!").queue();
                 break;
             default:
-                event.reply(client.getSuccess() + "" + s + "曲をシャッフルしました。").queue();
+                event.reply(event.getClient().getSuccess() + "" + s + "曲をシャッフルしました。").queue();
                 break;
         }
     }

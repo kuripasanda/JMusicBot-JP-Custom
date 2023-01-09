@@ -16,13 +16,13 @@
 package dev.cosgy.jmusicbot.slashcommands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jlyrics.LyricsClient;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import dev.cosgy.jmusicbot.slashcommands.MusicCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -58,7 +58,7 @@ public class LyricsCmd extends MusicCommand {
             if (sendingHandler.isMusicPlaying(event.getJDA()))
                 title = sendingHandler.getPlayer().getPlayingTrack().getInfo().title;
             else {
-                event.reply(client.getError() + "曲が再生されていないため使用できません。").queue();
+                event.reply(event.getClient().getError() + "曲が再生されていないため使用できません。").queue();
                 return;
             }
         } else
@@ -66,7 +66,7 @@ public class LyricsCmd extends MusicCommand {
         lClient.getLyrics(title).thenAccept(lyrics ->
         {
             if (lyrics == null) {
-                event.reply(client.getError() + "`" + title + "` の歌詞は見つかりませんでした。" + (event.getOption("name").getAsString().isEmpty() ? " 曲名を手動で入力してみてください (`lyrics [曲名]`)" : "")).queue();
+                event.reply(event.getClient().getError() + "`" + title + "` の歌詞は見つかりませんでした。" + (event.getOption("name").getAsString().isEmpty() ? " 曲名を手動で入力してみてください (`lyrics [曲名]`)" : "")).queue();
                 return;
             }
 
@@ -75,7 +75,7 @@ public class LyricsCmd extends MusicCommand {
                     .setColor(event.getMember().getColor())
                     .setTitle(lyrics.getTitle(), lyrics.getURL());
             if (lyrics.getContent().length() > 15000) {
-                event.reply(client.getWarning() + " `" + title + "` の歌詞の曲が見つかりましたが、正しくない可能性があります: " + lyrics.getURL()).queue();
+                event.reply(event.getClient().getWarning() + " `" + title + "` の歌詞の曲が見つかりましたが、正しくない可能性があります: " + lyrics.getURL()).queue();
             } else if (lyrics.getContent().length() > 2000) {
                 String content = lyrics.getContent().trim();
                 while (content.length() > 2000) {

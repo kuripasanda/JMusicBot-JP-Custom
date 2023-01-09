@@ -17,14 +17,14 @@ package dev.cosgy.jmusicbot.slashcommands.admin;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import dev.cosgy.jmusicbot.slashcommands.AdminCommand;
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.slf4j.Logger;
@@ -89,15 +89,15 @@ public class SettcCmd extends AdminCommand {
 
         @Override
         protected void execute(SlashCommandEvent event) {
-            if (checkAdminPermission(client, event)) {
-                event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+            if (checkAdminPermission(event.getClient(), event)) {
+                event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
                 return;
             }
-            Settings s = client.getSettingsFor(event.getGuild());
+            Settings s = event.getClient().getSettingsFor(event.getGuild());
 
 
             if (event.getOption("channel").getChannelType() != ChannelType.TEXT) {
-                event.reply(client.getError() + "テキストチャンネルを設定して下さい。").queue();
+                event.reply(event.getClient().getError() + "テキストチャンネルを設定して下さい。").queue();
                 return;
             }
             Long channelId = event.getOption("channel").getAsLong();
@@ -117,13 +117,13 @@ public class SettcCmd extends AdminCommand {
 
         @Override
         protected void execute(SlashCommandEvent event) {
-            if (checkAdminPermission(client, event)) {
-                event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+            if (checkAdminPermission(event.getClient(), event)) {
+                event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
                 return;
             }
-            Settings s = client.getSettingsFor(event.getGuild());
+            Settings s = event.getClient().getSettingsFor(event.getGuild());
             s.setTextChannel(null);
-            event.reply(client.getSuccess() + "音楽コマンドは現在どのチャンネルでも使用できます。").queue();
+            event.reply(event.getClient().getSuccess() + "音楽コマンドは現在どのチャンネルでも使用できます。").queue();
         }
 
         @Override

@@ -18,12 +18,12 @@ package dev.cosgy.jmusicbot.slashcommands.dj;
 
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.queue.FairQueue;
 import dev.cosgy.jmusicbot.slashcommands.DJCommand;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.slf4j.Logger;
@@ -106,8 +106,8 @@ public class MoveTrackCmd extends DJCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
-        if (!checkDJPermission(client, event)) {
-            event.reply(client.getWarning() + "権限がないため実行できません。").queue();
+        if (!checkDJPermission(event.getClient(), event)) {
+            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
             return;
         }
         int from;
@@ -117,7 +117,7 @@ public class MoveTrackCmd extends DJCommand {
         to = Integer.parseInt(event.getOption("to").getAsString());
 
         if (from == to) {
-            event.reply(client.getError() + "同じ位置に移動することはできません。").queue();
+            event.reply(event.getClient().getError() + "同じ位置に移動することはできません。").queue();
             return;
         }
 
@@ -126,12 +126,12 @@ public class MoveTrackCmd extends DJCommand {
         FairQueue<QueuedTrack> queue = handler.getQueue();
         if (isUnavailablePosition(queue, from)) {
             String reply = String.format("`%d` は再生待ちに存在しない位置です。", from);
-            event.reply(client.getError() + reply).queue();
+            event.reply(event.getClient().getError() + reply).queue();
             return;
         }
         if (isUnavailablePosition(queue, to)) {
             String reply = String.format("`%d` 再生待ちに存在しない位置です。", to);
-            event.reply(client.getError() + reply).queue();
+            event.reply(event.getClient().getError() + reply).queue();
             return;
         }
 
@@ -139,6 +139,6 @@ public class MoveTrackCmd extends DJCommand {
         QueuedTrack track = queue.moveItem(from - 1, to - 1);
         String trackTitle = track.getTrack().getInfo().title;
         String reply = String.format("**%s** を `%d` から `%d`に移動しました。", trackTitle, from, to);
-        event.reply(client.getSuccess() + reply).queue();
+        event.reply(event.getClient().getSuccess() + reply).queue();
     }
 }

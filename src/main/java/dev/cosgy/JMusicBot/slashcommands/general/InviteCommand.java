@@ -2,8 +2,8 @@ package dev.cosgy.jmusicbot.slashcommands.general;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 public class InviteCommand extends SlashCommand {
     public InviteCommand() {
@@ -21,8 +21,7 @@ public class InviteCommand extends SlashCommand {
                         Permission.MANAGE_ROLES,
                         Permission.MESSAGE_MANAGE,
                         Permission.NICKNAME_CHANGE,
-                        Permission.MESSAGE_READ,
-                        Permission.MESSAGE_WRITE,
+                        Permission.MESSAGE_SEND,
                         Permission.VOICE_CONNECT,
                         Permission.VOICE_SPEAK,
                         Permission.VIEW_CHANNEL,
@@ -41,8 +40,7 @@ public class InviteCommand extends SlashCommand {
                         Permission.MANAGE_ROLES,
                         Permission.MESSAGE_MANAGE,
                         Permission.NICKNAME_CHANGE,
-                        Permission.MESSAGE_READ,
-                        Permission.MESSAGE_WRITE,
+                        Permission.MESSAGE_SEND,
                         Permission.VOICE_CONNECT,
                         Permission.VOICE_SPEAK,
                         Permission.VIEW_CHANNEL,

@@ -8,7 +8,6 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -101,8 +100,6 @@ public class MylistLoader {
     public void writePlaylist(String userId, String name, String text) throws IOException {
         Files.write(Paths.get(config.getMylistfolder() + File.separator + userId + File.separator + name + ".txt"), text.trim().getBytes(StandardCharsets.UTF_8));
     }
-
-    @Nullable
     public Playlist getPlaylist(String userId, String name) {
         if (!getPlaylistNames(userId).contains(name))
             return null;
