@@ -36,6 +36,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.exceptions.InvalidTokenException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
@@ -304,13 +305,13 @@ public class JMusicBot {
                     .setBulkDeleteSplittingEnabled(true)
                     .build();
             bot.setJDA(jda);
-        } /*catch (LoginException ex) {
+        } catch (InvalidTokenException ex) {
             prompt.alert(Prompt.Level.ERROR, "JMusicBot", ex + "\n" +
                     "正しい設定ファイルを編集していることを確認してください。Botトークンでのログインに失敗しました。" +
                     "正しいBotトークンを入力してください。(CLIENT SECRET ではありません!)\n" +
                     "設定ファイルの場所: " + config.getConfigLocation());
             System.exit(1);
-        }*/ catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             prompt.alert(Prompt.Level.ERROR, "JMusicBot", "設定の一部が無効です:" + ex + "\n" +
                     "設定ファイルの場所: " + config.getConfigLocation());
             System.exit(1);
