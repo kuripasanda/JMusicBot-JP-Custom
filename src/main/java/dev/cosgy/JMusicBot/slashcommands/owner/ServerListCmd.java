@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021 Cosgy Dev (info@cosgy.dev).
+ *  Copyright 2023 Cosgy Dev (info@cosgy.dev).
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,12 +14,13 @@
  *  limitations under the License.
  */
 
-package dev.cosgy.jmusicbot.slashcommands.admin;
+package dev.cosgy.jmusicbot.slashcommands.owner;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.jmusicbot.slashcommands.AdminCommand;
+import dev.cosgy.jmusicbot.slashcommands.OwnerCommand;
 import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * @author Kosugi_kun
  */
-public class ServerListCmd extends AdminCommand {
+public class ServerListCmd extends OwnerCommand {
     protected Bot bot;
 
     public ServerListCmd(Bot bot) {
@@ -37,11 +38,6 @@ public class ServerListCmd extends AdminCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
-        if (checkAdminPermission(event.getClient(), event)) {
-            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
-            return;
-        }
-
         List<Guild> guilds = event.getJDA().getGuilds();
 
         StringBuilder stringBuilder = new StringBuilder();

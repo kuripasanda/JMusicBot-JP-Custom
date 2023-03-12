@@ -82,16 +82,16 @@ public class AboutCommand extends SlashCommand {
         }
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(event.getGuild() == null ? color : event.getGuild().getSelfMember().getColor());
-        builder.setAuthor("" + event.getJDA().getSelfUser().getName() + "について!", null, event.getJDA().getSelfUser().getAvatarUrl());
+        builder.setAuthor("" + event.getJDA().getSelfUser().getName() + "についての情報", null, event.getJDA().getSelfUser().getAvatarUrl());
         String CosgyOwner = "Cosgy Devが運営、開発をしています。";
         String author = event.getJDA().getUserById(event.getClient().getOwnerId()) == null ? "<@" + event.getClient().getOwnerId() + ">"
                 : Objects.requireNonNull(event.getJDA().getUserById(event.getClient().getOwnerId())).getName();
         StringBuilder descr = new StringBuilder().append("こんにちは！ **").append(event.getJDA().getSelfUser().getName()).append("**です。 ")
-                .append(description).append("は、").append(JDAUtilitiesInfo.AUTHOR + "の[コマンド拡張](" + JDAUtilitiesInfo.GITHUB + ") (")
-                .append(JDAUtilitiesInfo.VERSION).append(")と[JDAライブラリ](https://github.com/DV8FromTheWorld/JDA) (")
+                .append(description).append("は、").append("[" + JDAUtilitiesInfo.AUTHOR + "](https://github.com/JDA-Applications)の[Commands Extension](" + JDAUtilitiesInfo.GITHUB + ") (")
+                .append(JDAUtilitiesInfo.VERSION).append(")と[JDA library](https://github.com/DV8FromTheWorld/JDA) (")
                 .append(JDAInfo.VERSION).append(")を使用しており、").append((IS_AUTHOR ? CosgyOwner : author + "が所有しています。"))
                 .append(event.getJDA().getSelfUser().getName()).append("についての質問などは[Cosgy Dev公式チャンネル](https://discord.gg/RBpkHxf)へお願いします。")
-                .append("\nこのボットの使用方法は`").append(event.getClient().getTextualPrefix()).append(event.getClient().getHelpWord())
+                .append("\nこのボットの使用方法は`").append("/help")
                 .append("`で確認することができます。").append("\n\n機能の特徴： ```css");
         for (String feature : features)
             descr.append("\n").append(event.getClient().getSuccess().startsWith("<") ? REPLACEMENT_ICON : event.getClient().getSuccess()).append(" ").append(feature);
