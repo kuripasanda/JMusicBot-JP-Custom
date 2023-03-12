@@ -91,9 +91,9 @@ public class SettingsManager implements GuildSettingsManager {
     }
 
     protected void writeSettings() {
-        JSONObject obj = new JSONObject();
-        settings.keySet().forEach(key -> {
-            JSONObject o = new JSONObject();
+        var obj = new JSONObject();
+        for (Long key : settings.keySet()) {
+            var o = new JSONObject();
             Settings s = settings.get(key);
             if (s.textId != 0)
                 o.put("text_channel_id", Long.toString(s.textId));
@@ -114,7 +114,7 @@ public class SettingsManager implements GuildSettingsManager {
             if (s.getSkipRatio() != SKIP_RATIO)
                 o.put("skip_ratio", s.getSkipRatio());
             obj.put(Long.toString(key), o);
-        });
+        }
         try {
             Files.write(OtherUtil.getPath("serversettings.json"), obj.toString(4).getBytes());
         } catch (IOException ex) {
