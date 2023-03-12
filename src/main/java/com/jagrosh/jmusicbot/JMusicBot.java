@@ -119,7 +119,7 @@ public class JMusicBot {
         Bot.INSTANCE = bot;
 
         AboutCommand aboutCommand = new AboutCommand(Color.BLUE.brighter(),
-                "[簡単にホストできる！](https://github.com/Cosgy-Dev/MusicBot-JP-java)JMusicBot JP(v" + version + ")",
+                "[JMusicBot JP(v" + version + ")](https://github.com/Cosgy-Dev/MusicBot-JP-java)",
                 new String[]{"高品質の音楽再生", "FairQueue™テクノロジー", "自分で簡単にホスト"},
                 RECOMMENDED_PERMS);
         aboutCommand.setIsAuthor(false);
