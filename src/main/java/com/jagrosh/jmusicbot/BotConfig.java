@@ -56,6 +56,8 @@ public class BotConfig {
     private String nicoPass;
     private String ytEmail;
     private String ytPass;
+    private String spClientId;
+    private String spClientSecret;
     // [JMusicBot-JP] added useNicoNico, changeNickName, pauseNoUsers, resumeJoined, stopNoUsers, cosgyDevHost, helpToDm, officialInvite
     private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost, helpToDm, autoStopQueueSave, auditCommands, officialInvite, useinvitecommand;
     private long owner, maxSeconds, aloneTimeUntilStop;
@@ -128,6 +130,9 @@ public class BotConfig {
             useinvitecommand = config.getBoolean("useinvitecommand");
             ytEmail = config.getString("ytemail");
             ytPass = config.getString("ytpass");
+            spClientId = config.getString("spclient");
+            spClientSecret = config.getString("spsecret");
+
 
             cosgyDevHost = false;
             // [JMusicBot-JP] End
@@ -344,6 +349,10 @@ public class BotConfig {
     public String getYouTubePassword() {
         return ytPass;
     }
+
+    public String getSpotifyClientId(){return spClientId;}
+
+    public String getSpotifyClientSecret(){return spClientSecret;}
 
     // [JMusicBot-JP] End
 

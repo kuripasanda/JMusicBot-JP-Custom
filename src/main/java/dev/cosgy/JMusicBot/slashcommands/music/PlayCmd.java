@@ -402,12 +402,12 @@ public class PlayCmd extends MusicCommand {
             event.reply(loadingEmoji + "`[" + event.getOption("input").getAsString() + "]`を読み込み中です…").queue(m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), event.getOption("input").getAsString(), new SlashResultHandler(m, event, false)));
         }
 
-        private class SlashResultHandler implements AudioLoadResultHandler {
+        public class SlashResultHandler implements AudioLoadResultHandler {
             private final InteractionHook m;
             private final SlashCommandEvent event;
             private final boolean ytsearch;
 
-            private SlashResultHandler(InteractionHook m, SlashCommandEvent event, boolean ytsearch) {
+            SlashResultHandler(InteractionHook m, SlashCommandEvent event, boolean ytsearch) {
                 this.m = m;
                 this.event = event;
                 this.ytsearch = ytsearch;
