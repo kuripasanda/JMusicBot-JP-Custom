@@ -60,7 +60,7 @@ public class SpotifyCmd extends MusicCommand {
     private final static String LOAD = "\uD83D\uDCE5"; // 📥
     private final static String CANCEL = "\uD83D\uDEAB"; // 🚫
 
-    private String accessToken;
+    private String accessToken = null;
     private long accessTokenExpirationTime;
 
     public SpotifyCmd(Bot bot) {
@@ -79,6 +79,9 @@ public class SpotifyCmd extends MusicCommand {
         String clientId  = bot.getConfig().getSpotifyClientId();
         String clientSecret  = bot.getConfig().getSpotifyClientSecret();
 
+        if(clientId.isEmpty() || clientSecret.isEmpty()){
+            return;
+        }
         // ACCESS_TOKEN の発行
         accessToken = getAccessToken(clientId, clientSecret);
     }
