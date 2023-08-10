@@ -203,7 +203,7 @@ public class JMusicBot {
             //add(new LeaveCmd(bot));
         }};
 
-        //cb.addCommands(slashCommandList.toArray(new Command[0]));
+        cb.addCommands(slashCommandList.toArray(new Command[0]));
         cb.addSlashCommands(slashCommandList.toArray(new SlashCommand[0]));
 
         if (config.useEval())
