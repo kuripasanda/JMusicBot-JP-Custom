@@ -247,7 +247,7 @@ public class SpotifyCmd extends MusicCommand {
 
     public boolean isSpotifyTrackUrl(String url) {
         Pattern pattern = Pattern.compile("https://open\\.spotify\\.com/(intl-ja/)?track/\\w+");
-        Matcher matcher = pattern.matcher(url);
+        Matcher matcher = pattern.matcher(url.split("\\?")[0]);
 
         return matcher.matches();
     }
@@ -343,33 +343,49 @@ public class SpotifyCmd extends MusicCommand {
         @Override
         public void trackLoaded(AudioTrack track) {
             if (bot.getConfig().isTooLong(track)) {
-                m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " この曲 (**" + track.getInfo().title + "**) は許可されている最大長よりも長いです。 `"
+                m.editMessage(FormatUtil.filter(event.getClient().getWarning() + "**" + track.getInfo().title + "**`は許可されている最大長より長いです。"
                         + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`")).queue();
                 return;
             }
             AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
             int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
-            m.editMessage(FormatUtil.filter(event.getClient().getSuccess() + " **" + track.getInfo().title
-                    + "** (`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "の再生を開始します。"
+            m.editMessage(FormatUtil.filter(event.getClient().getSuccess() + "**" + track.getInfo().title
+                    + "**(`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "を追加しました。"
                     : "を" + pos + "番目の再生待ちに追加しました。"))).queue();
         }
 
         @Override
         public void playlistLoaded(AudioPlaylist playlist) {
+            AudioTrack track = playlist.getTracks().get(0);
 
+            for(int i = 0; i < playlist.getTracks().size(); i++){
+                log.info((i + 1) +" Title:"+ playlist.getTracks().get(i).getInfo().title + " Artist:"+playlist.getTracks().get(i).getInfo().author);
+            }
+
+            if (bot.getConfig().isTooLong(track)) {
+                m.editMessage(bot.getConfig().getWarning() + "この曲 (**" + track.getInfo().title + "**) は、許容される最大長より長いです。: `"
+                        + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`").queue();
+                return;
+            }
+            AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+            int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
+            m.editMessage(bot.getConfig().getSuccess() + "**" + FormatUtil.filter(track.getInfo().title)
+                    + "** (`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "の再生を開始します。"
+                    : "を" + pos + "番目の再生待ちに追加しました。")).queue();
         }
 
         @Override
         public void noMatches() {
-            m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " `" + event.getArgs() + "`に該当する結果は見つかりませんでした。")).queue();
+            m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " 曲を検索しましたが見つかりませんでした。 `")).queue();
         }
 
         @Override
         public void loadFailed(FriendlyException throwable) {
+
             if (throwable.severity == FriendlyException.Severity.COMMON)
-                m.editMessage(event.getClient().getError() + " 読み込みエラー: " + throwable.getMessage()).queue();
+                m.editMessage(event.getClient().getError() + " 読み込み中にエラーが発生しました: " + throwable.getMessage()).queue();
             else
-                m.editMessage(event.getClient().getError() + " 曲の読み込みに失敗しました。").queue();
+                m.editMessage(event.getClient().getError() + " 読み込み中にエラーが発生しました").queue();
         }
     }
 }
