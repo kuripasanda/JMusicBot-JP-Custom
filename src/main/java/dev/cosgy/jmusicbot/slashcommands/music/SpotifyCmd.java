@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SpotifyCmd extends MusicCommand {
 
@@ -102,12 +104,12 @@ public class SpotifyCmd extends MusicCommand {
             accessToken = getAccessToken(clientId, clientSecret);
         }
 
-        if (!trackUrl.startsWith(SPOTIFY_TRACK_URL_PREFIX)) {
+        if (!isSpotifyTrackUrl(trackUrl)) {
             event.reply("Error: 指定されたURLはSpotifyの曲のURLではありません").queue();
             return;
         }
 
-        String trackId = getTrackId(trackUrl);
+        String trackId = extractTrackIdFromUrl(trackUrl);
         String endpoint = "https://api.spotify.com/v1/tracks/" + trackId;
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -158,11 +160,96 @@ public class SpotifyCmd extends MusicCommand {
 
     @Override
     public void doCommand(CommandEvent event) {
-        // 使用しない
+        if (event.getArgs().isEmpty()) {
+            event.reply(event.getClient().getError() + " 再生リスト名を含めてください。");
+            return;
+        }
+        String trackUrl = event.getArgs();
+
+        if(accessToken == null){
+            event.reply("このコマンドは使用できません。このコマンドを有効にするにはボットの所有者による設定が必要です。");
+            return;
+        }
+
+        // アクセストークンが有効期限切れの場合は再度発行する
+        if (System.currentTimeMillis() >= accessTokenExpirationTime) {
+            String clientId = bot.getConfig().getSpotifyClientId();
+            String clientSecret = bot.getConfig().getSpotifyClientSecret();
+            accessToken = getAccessToken(clientId, clientSecret);
+        }
+
+        if (!isSpotifyTrackUrl(trackUrl)) {
+            event.reply("Error: 指定されたURLはSpotifyの曲のURLではありません");
+            return;
+        }
+
+        String trackId = extractTrackIdFromUrl(trackUrl);
+        String endpoint = "https://api.spotify.com/v1/tracks/" + trackId;
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .header("Authorization", "Bearer "+ accessToken)
+                .header("Accept-Language", "en")
+                .GET()
+                .uri(URI.create(endpoint))
+                .build();
+
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            JSONObject json = new JSONObject(response.body());
+            String trackName = json.getString("name");
+            String albumName = json.getJSONObject("album").getString("name");
+            String artistName = json.getJSONArray("artists").getJSONObject(0).getString("name");
+            String albumImageUrl = json.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url");
+
+            // Audio Features エンドポイントを使用して曲の情報を取得
+            endpoint = "https://api.spotify.com/v1/audio-features/" + trackId;
+            request = HttpRequest.newBuilder()
+                    .header("Authorization", "Bearer "+ accessToken)
+                    .GET()
+                    .uri(URI.create(endpoint))
+                    .build();
+
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            json = new JSONObject(response.body());
+            double trackColor = json.getDouble("valence");
+
+            int hue = (int) (trackColor * 360);
+            Color color = Color.getHSBColor((float) hue / 360, 1.0f, 1.0f);
+
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.setTitle("Track Information");
+            embed.addField("Track Name", trackName, true);
+            embed.addField("Album Name", albumName, true);
+            embed.addField("Artist Name", artistName, true);
+            embed.setImage(albumImageUrl);
+            embed.setColor(color);
+
+            event.getTextChannel().sendMessageEmbeds(embed.build()).queue();
+
+            event.reply("`[" + trackName + "]`を読み込み中です…", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "ytmsearch:"+trackName + " " + artistName, new ResultHandler(m, event)));
+        } catch (IOException | InterruptedException e) {
+            event.reply("Error: " + e.getMessage());
+        }
     }
 
-    private String getTrackId(String trackUrl) {
-        return trackUrl.split("/")[4];
+    public static String extractTrackIdFromUrl(String url) {
+        String trackId = null;
+
+        Pattern pattern = Pattern.compile("track/(\\w+)");
+        Matcher matcher = pattern.matcher(url);
+
+        if (matcher.find()) {
+            trackId = matcher.group(1);
+        }
+
+        return trackId;
+    }
+
+    public boolean isSpotifyTrackUrl(String url) {
+        Pattern pattern = Pattern.compile("https://open\\.spotify\\.com/(intl-ja/)?track/\\w+");
+        Matcher matcher = pattern.matcher(url);
+
+        return matcher.matches();
     }
 
     private String getAccessToken(String clientId, String clientSecret) {
