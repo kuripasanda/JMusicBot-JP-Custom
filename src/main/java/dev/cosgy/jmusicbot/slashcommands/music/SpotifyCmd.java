@@ -19,6 +19,7 @@ package dev.cosgy.jmusicbot.slashcommands.music;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jdautilities.menu.ButtonMenu;
+import com.jagrosh.jdautilities.menu.OrderedMenu;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
@@ -65,6 +66,8 @@ public class SpotifyCmd extends MusicCommand {
     private String accessToken = null;
     private long accessTokenExpirationTime;
 
+    private final OrderedMenu.Builder builder;
+
     public SpotifyCmd(Bot bot) {
         super(bot);
         this.name = "spotify";
@@ -76,6 +79,13 @@ public class SpotifyCmd extends MusicCommand {
         List<OptionData> options = new ArrayList<>();
         options.add(new OptionData(OptionType.STRING, "tracklink", "Spotifyの曲のURL", true));
         this.options = options;
+
+        builder = new OrderedMenu.Builder()
+                .allowTextInput(true)
+                .useNumbers()
+                .useCancelButton(true)
+                .setEventWaiter(bot.getWaiter())
+                .setTimeout(1, TimeUnit.MINUTES);
 
         // Spotify のユーザー名とパスワードを取得
         String clientId  = bot.getConfig().getSpotifyClientId();
@@ -285,49 +295,59 @@ public class SpotifyCmd extends MusicCommand {
         @Override
         public void trackLoaded(AudioTrack track) {
             if (bot.getConfig().isTooLong(track)) {
-                m.editOriginal(FormatUtil.filter(event.getClient().getWarning() + "**" + track.getInfo().title + "**`は許可されている最大長より長いです。"
+                event.getHook().sendMessage(FormatUtil.filter(event.getClient().getWarning() + "**" + track.getInfo().title + "**`は許可されている最大長より長いです。"
                         + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`")).queue();
                 return;
             }
             AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
             int pos = handler.addTrack(new QueuedTrack(track, event.getUser())) + 1;
-            m.editOriginal(FormatUtil.filter(event.getClient().getSuccess() + "**" + track.getInfo().title
+            event.getHook().sendMessage(FormatUtil.filter(event.getClient().getSuccess() + "**" + track.getInfo().title
                     + "**(`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "を追加しました。"
                     : "を" + pos + "番目の再生待ちに追加しました。"))).queue();
         }
 
         @Override
         public void playlistLoaded(AudioPlaylist playlist) {
-            AudioTrack track = playlist.getTracks().get(0);
-
-            for(int i = 0; i < playlist.getTracks().size(); i++){
-                log.info((i + 1) +" Title:"+ playlist.getTracks().get(i).getInfo().title + " Artist:"+playlist.getTracks().get(i).getInfo().author);
+            builder.setColor(event.getGuild().getSelfMember().getColor())
+                    .setText(FormatUtil.filter(event.getClient().getSuccess() + "検索結果:"))
+                    .setChoices()
+                    .setSelection((msg, i) ->
+                    {
+                        AudioTrack track = playlist.getTracks().get(i - 1);
+                        if (bot.getConfig().isTooLong(track)) {
+                            event.getHook().sendMessage(event.getClient().getWarning() + "**" + track.getInfo().title + "**`は許可されている最大長よりも長いです。"
+                                    + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`").queue();
+                            return;
+                        }
+                        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+                        int pos = handler.addTrack(new QueuedTrack(track, event.getUser())) + 1;
+                        event.getHook().sendMessage(event.getClient().getSuccess() + "**" + track.getInfo().title
+                                + "**(`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "を追加しました。"
+                                : " を" + pos + "番目の再生待ちに追加しました。 ")).queue();
+                    })
+                    .setCancel((msg) -> {
+                    })
+                    .setUsers(event.getUser())
+            ;
+            for (int i = 0; i < 4 && i < playlist.getTracks().size(); i++) {
+                AudioTrack track = playlist.getTracks().get(i);
+                builder.addChoices("`[" + FormatUtil.formatTime(track.getDuration()) + "]` [**" + track.getInfo().title + "**](" + track.getInfo().uri + ")");
             }
-
-            if (bot.getConfig().isTooLong(track)) {
-                m.editOriginal(bot.getConfig().getWarning() + "この曲 (**" + track.getInfo().title + "**) は、許容される最大長より長いです。: `"
-                        + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`").queue();
-                return;
-            }
-            AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-            int pos = handler.addTrack(new QueuedTrack(track, event.getUser())) + 1;
-            m.editOriginal(bot.getConfig().getSuccess() + "**" + FormatUtil.filter(track.getInfo().title)
-                    + "** (`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "の再生を開始します。"
-                    : "を" + pos + "番目の再生待ちに追加しました。")).queue();
+            builder.build().display(event.getChannel());
         }
 
         @Override
         public void noMatches() {
-            m.editOriginal(FormatUtil.filter(event.getClient().getWarning() + " 曲を検索しましたが見つかりませんでした。 `")).queue();
+            event.getHook().sendMessage(FormatUtil.filter(event.getClient().getWarning() + " 曲を検索しましたが見つかりませんでした。 `")).queue();
         }
 
         @Override
         public void loadFailed(FriendlyException throwable) {
 
             if (throwable.severity == FriendlyException.Severity.COMMON)
-                m.editOriginal(event.getClient().getError() + " 読み込み中にエラーが発生しました: " + throwable.getMessage()).queue();
+                event.getHook().sendMessage(event.getClient().getError() + " 読み込み中にエラーが発生しました: " + throwable.getMessage()).queue();
             else
-                m.editOriginal(event.getClient().getError() + " 読み込み中にエラーが発生しました").queue();
+                event.getHook().sendMessage(event.getClient().getError() + " 読み込み中にエラーが発生しました").queue();
         }
     }
 
@@ -356,22 +376,32 @@ public class SpotifyCmd extends MusicCommand {
 
         @Override
         public void playlistLoaded(AudioPlaylist playlist) {
-            AudioTrack track = playlist.getTracks().get(0);
-
-            for(int i = 0; i < playlist.getTracks().size(); i++){
-                log.info((i + 1) +" Title:"+ playlist.getTracks().get(i).getInfo().title + " Artist:"+playlist.getTracks().get(i).getInfo().author);
+            builder.setColor(event.getSelfMember().getColor())
+                    .setText(FormatUtil.filter(event.getClient().getSuccess() + "検索結果:"))
+                    .setChoices()
+                    .setSelection((msg, i) ->
+                    {
+                        AudioTrack track = playlist.getTracks().get(i - 1);
+                        if (bot.getConfig().isTooLong(track)) {
+                            event.replyWarning("この曲 (**" + track.getInfo().title + "**) は、許容される最大長より長いです。: `"
+                                    + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`");
+                            return;
+                        }
+                        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+                        int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
+                        event.replySuccess("**" + FormatUtil.filter(track.getInfo().title)
+                                + "** (`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "の再生を開始します。"
+                                : "を" + pos + "番目の再生待ちに追加しました。"));
+                    })
+                    .setCancel((msg) -> {
+                    })
+                    .setUsers(event.getAuthor())
+            ;
+            for (int i = 0; i < 4 && i < playlist.getTracks().size(); i++) {
+                AudioTrack track = playlist.getTracks().get(i);
+                builder.addChoices("`[" + FormatUtil.formatTime(track.getDuration()) + "]` [**" + track.getInfo().title + "**](" + track.getInfo().uri + ")");
             }
-
-            if (bot.getConfig().isTooLong(track)) {
-                m.editMessage(bot.getConfig().getWarning() + "この曲 (**" + track.getInfo().title + "**) は、許容される最大長より長いです。: `"
-                        + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`").queue();
-                return;
-            }
-            AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-            int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
-            m.editMessage(bot.getConfig().getSuccess() + "**" + FormatUtil.filter(track.getInfo().title)
-                    + "** (`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "の再生を開始します。"
-                    : "を" + pos + "番目の再生待ちに追加しました。")).queue();
+            builder.build().display(m);
         }
 
         @Override
