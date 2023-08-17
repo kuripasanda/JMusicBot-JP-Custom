@@ -34,6 +34,7 @@ public class ServerListCmd extends OwnerCommand {
     public ServerListCmd(Bot bot) {
         this.name = "slist";
         this.help = "ボットコマンドを使用できる役割DJを設定します。";
+        this.aliases = bot.getConfig().getAliases(this.name);
     }
 
     @Override

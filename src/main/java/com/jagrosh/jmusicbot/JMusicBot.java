@@ -149,9 +149,9 @@ public class JMusicBot {
             }
             add(new PingCommand());
             add(new SettingsCmd(bot));
-            if (config.getCosgyDevHost()) add(new InfoCommand(bot));
+            //if (config.getCosgyDevHost()) add(new InfoCommand(bot));
             // General
-            add(new ServerInfo());
+            add(new ServerInfo(bot));
             //add(new UserInfo());
             add(new CashCmd(bot));
             // Music

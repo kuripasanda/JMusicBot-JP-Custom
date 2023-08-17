@@ -73,6 +73,7 @@ public class SpotifyCmd extends MusicCommand {
         this.name = "spotify";
         this.arguments = "<title|URL|subcommand>";
         this.help = "指定された曲を再生します";
+        this.aliases = bot.getConfig().getAliases(this.name);
         this.beListening = true;
         this.bePlaying = false;
 
