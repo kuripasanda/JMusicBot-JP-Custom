@@ -5,7 +5,7 @@
     <groupId>com.jagrosh</groupId>
     <artifactId>JMusicBot</artifactId>
     <!-- バージョン装飾子参考の参考に: https://kengotoda.gitbooks.io/what-is-maven/deploy/snapshot-and-stable.html -->
-    <version>0.8.7</version>
+    <version>0.8.8</version>
     <packaging>jar</packaging>
 
     <repositories>
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>com.github.Cosgy-Dev</groupId>
             <artifactId>lavaplayer-cosgy</artifactId>
-            <version>1.4.2-cosgy.3</version>
+            <version>1.4.2-cosgy.4</version>
         </dependency>
         <!--
         <dependency>
