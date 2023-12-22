@@ -203,9 +203,9 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                 if (rm.getOwner() != 0L) {
                     User u = guild.getJDA().getUserById(rm.user.id);
                     if (u == null)
-                        eb.setAuthor(rm.user.username + "#" + rm.user.discrim, null, rm.user.avatar);
+                        eb.setAuthor(rm.user.username, null, rm.user.avatar);
                     else
-                        eb.setAuthor(u.getName() + "#" + u.getDiscriminator(), null, u.getEffectiveAvatarUrl());
+                        eb.setAuthor(u.getName(), null, u.getEffectiveAvatarUrl());
                 }
                 try {
                     eb.setTitle(track.getInfo().title, track.getInfo().uri);
@@ -230,9 +230,9 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                 if (rm.getOwner() != 0L) {
                     User u = guild.getJDA().getUserById(rm.user.id);
                     if (u == null)
-                        eb.setAuthor(rm.user.username + "#" + rm.user.discrim, null, rm.user.avatar);
+                        eb.setAuthor(rm.user.username, null, rm.user.avatar);
                     else
-                        eb.setAuthor(u.getName() + "#" + u.getDiscriminator(), null, u.getEffectiveAvatarUrl());
+                        eb.setAuthor(u.getName(), null, u.getEffectiveAvatarUrl());
                 }
                 try {
                     eb.setTitle(track.getInfo().title, track.getInfo().uri);
