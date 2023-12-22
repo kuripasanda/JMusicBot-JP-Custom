@@ -5,7 +5,7 @@
     <groupId>com.jagrosh</groupId>
     <artifactId>JMusicBot</artifactId>
     <!-- バージョン装飾子参考の参考に: https://kengotoda.gitbooks.io/what-is-maven/deploy/snapshot-and-stable.html -->
-    <version>0.8.9</version>
+    <version>0.9.0</version>
     <packaging>jar</packaging>
 
     <repositories>
@@ -45,9 +45,9 @@
             <version>5.0.0-beta.18</version>
         </dependency>
         <dependency>
-            <groupId>com.github.walkyst</groupId>
-            <artifactId>lavaplayer-fork</artifactId>
-            <version>1.4.3</version>
+            <groupId>com.github.Cosgy-Dev</groupId>
+            <artifactId>lavaplayer-cosgy</artifactId>
+            <version>cosgy-v2-SNAPSHOT</version>
         </dependency>
         <!--
         <dependency>
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.11</version>
+            <version>1.4.12</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe</groupId>
@@ -123,7 +123,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.14.3</version>
+            <version>1.15.3</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -225,6 +225,14 @@
                         <goals>
                             <goal>testCompile</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
                     </execution>
                 </executions>
                 <configuration>
