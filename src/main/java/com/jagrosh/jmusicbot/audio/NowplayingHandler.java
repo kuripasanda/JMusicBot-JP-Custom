@@ -22,8 +22,11 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
 import net.dv8tion.jda.api.utils.messages.MessageEditData;
@@ -117,6 +120,41 @@ public class NowplayingHandler {
                 }
             }
         }
+
+        // ボイスチャンネルステータスの更新
+        GuildVoiceState vChan = guild.getSelfMember().getVoiceState();
+
+        if(vChan == null || !vChan.inAudioChannel()){
+            return;
+        }
+
+        AudioChannelUnion chan = vChan.getChannel();
+        if (!(chan instanceof VoiceChannel)) {
+            return;
+        }
+
+        VoiceChannel voiceChannel = (VoiceChannel) chan;
+
+        if(guild.getSelfMember().hasPermission(voiceChannel, Permission.VOICE_SET_STATUS)){
+
+            String otherText;
+            String status = voiceChannel.getStatus();
+            if (status.isEmpty())
+                otherText = "\u200B";
+            else if (status.contains("\u200B"))
+                otherText = status.substring(status.lastIndexOf("\u200B"));
+            else
+                otherText = "\u200B\n " + status;
+            String text = handler.getTopicFormat(bot.getJDA()) + otherText;
+            if (!text.equals(voiceChannel.getStatus())) {
+                try {
+                    voiceChannel.modifyStatus(text).complete(wait);
+                } catch (PermissionException | RateLimitedException ignore) {
+                }
+            }
+        }
+
+
     }
 
     // "event"-based methods
