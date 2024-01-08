@@ -136,16 +136,7 @@ public class NowplayingHandler {
         VoiceChannel voiceChannel = (VoiceChannel) chan;
 
         if(guild.getSelfMember().hasPermission(voiceChannel, Permission.VOICE_SET_STATUS)){
-
-            String otherText;
-            String status = voiceChannel.getStatus();
-            if (status.isEmpty())
-                otherText = "\u200B";
-            else if (status.contains("\u200B"))
-                otherText = status.substring(status.lastIndexOf("\u200B"));
-            else
-                otherText = "\u200B\n " + status;
-            String text = handler.getTopicFormat(bot.getJDA()) + otherText;
+            String text = handler.getTopicFormat(bot.getJDA());
             if (!text.equals(voiceChannel.getStatus())) {
                 try {
                     voiceChannel.modifyStatus(text).complete(wait);
