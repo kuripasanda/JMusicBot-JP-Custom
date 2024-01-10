@@ -40,9 +40,10 @@ public class Settings implements GuildSettingsProvider {
     private String prefix;
     private boolean bitrateWarningReaded;
     private double skipRatio;
+    private boolean vcStatus;
 
 
-    public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, boolean bitrateWarningReaded, int announce, double skipRatio) {
+    public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, boolean bitrateWarningReaded, int announce, double skipRatio, boolean vcStatus) {
         this.manager = manager;
         try {
             this.textId = Long.parseLong(textId);
@@ -66,9 +67,10 @@ public class Settings implements GuildSettingsProvider {
         this.bitrateWarningReaded = bitrateWarningReaded;
         this.announce = announce;
         this.skipRatio = skipRatio;
+        this.vcStatus = vcStatus;
     }
 
-    public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, boolean bitrateWarningReaded, int announce, double skipRatio) {
+    public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, boolean bitrateWarningReaded, int announce, double skipRatio, boolean vcStatus) {
         this.manager = manager;
         this.textId = textId;
         this.voiceId = voiceId;
@@ -80,6 +82,7 @@ public class Settings implements GuildSettingsProvider {
         this.bitrateWarningReaded = bitrateWarningReaded;
         this.announce = announce;
         this.skipRatio = skipRatio;
+        this.vcStatus = vcStatus;
     }
 
     // Getters
@@ -146,6 +149,15 @@ public class Settings implements GuildSettingsProvider {
 
     public void setAnnounce(int announce) {
         this.announce = announce;
+        this.manager.writeSettings();
+    }
+
+    public boolean getVCStatus() {
+        return vcStatus;
+    }
+
+    public void setVCStatus(boolean vcStatus) {
+        this.vcStatus = vcStatus;
         this.manager.writeSettings();
     }
 

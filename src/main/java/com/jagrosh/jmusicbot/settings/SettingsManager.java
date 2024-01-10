@@ -64,7 +64,8 @@ public class SettingsManager implements GuildSettingsManager {
                         o.has("prefix") ? o.getString("prefix") : null,
                         o.has("bitrate_warnings_readied") && o.getBoolean("bitrate_warnings_readied"),
                         o.has("announce") ? o.getInt("announce") : 0,
-                        o.has("skip_ratio") ? o.getDouble("skip_ratio") : SKIP_RATIO));
+                        o.has("skip_ratio") ? o.getDouble("skip_ratio") : SKIP_RATIO,
+                        o.has("vc_status") && o.getBoolean("vc_status")));
             });
         } catch (IOException | JSONException e) {
             LoggerFactory.getLogger("Settings").warn("サーバー設定を読み込めませんでした(まだ設定がない場合は正常です): " + e);
@@ -87,7 +88,7 @@ public class SettingsManager implements GuildSettingsManager {
     }
 
     private Settings createDefaultSettings() {
-        return new Settings(this, 0, 0, 0, 10, null, RepeatMode.OFF, null, false, 0, SKIP_RATIO);
+        return new Settings(this, 0, 0, 0, 10, null, RepeatMode.OFF, null, false, 0, SKIP_RATIO, true);
     }
 
     protected void writeSettings() {
@@ -113,6 +114,9 @@ public class SettingsManager implements GuildSettingsManager {
                 o.put("announce", s.getAnnounce());
             if (s.getSkipRatio() != SKIP_RATIO)
                 o.put("skip_ratio", s.getSkipRatio());
+            if (!s.getVCStatus())
+                o.put("vc_status", s.getVCStatus());
+
             obj.put(Long.toString(key), o);
         }
         try {

@@ -135,7 +135,7 @@ public class NowplayingHandler {
 
         VoiceChannel voiceChannel = (VoiceChannel) chan;
 
-        if(guild.getSelfMember().hasPermission(voiceChannel, Permission.VOICE_SET_STATUS)){
+        if(settings.getVCStatus() && guild.getSelfMember().hasPermission(voiceChannel, Permission.VOICE_SET_STATUS)){
             String text = handler.getTopicFormat(bot.getJDA());
             if (!text.equals(voiceChannel.getStatus())) {
                 try {

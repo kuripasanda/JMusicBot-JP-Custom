@@ -190,6 +190,7 @@ public class JMusicBot {
             add(new SkipratioCmd(bot));
             add(new SettcCmd(bot));
             add(new SetvcCmd(bot));
+            add(new SetvcStatusCmd(bot));
             add(new AutoplaylistCmd(bot));
             add(new ServerListCmd(bot));
             // Owner
