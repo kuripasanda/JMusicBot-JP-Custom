@@ -246,6 +246,26 @@ public class JMusicBot {
                     .setBulkDeleteSplittingEnabled(true)
                     .build();
             bot.setJDA(jda);
+
+            String unsupportedReason = OtherUtil.getUnsupportedBotReason(jda);
+            if (unsupportedReason != null)
+            {
+                prompt.alert(Prompt.Level.ERROR, "JMusicBot", "このDiscordボットユーザーではJMusicBotを実行できません: " + unsupportedReason);
+                try{ Thread.sleep(5000);}catch(InterruptedException ignored){} // this is awful but until we have a better way...
+                jda.shutdown();
+                System.exit(1);
+            }
+
+            // other check that will just be a warning now but may be required in the future
+            // check if the user has changed the prefix and provide info about the
+            // message content intent
+            if(!"@mention".equals(config.getPrefix()))
+            {
+                prompt.alert(Prompt.Level.INFO, "JMusicBot", "現在、カスタム接頭辞が設定されています。 "
+                        + "カスタム接頭辞が機能しない場合は、「MESSAGE CONTENT INTENT」が有効になっていることを確認してください。"
+                        + "https://discord.com/developers/applications/" + jda.getSelfUser().getId() + "/bot");
+            }
+
         } catch (InvalidTokenException ex) {
             prompt.alert(Prompt.Level.ERROR, "JMusicBot", ex + "\n" +
                     "正しい設定ファイルを編集していることを確認してください。Botトークンでのログインに失敗しました。" +

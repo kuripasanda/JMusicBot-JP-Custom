@@ -17,8 +17,11 @@ package com.jagrosh.jmusicbot.utils;
 
 import com.jagrosh.jmusicbot.JMusicBot;
 import com.jagrosh.jmusicbot.entities.Prompt;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.ApplicationInfo;
+import net.dv8tion.jda.api.entities.User;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -188,5 +191,17 @@ public class OtherUtil {
         } catch (IOException | JSONException | NullPointerException ex) {
             return null;
         }
+    }
+
+    public static String getUnsupportedBotReason(JDA jda)
+    {
+        if (jda.getSelfUser().getFlags().contains(User.UserFlag.VERIFIED_BOT))
+            return "The bot is verified. Using JMusicBot in a verified bot is not supported.";
+
+        ApplicationInfo info = jda.retrieveApplicationInfo().complete();
+        if (info.isBotPublic())
+            return "\"Public Bot\" is enabled. Using JMusicBot as a public bot is not supported. Please disable it in the Developer Dashboard.";
+
+        return null;
     }
 }
