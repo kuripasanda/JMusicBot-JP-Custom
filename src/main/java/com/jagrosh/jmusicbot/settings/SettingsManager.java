@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.HashMap;
 
 /**
@@ -67,8 +68,18 @@ public class SettingsManager implements GuildSettingsManager {
                         o.has("skip_ratio") ? o.getDouble("skip_ratio") : SKIP_RATIO,
                         o.has("vc_status") && o.getBoolean("vc_status")));
             });
-        } catch (IOException | JSONException e) {
-            LoggerFactory.getLogger("Settings").warn("サーバー設定を読み込めませんでした(まだ設定がない場合は正常です): " + e);
+        } catch (NoSuchFileException e) {
+            // ignore, it just means no settings have been saved yet
+            // create an empty json file
+            try {
+                LoggerFactory.getLogger("Settings").info("serversettings.json を" + OtherUtil.getPath("serversettings.json").toAbsolutePath() + "に作成しました。");
+                Files.write(OtherUtil.getPath("serversettings.json"), new JSONObject().toString(4).getBytes());
+            } catch(IOException ex) {
+                LoggerFactory.getLogger("Settings").warn("サーバー設定ファイルの作成に失敗しました:"+ex);
+            }
+            return;
+        } catch(IOException | JSONException e) {
+            LoggerFactory.getLogger("Settings").warn("サーバー設定ファイルの読み込みに失敗しました: "+e);
         }
     }
 
