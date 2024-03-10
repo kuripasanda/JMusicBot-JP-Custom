@@ -196,11 +196,11 @@ public class OtherUtil {
     public static String getUnsupportedBotReason(JDA jda)
     {
         if (jda.getSelfUser().getFlags().contains(User.UserFlag.VERIFIED_BOT))
-            return "The bot is verified. Using JMusicBot in a verified bot is not supported.";
+            return "ボットは検証済みです。検証済みのボットでJMusicBotを使用することはサポートされていません。";
 
         ApplicationInfo info = jda.retrieveApplicationInfo().complete();
         if (info.isBotPublic())
-            return "\"Public Bot\" is enabled. Using JMusicBot as a public bot is not supported. Please disable it in the Developer Dashboard.";
+            return "\"Public Bot \"が有効になっています。JMusicBotを公開ボットとして使用することはサポートされていません。開発者ダッシュボードで無効にしてください。";
 
         return null;
     }
