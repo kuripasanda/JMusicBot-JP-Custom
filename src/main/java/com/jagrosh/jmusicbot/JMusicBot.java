@@ -41,6 +41,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 
+import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class JMusicBot {
     public final static Permission[] RECOMMENDED_PERMS = {Permission.MESSAGE_SEND, Permission.VIEW_CHANNEL, Permission.MESSAGE_HISTORY, Permission.MESSAGE_ADD_REACTION,
             Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_MANAGE, Permission.MESSAGE_EXT_EMOJI,
             Permission.MANAGE_CHANNEL, Permission.VOICE_CONNECT, Permission.VOICE_SPEAK, Permission.NICKNAME_CHANGE, Permission.VOICE_SET_STATUS};
-    public final static GatewayIntent[] INTENTS = {GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.MESSAGE_CONTENT}; // , GatewayIntent.MESSAGE_CONTENT
+    public final static GatewayIntent[] INTENTS = {GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES}; // , GatewayIntent.MESSAGE_CONTENT
     public static boolean CHECK_UPDATE = true;
     public static boolean COMMAND_AUDIT_ENABLED = false;
 
@@ -266,7 +267,8 @@ public class JMusicBot {
                         + "https://discord.com/developers/applications/" + jda.getSelfUser().getId() + "/bot");
             }
 
-        } catch (InvalidTokenException ex) {
+        }
+        catch (InvalidTokenException ex) {
             prompt.alert(Prompt.Level.ERROR, "JMusicBot", ex + "\n" +
                     "正しい設定ファイルを編集していることを確認してください。Botトークンでのログインに失敗しました。" +
                     "正しいBotトークンを入力してください。(CLIENT SECRET ではありません!)\n" +
