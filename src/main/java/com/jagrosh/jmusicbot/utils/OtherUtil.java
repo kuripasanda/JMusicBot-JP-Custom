@@ -123,6 +123,7 @@ public class OtherUtil {
         if (game == null || game.trim().isEmpty() || game.trim().equalsIgnoreCase("default"))
             return null;
         String lower = game.toLowerCase();
+
         if (lower.startsWith("playing"))
             return Activity.playing(makeNonEmpty(game.substring(7).trim()));
         if (lower.startsWith("listening to"))
@@ -137,7 +138,7 @@ public class OtherUtil {
                 return Activity.streaming(makeNonEmpty(parts[1]), "https://twitch.tv/" + parts[0]);
             }
         }
-        return Activity.playing(game);
+        return Activity.customStatus(game);
     }
 
     public static String makeNonEmpty(String str) {
