@@ -57,10 +57,10 @@ public class JMusicBot {
     public final static String PLAY_EMOJI = "▶"; // ▶
     public final static String PAUSE_EMOJI = "⏸"; // ⏸
     public final static String STOP_EMOJI = "⏹"; // ⏹
-    public final static Permission[] RECOMMENDED_PERMS = {Permission.MESSAGE_SEND, Permission.VIEW_CHANNEL, Permission.MESSAGE_HISTORY, Permission.MESSAGE_ADD_REACTION,
+    public final static Permission[] RECOMMENDED_PERMS = {Permission.MESSAGE_SEND, Permission.MESSAGE_HISTORY, Permission.MESSAGE_ADD_REACTION,
             Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_MANAGE, Permission.MESSAGE_EXT_EMOJI,
-            Permission.MANAGE_CHANNEL, Permission.VOICE_CONNECT, Permission.VOICE_SPEAK, Permission.NICKNAME_CHANGE, Permission.VOICE_SET_STATUS};
-    public final static GatewayIntent[] INTENTS = {GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES}; // , GatewayIntent.MESSAGE_CONTENT
+            Permission.VOICE_CONNECT, Permission.VOICE_SPEAK, Permission.NICKNAME_CHANGE, Permission.VOICE_SET_STATUS};
+    public final static GatewayIntent[] INTENTS = {GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.MESSAGE_CONTENT}; // , GatewayIntent.MESSAGE_CONTENT
     public static boolean CHECK_UPDATE = true;
     public static boolean COMMAND_AUDIT_ENABLED = false;
 
@@ -233,7 +233,7 @@ public class JMusicBot {
             }
         }
 
-        log.info(config.getConfigLocation() + " から設定を読み込みました");
+        log.info("{} から設定を読み込みました", config.getConfigLocation());
 
         // attempt to log in and start
         try {
@@ -274,6 +274,7 @@ public class JMusicBot {
                     "正しいBotトークンを入力してください。(CLIENT SECRET ではありません!)\n" +
                     "設定ファイルの場所: " + config.getConfigLocation());
             System.exit(1);
+
         } catch (IllegalArgumentException ex) {
             prompt.alert(Prompt.Level.ERROR, "JMusicBot", "設定の一部が無効です:" + ex + "\n" +
                     "設定ファイルの場所: " + config.getConfigLocation());
