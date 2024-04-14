@@ -269,6 +269,7 @@ public class JMusicBot {
 
         }
         catch (InvalidTokenException ex) {
+            //ex.getCause().getMessage();
             prompt.alert(Prompt.Level.ERROR, "JMusicBot", ex + "\n" +
                     "正しい設定ファイルを編集していることを確認してください。Botトークンでのログインに失敗しました。" +
                     "正しいBotトークンを入力してください。(CLIENT SECRET ではありません!)\n" +
@@ -276,6 +277,7 @@ public class JMusicBot {
             System.exit(1);
 
         } catch (IllegalArgumentException ex) {
+
             prompt.alert(Prompt.Level.ERROR, "JMusicBot", "設定の一部が無効です:" + ex + "\n" +
                     "設定ファイルの場所: " + config.getConfigLocation());
             System.exit(1);
