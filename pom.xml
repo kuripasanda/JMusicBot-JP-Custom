@@ -47,7 +47,7 @@
         <dependency>
             <groupId>com.github.Cosgy-Dev</groupId>
             <artifactId>lavaplayer-cosgy</artifactId>
-            <version>cosgy-v2-1bd1561389-1</version>
+            <version>cosgy-v2-178b494367-1</version>
         </dependency>
         <dependency>
             <groupId>com.github.Cosgy-Dev</groupId>
