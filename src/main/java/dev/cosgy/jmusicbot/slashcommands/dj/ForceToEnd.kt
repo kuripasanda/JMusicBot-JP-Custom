@@ -19,10 +19,7 @@ package dev.cosgy.jmusicbot.slashcommands.dj
 import com.jagrosh.jdautilities.command.CommandEvent
 import com.jagrosh.jdautilities.command.SlashCommandEvent
 import com.jagrosh.jmusicbot.Bot
-import dev.cosgy.jmusicbot.slashcommands.AdminCommand
-import dev.cosgy.jmusicbot.slashcommands.AdminCommand.checkAdminPermission
 import dev.cosgy.jmusicbot.slashcommands.DJCommand
-import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 
@@ -50,9 +47,9 @@ class ForceToEnd(bot: Bot) : DJCommand(bot) {
         bot.settingsManager.getSettings(event.guild)?.isForceToEndQue = newSetting
 
         var msg = "再生待ちへの追加方法を変更しました。\n設定:"
-        if (nowSetting == true) {
+        if (newSetting == true) {
             msg += "通常追加モード\nリクエストした曲を再生待ちの最後に追加します。"
-        } else if (nowSetting == false) {
+        } else if (newSetting == false) {
             msg += "フェア追加モード\nリクエストした曲をフェアな順序で再生待ちに追加します。"
         }
 
@@ -69,9 +66,9 @@ class ForceToEnd(bot: Bot) : DJCommand(bot) {
         bot.settingsManager.getSettings(event.guild)?.isForceToEndQue = newSetting
 
         var msg = "再生待ちへの追加方法を変更しました。\n設定:"
-        if (nowSetting == true) {
+        if (newSetting == true) {
             msg += "通常追加モード\nリクエストした曲を再生待ちの最後に追加します。"
-        } else if (nowSetting == false) {
+        } else if (newSetting == false) {
             msg += "フェア追加モード\nリクエストした曲をフェアな順序で再生待ちに追加します。"
         }
 
