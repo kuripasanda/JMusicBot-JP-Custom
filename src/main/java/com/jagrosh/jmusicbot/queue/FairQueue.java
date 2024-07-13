@@ -29,8 +29,9 @@ public class FairQueue<T extends Queueable> {
     private final Set<Long> set = new HashSet<>();
 
     /**
-     *
-     * @deprecated
+     * @deprecated 新しくフェアキューと普通のキューを切り替えられるメゾットを追加したのでそちらを使用してください。
+     * @param item 追加する楽曲情報
+     * @return 何曲目に追加したか
      */
     public int add(T item) {
         int lastIndex;
@@ -48,6 +49,12 @@ public class FairQueue<T extends Queueable> {
         return lastIndex;
     }
 
+    /**
+     * キューに楽曲を追加します。
+     * @param item 楽曲情報
+     * @param forceToEnd 強制的にキューの一番最後に追加するか
+     * @return 何番目に追加したか
+     */
     public int add(T item, boolean forceToEnd) {
         if (forceToEnd) {
             list.add(item);
