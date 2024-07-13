@@ -66,7 +66,8 @@ public class SettingsManager implements GuildSettingsManager {
                         o.has("bitrate_warnings_readied") && o.getBoolean("bitrate_warnings_readied"),
                         o.has("announce") ? o.getInt("announce") : 0,
                         o.has("skip_ratio") ? o.getDouble("skip_ratio") : SKIP_RATIO,
-                        o.has("vc_status") && o.getBoolean("vc_status")));
+                        o.has("vc_status") && o.getBoolean("vc_status"),
+                        o.has("force_to_end_que") && o.getBoolean("force_to_end_que")));
             });
         } catch (NoSuchFileException e) {
             // ignore, it just means no settings have been saved yet
@@ -99,7 +100,7 @@ public class SettingsManager implements GuildSettingsManager {
     }
 
     private Settings createDefaultSettings() {
-        return new Settings(this, 0, 0, 0, 10, null, RepeatMode.OFF, null, false, 0, SKIP_RATIO, true);
+        return new Settings(this, 0, 0, 0, 10, null, RepeatMode.OFF, null, false, 0, SKIP_RATIO, true, false);
     }
 
     protected void writeSettings() {
@@ -127,6 +128,8 @@ public class SettingsManager implements GuildSettingsManager {
                 o.put("skip_ratio", s.getSkipRatio());
             if (!s.getVCStatus())
                 o.put("vc_status", s.getVCStatus());
+            if(s.isForceToEndQue())
+                o.put("force_to_end_que", s.isForceToEndQue());
 
             obj.put(Long.toString(key), o);
         }

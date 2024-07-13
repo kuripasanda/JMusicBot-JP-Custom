@@ -28,7 +28,32 @@ public class FairQueue<T extends Queueable> {
     private final List<T> list = new ArrayList<>();
     private final Set<Long> set = new HashSet<>();
 
+    /**
+     *
+     * @deprecated
+     */
     public int add(T item) {
+        int lastIndex;
+        for (lastIndex = list.size() - 1; lastIndex > -1; lastIndex--)
+            if (list.get(lastIndex).getIdentifier() == item.getIdentifier())
+                break;
+        lastIndex++;
+        set.clear();
+        for (; lastIndex < list.size(); lastIndex++) {
+            if (set.contains(list.get(lastIndex).getIdentifier()))
+                break;
+            set.add(list.get(lastIndex).getIdentifier());
+        }
+        list.add(lastIndex, item);
+        return lastIndex;
+    }
+
+    public int add(T item, boolean forceToEnd) {
+        if (forceToEnd) {
+            list.add(item);
+            return list.size() - 1;
+        }
+
         int lastIndex;
         for (lastIndex = list.size() - 1; lastIndex > -1; lastIndex--)
             if (list.get(lastIndex).getIdentifier() == item.getIdentifier())
