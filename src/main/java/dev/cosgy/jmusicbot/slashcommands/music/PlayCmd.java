@@ -80,9 +80,6 @@ public class PlayCmd extends MusicCommand {
     @Override
     public void doCommand(CommandEvent event) {
 
-        // TODO:設定からqueの一番下に強制追加するかを取得する
-
-
         if (event.getArgs().isEmpty() && event.getMessage().getAttachments().isEmpty()) {
             AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
             if (handler.getPlayer().getPlayingTrack() != null && handler.getPlayer().isPaused()) {
