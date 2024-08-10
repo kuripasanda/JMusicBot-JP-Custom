@@ -1,7 +1,6 @@
 package com.sedmelluq.discord.lavaplayer.source.nico;
 
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerDescriptor;
-import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry;
 import com.sedmelluq.discord.lavaplayer.container.wav.WavContainerProbe;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager;
@@ -53,19 +52,9 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
     private static final String TRACK_URL_REGEX = "^(?:http://|https://|)(?:(?:www\\.|sp\\.|)nicovideo\\.jp/watch/|nico\\.ms/)(sm[0-9]+)(?:\\?.*|)$";
 
     private static final Pattern trackUrlPattern = Pattern.compile(TRACK_URL_REGEX);
-
+    private static final Logger log = LoggerFactory.getLogger(NicoAudioSourceManager.class);
     private final HttpInterfaceManager httpInterfaceManager;
     private final AtomicBoolean loggedIn;
-
-    public NicoAudioSourceManager() {
-        this(null, null);
-    }
-
-    private static final Logger log = LoggerFactory.getLogger(NicoAudioSourceManager.class);
-
-    public HttpInterfaceManager getHttpInterfaceManager() {
-        return httpInterfaceManager;
-    }
 
     /**
      * @param email    Site account email
@@ -83,8 +72,12 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
         loggedIn = new AtomicBoolean();
         // Log in at the start
         if (!DataFormatTools.isNullOrEmpty(email) && !DataFormatTools.isNullOrEmpty(password)) {
-            logIn(email,password);
+            logIn(email, password);
         }
+    }
+
+    private static String getWatchUrl(String videoId) {
+        return "https://www.nicovideo.jp/watch/" + videoId;
     }
 
     public void updateYtDlp() {
@@ -137,9 +130,9 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
         for (Element element : document.select(":root > thumb")) {
 
             String uploader = "";
-            if(videoId.matches("so.*")){
+            if (videoId.matches("so.*")) {
                 uploader = element.select("ch_name").first().text();
-            }else{
+            } else {
                 uploader = element.select("user_nickname").first().text();
             }
             String title = element.selectFirst("title").text();
@@ -147,13 +140,13 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
             long duration = DataFormatTools.durationTextToMillis(element.selectFirst("length").text());
 
             return new NicoAudioTrack(new AudioTrackInfo(title,
-                uploader,
-                duration,
-                videoId,
-                false,
-                getWatchUrl(videoId),
-                thumbnailUrl,
-                null
+                    uploader,
+                    duration,
+                    videoId,
+                    false,
+                    getWatchUrl(videoId),
+                    thumbnailUrl,
+                    null
             ), this, new MediaContainerDescriptor(new WavContainerProbe(), null));
         }
 
@@ -208,8 +201,8 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
             HttpPost loginRequest = new HttpPost(uri);
 
             loginRequest.setEntity(new UrlEncodedFormEntity(Arrays.asList(
-                new BasicNameValuePair("mail_tel", email),
-                new BasicNameValuePair("password", password)
+                    new BasicNameValuePair("mail_tel", email),
+                    new BasicNameValuePair("password", password)
             ), StandardCharsets.UTF_8));
 
             try (HttpInterface httpInterface = getHttpInterface()) {
@@ -232,9 +225,5 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
                 throw new FriendlyException("Exception when trying to log into NicoNico", SUSPICIOUS, e);
             }
         }
-    }
-
-    private static String getWatchUrl(String videoId) {
-        return "https://www.nicovideo.jp/watch/" + videoId;
     }
 }
