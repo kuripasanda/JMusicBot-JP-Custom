@@ -27,6 +27,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -59,6 +61,8 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
         this(null, null);
     }
 
+    private static final Logger log = LoggerFactory.getLogger(NicoAudioSourceManager.class);
+
     public HttpInterfaceManager getHttpInterfaceManager() {
         return httpInterfaceManager;
     }
@@ -86,11 +90,13 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
     public void updateYtDlp() {
         Runtime runtime = Runtime.getRuntime();
         try {
+            log.info("Updating yt-dlp.");
             Process process = runtime.exec("python3 -m pip install -U --pre \"yt-dlp\"");
             process.waitFor();
             process.destroy();
+            log.info("yt-dlp update completed.");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.error("Failed to update yt-dlp. Please run \"python3 -m pip install -U --pre yt-dlp\" to update.");
         }
 
     }

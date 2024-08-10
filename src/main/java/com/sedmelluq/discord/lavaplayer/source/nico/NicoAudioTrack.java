@@ -27,6 +27,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.parser.Parser;
@@ -87,15 +88,13 @@ public class NicoAudioTrack extends DelegatedAudioTrack {
     }
 
     //
-    private File downloadAudio(){
+    private @NotNull File downloadAudio(){
         String path = new File(".").getAbsoluteFile().getParent();
         Path  file = Path.of(path,"cache" + File.separator + getIdentifier() + ".wav");
 
-        if (!Files.notExists(file)) {
-            return file.toFile();
-        } else {
+        if (Files.notExists(file)) {
             try {
-                log.debug("downloading...");
+                log.info("Downloading NicoNico track from: {}", getIdentifier());
                 Runtime runtime = Runtime.getRuntime();
                 String command = "yt-dlp --extract-audio --audio-format wav https://www.nicovideo.jp/watch/" + getIdentifier() + " --output cache/" + getIdentifier() + ".wav";
                 Process process = runtime.exec(command);
@@ -132,8 +131,8 @@ public class NicoAudioTrack extends DelegatedAudioTrack {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            return file.toFile();
         }
+        return file.toFile();
     }
 
     private String extractHlsAudioPlaylistUrl(HttpInterface httpInterface, String videoPlaylistUrl) throws IOException {
