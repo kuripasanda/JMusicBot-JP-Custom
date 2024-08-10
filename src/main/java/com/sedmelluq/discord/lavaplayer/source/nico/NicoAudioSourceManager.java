@@ -107,7 +107,7 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
             }
 
             log.info("Updating yt-dlp using {}.", pythonCommand);
-            Process process = runtime.exec(pythonCommand + " -m pip install -U --pre \"yt-dlp\"");
+            Process process = runtime.exec(pythonCommand + " -m pip install -U --pre yt-dlp");
             process.waitFor();
             process.destroy();
             log.info("yt-dlp update completed.");
