@@ -288,12 +288,12 @@ public class JMusicBot {
             // other check that will just be a warning now but may be required in the future
             // check if the user has changed the prefix and provide info about the
             // message content intent
-            if(!"@mention".equals(config.getPrefix()))
+            /*if(!"@mention".equals(config.getPrefix()))
             {
                 prompt.alert(Prompt.Level.INFO, "JMusicBot", "現在、カスタム接頭辞が設定されています。 "
                         + "カスタム接頭辞が機能しない場合は、「MESSAGE CONTENT INTENT」が有効になっていることを確認してください。"
                         + "https://discord.com/developers/applications/" + jda.getSelfUser().getId() + "/bot");
-            }
+            }*/
 
         }
         catch (InvalidTokenException ex) {
