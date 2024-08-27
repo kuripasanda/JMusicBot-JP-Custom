@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jagrosh</groupId>
-    <artifactId>JMusicBot</artifactId>
+    <artifactId>JMusicBot-Customized</artifactId>
     <!-- バージョン装飾子参考の参考に: https://kengotoda.gitbooks.io/what-is-maven/deploy/snapshot-and-stable.html -->
     <version>0.9.9</version>
     <packaging>jar</packaging>
