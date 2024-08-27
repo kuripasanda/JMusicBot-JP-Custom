@@ -201,11 +201,13 @@ public class OtherUtil {
                     "VCで音楽を再生するため、権利問題が発生する可能性がある為ご理解とご協力をお願いします。";
 
         ApplicationInfo info = jda.retrieveApplicationInfo().complete();
-        if (info.isBotPublic())
+        /*if (info.isBotPublic())
             return "公開ボットのため、JMusicBot JPを使用することはサポートされていません。\n" +
                     "デベロッパーポータルで「PUBLIC BOT」を無効にしてください。\n" +
                     "https://discord.com/developers/applications/" + info.getId() + "/bot\n" +
                     "VCで音楽を再生するため、権利問題が発生する可能性がある為ご理解とご協力をお願いします。";
+
+         */
 
         return null;
     }
