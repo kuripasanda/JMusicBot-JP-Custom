@@ -74,9 +74,9 @@ public class JMusicBot {
         Logger log = getLogger("Startup");
 
         try {
-            System.out.println(FigletFont.convertOneLine("JMusicBot v" + OtherUtil.getCurrentVersion()) + "\n" + "by Cosgy Dev");
+            System.out.println(FigletFont.convertOneLine("JMusicBot v" + OtherUtil.getCurrentVersion()) + "\n" + "by Cosgy Dev" + "\n" + "Customized by kuripasanda");
         } catch (IOException e) {
-            System.out.println("JMusicBot v" + OtherUtil.getCurrentVersion() + "\nby Cosgy Dev");
+            System.out.println("JMusicBot v" + OtherUtil.getCurrentVersion() + "\nby Cosgy Dev" + "\n" + "Customized by kuripasanda");
         }
 
 
