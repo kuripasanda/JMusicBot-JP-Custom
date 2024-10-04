@@ -22,9 +22,7 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.nico.NicoAudioSourceManager;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
-import dev.lavalink.youtube.clients.AndroidTestsuite;
-import dev.lavalink.youtube.clients.Music;
-import dev.lavalink.youtube.clients.Web;
+import dev.lavalink.youtube.clients.*;
 import dev.lavalink.youtube.clients.skeleton.Client;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
@@ -50,7 +48,17 @@ public class PlayerManager extends DefaultAudioPlayerManager {
             );
         }
 
-        registerSourceManager(new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] { new Music(), new Web(), new AndroidTestsuite() }));
+        registerSourceManager(new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] { new Music(),
+                new TvHtml5Embedded(),
+                new AndroidMusic(),
+                new AndroidTestsuite(),
+                new Web(),
+                new WebEmbedded(),
+                new Android(),
+                new AndroidLite(),
+                new MediaConnect(),
+                new Ios()
+        }));
 
         TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(this::registerSourceManager);
         AudioSourceManagers.registerRemoteSources(this);
