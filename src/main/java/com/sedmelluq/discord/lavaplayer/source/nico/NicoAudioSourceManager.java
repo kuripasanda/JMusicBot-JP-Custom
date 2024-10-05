@@ -1,5 +1,6 @@
 package com.sedmelluq.discord.lavaplayer.source.nico;
 
+import com.jagrosh.jmusicbot.BotConfig;
 import com.sedmelluq.discord.lavaplayer.container.*;
 import com.sedmelluq.discord.lavaplayer.container.wav.WavContainerProbe;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -53,6 +54,9 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
     private static final Logger log = LoggerFactory.getLogger(NicoAudioSourceManager.class);
     private final HttpInterfaceManager httpInterfaceManager;
     private final AtomicBoolean loggedIn;
+    public static String userName = null;
+    public static String password = null;
+    public static String twofactor = null;
 
     public NicoAudioSourceManager() {
         this(null, null);
@@ -75,6 +79,12 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
         // Log in at the start
         if (!DataFormatTools.isNullOrEmpty(email) && !DataFormatTools.isNullOrEmpty(password)) {
             logIn(email, password);
+            NicoAudioSourceManager.userName = email;
+            NicoAudioSourceManager.password = password;
+        }
+
+        if(!BotConfig.getNicoNicoTwoFactor().isEmpty()){
+            NicoAudioSourceManager.twofactor = BotConfig.getNicoNicoTwoFactor();
         }
     }
 

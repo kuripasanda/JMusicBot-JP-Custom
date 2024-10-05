@@ -79,7 +79,21 @@ public class NicoAudioTrack extends DelegatedAudioTrack {
             try {
                 log.info("Downloading NicoNico track from: {}", getIdentifier());
                 Runtime runtime = Runtime.getRuntime();
-                String command = "yt-dlp --extract-audio --audio-format wav https://www.nicovideo.jp/watch/" + getIdentifier() + " --output cache/" + getIdentifier() + ".wav";
+
+                String login = "";
+                if (NicoAudioSourceManager.userName != null && NicoAudioSourceManager.password != null) {
+                    login += " --username " + NicoAudioSourceManager.userName + " --password " + NicoAudioSourceManager.password;
+                    log.info("ニコニコのログイン情報を使用しました。");
+                    if(NicoAudioSourceManager.twofactor != null) {
+                        String code = TOTPGenerator.getCode(NicoAudioSourceManager.twofactor);
+
+                        login += " --twofactor " + code;
+                        log.info("二段階認証を行いました:{}", code);
+                    }
+                }
+
+                String command = "yt-dlp" + login + " --extract-audio --audio-format wav https://www.nicovideo.jp/watch/" + getIdentifier() + " --output cache/" + getIdentifier() + ".wav";
+
                 Process process = runtime.exec(command);
 
                 // エラーストリームを読み取るためのスレッドを作成
