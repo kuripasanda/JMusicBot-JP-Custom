@@ -120,7 +120,7 @@ public class SeekCmd extends MusicCommand
             return;
         }
 
-        String args = event.getOption("input").getAsString();
+        String args = event.getOption("time").getAsString();
         TimeUtil.SeekTime seekTime = TimeUtil.parseTime(args);
         if (seekTime == null)
         {
