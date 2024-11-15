@@ -41,7 +41,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 
-import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -194,6 +193,7 @@ public class JMusicBot {
             add(new RemoveCmd(bot));
             add(new SearchCmd(bot));
             add(new SCSearchCmd(bot));
+            add(new SeekCmd(bot));
             add(new NicoSearchCmd(bot));
             add(new ShuffleCmd(bot));
             add(new SkipCmd(bot));

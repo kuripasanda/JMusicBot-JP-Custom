@@ -1,5 +1,6 @@
 package com.sedmelluq.discord.lavaplayer.source.nico;
 
+import com.jagrosh.jmusicbot.BotConfig;
 import com.sedmelluq.discord.lavaplayer.container.*;
 import com.sedmelluq.discord.lavaplayer.container.wav.WavContainerProbe;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -53,6 +54,9 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
     private static final Logger log = LoggerFactory.getLogger(NicoAudioSourceManager.class);
     private final HttpInterfaceManager httpInterfaceManager;
     private final AtomicBoolean loggedIn;
+    public static String userName = null;
+    public static String password = null;
+    public static String twofactor = null;
 
     public NicoAudioSourceManager() {
         this(null, null);
@@ -75,12 +79,37 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
         // Log in at the start
         if (!DataFormatTools.isNullOrEmpty(email) && !DataFormatTools.isNullOrEmpty(password)) {
             logIn(email, password);
+            NicoAudioSourceManager.userName = email;
+            NicoAudioSourceManager.password = password;
+        }
+
+        if(!BotConfig.getNicoNicoTwoFactor().isEmpty()){
+            NicoAudioSourceManager.twofactor = BotConfig.getNicoNicoTwoFactor();
         }
     }
 
     private static String getWatchUrl(String videoId) {
         return "https://www.nicovideo.jp/watch/" + videoId;
     }
+
+    /**
+     * This method attempts to update the <code>`yt-dlp`</code> Python package on the system.
+     * <p>
+     * The process involves checking whether Python 3 is available by first trying
+     * to execute the <code>`python3 --version`</code> command. If `python3` is not found,
+     * the method checks if the `python` command corresponds to Python version 3.x.
+     * <p>
+     * If a suitable Python 3 interpreter is found, the method then attempts to
+     * update `yt-dlp` using the command <code>`python3 -m pip install -U --pre yt-dlp`</code>
+     * or <code>`python -m pip install -U --pre yt-dlp`</code>, depending on which interpreter
+     * is available.
+     * <p>
+     * If neither `python3` nor `python` corresponds to a Python 3.x interpreter,
+     * the method logs an error and aborts the update process.
+     * <p>
+     * In case of any exception during this process, an error is logged, and the user
+     * is prompted to run the appropriate command manually.
+     */
 
     public void updateYtDlp() {
         Runtime runtime = Runtime.getRuntime();
@@ -149,6 +178,28 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
         }
     }
 
+
+    /**
+     * This method extracts an `AudioTrack` object from the provided XML document
+     * based on the given video ID.
+     * <p>
+     * The method iterates over the elements in the document that match the CSS selector
+     * `:root > thumb`. For each matching element, it extracts relevant information such as:
+     * - Uploader: If the video ID starts with "so", the uploader's name is retrieved
+     *   from the `ch_name` element. Otherwise, it is retrieved from the `user_nickname` element.
+     * - Title: The track title is retrieved from the `title` element.
+     * - Thumbnail URL: The URL of the video's thumbnail is retrieved from the `thumbnail_url` element.
+     * - Duration: The video's duration is parsed from the `length` element using
+     *   `DataFormatTools.durationTextToMillis`.
+     * <p>
+     * Once these details are collected, a new `NicoAudioTrack` object is created with
+     * the extracted information and is returned. If no matching elements are found
+     * in the XML document, the method returns `null`.
+     *
+     * @param videoId  The ID of the video for which the track information is being extracted.
+     * @param document The XML document containing the track's metadata.
+     * @return A `NicoAudioTrack` object with the extracted track information, or `null` if no matching element is found.
+     */
 
     private AudioTrack extractTrackFromXml(String videoId, Document document) {
         for (Element element : document.select(":root > thumb")) {
