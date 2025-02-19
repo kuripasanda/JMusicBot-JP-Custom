@@ -23,7 +23,6 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.nico.NicoAudioSourceManager;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.*;
-import dev.lavalink.youtube.clients.skeleton.Client;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,22 +47,22 @@ public class PlayerManager extends DefaultAudioPlayerManager {
             );
         }
 
-        registerSourceManager(new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] { new Music(),
+        registerSourceManager(new YoutubeAudioSourceManager(true, new Music(),
                 new TvHtml5Embedded(),
                 new AndroidMusic(),
-                new AndroidTestsuite(),
                 new Web(),
                 new WebEmbedded(),
                 new Android(),
-                new AndroidLite(),
-                new MediaConnect(),
-                new Ios()
-        }));
+                new Ios()));
+
 
         TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(this::registerSourceManager);
         AudioSourceManagers.registerRemoteSources(this);
         AudioSourceManagers.registerLocalSource(this);
+
         source(YoutubeAudioSourceManager.class).setPlaylistPageCount(10);
+        source(YoutubeAudioSourceManager.class).useOauth2(null, false);
+
 
         if (getConfiguration().getOpusEncodingQuality() != 10) {
             logger.debug("OpusEncodingQuality は、{}(< 10), 品質を10に設定します。", getConfiguration().getOpusEncodingQuality());

@@ -28,6 +28,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +49,7 @@ import static com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity.
  * Audio source manager that implements finding NicoNico tracks based on URL.
  */
 public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigurable {
-    private static final String TRACK_URL_REGEX = "^(?:http://|https://|)(?:(?:www\\.|sp\\.|)nicovideo\\.jp/watch/|nico\\.ms/)((?:sm|nm)[0-9]+)(?:\\?.*|)$";
+    private static final String TRACK_URL_REGEX = "^(?:http://|https://|)(?:(?:www\\.|sp\\.|)nicovideo\\.jp/watch/|nico\\.ms/)((?:sm|nm|so)[0-9]+)(?:\\?.*|)$";
 
     private static final Pattern trackUrlPattern = Pattern.compile(TRACK_URL_REGEX);
     private static final Logger log = LoggerFactory.getLogger(NicoAudioSourceManager.class);
@@ -208,7 +209,13 @@ public class NicoAudioSourceManager implements AudioSourceManager, HttpConfigura
             if (videoId.matches("so.*")) {
                 uploader = element.select("ch_name").first().text();
             } else {
-                uploader = element.select("user_nickname").first().text();
+                Elements userNicknameElements = element.select("user_nickname");
+                if (!userNicknameElements.isEmpty()) {
+                    uploader = userNicknameElements.first().text();
+                } else {
+                    // user_nicknameが存在しない場合の処理
+                    uploader = "情報なし";
+                }
             }
             String title = element.selectFirst("title").text();
             String thumbnailUrl = element.selectFirst("thumbnail_url").text();
